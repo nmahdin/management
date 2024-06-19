@@ -101,10 +101,25 @@
                     </a>
                     <ul class="nk-menu-sub">
                         <li class="nk-menu-item">
-                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">لیست محصولات</span></a>
+                            <a href="{{ route('products.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست محصولات</span></a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">افزودن محصول</span></a>
+                            <a href="{{ route('product.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن محصول</span></a>
+                        </li>
+                        <li class="nk-menu-item has-sub">
+                            <a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-text">دسته بندی ها</span></a>
+                            <ul class="nk-menu-sub">
+                                <li class="nk-menu-item">
+                                    <a href="{{ route('products.categories.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست دسته بندی ها</span></a>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a href="{{ route('products.category.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن دسته بندی</span></a>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a href="#" class="nk-menu-link"><span class="nk-menu-text"></span></a>
+                                </li>
+                            </ul>
+                            <!-- .nk-menu-sub -->
                         </li>
                     </ul>
                     <!-- .nk-menu-sub -->

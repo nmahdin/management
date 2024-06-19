@@ -60,12 +60,31 @@ class Management extends Controller
     public function customers_list()
     {
         $customers = Customer::where('deleted' , 0)->get();
-        $count = Customer::count();
+        $count = Customer::where('deleted' , 0)->count();
         return view('admin.management.customers.list' , ['customers' => $customers , 'n' => $count]);
+    }
+    public function customers_trash()
+    {
+        $customers = Customer::where('deleted' , 1)->get();
+        $count = Customer::where('deleted' , 1)->count();
+        return view('admin.management.customers.trash' , ['customers' => $customers , 'n' => $count]);
     }
     public function customers_creat()
     {
+        return view('admin.management.customers.creat');
+    }
+    public function customer_create_post(Request $request)
+    {
+        $data = $request->validate([
+            'name' => ['required' , 'max:250'],
+            'number' => [ 'min:8' , 'max:12'],
+            'address' => ['max:250'],
+            'com_ways' => ['array'],
+        ]);
 
+        dd($data);
+        Customer::create([]);
+        return back()->with('created' , );
     }
 
     public function customers_delete(Customer $customer)
@@ -73,5 +92,55 @@ class Management extends Controller
         $customer->update(['deleted' => 1]);
         return back()->with('deleted' , $customer->name);
     }
+    public function customers_restore(Customer $customer)
+    {
+        $customer->update(['deleted' => 0]);
+        return back()->with('restored' , $customer->name);
+    }
+    public function customers_delete_trash(Customer $customer)
+    {
+        $name = $customer->name;
+        $customer->delete();
+        return back()->with('deleted' , $name);
+    }
     // end customers
+
+    // start products
+    public function products_list()
+    {
+
+    }
+    public function products_trash()
+    {
+
+    }
+    public function product_create()
+    {
+
+    }
+    public function product_edit()
+    {
+
+    }
+    public function product_detail()
+    {
+
+    }
+    public function products_categories_list()
+    {
+
+    }
+    public function products_category_create()
+    {
+
+    }
+    public function products_category_edit()
+    {
+
+    }
+    public function products_category_delete()
+    {
+
+    }
+    // end products
 }

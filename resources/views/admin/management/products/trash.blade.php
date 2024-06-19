@@ -1,4 +1,4 @@
-<x-admin.main title="مدیریت مشتریان">
+<x-admin.main title="مشتریان حذف شده">
 
     <div class="nk-content nk-content-fluid">
         <div class="container-xl wide-xl">
@@ -7,10 +7,10 @@
                     <div class="nk-block-between">
                         <div class="nk-block-head-content">
                             <!--   --------------- title --------------     -->
-                            <h3 class="nk-block-title page-title">مدریت مشتریان</h3>
+                            <h3 class="nk-block-title page-title">مشتریان حذف شده</h3>
                             <div class="nk-block-des text-soft">
                                 <!--   --------------- توضیح صفحه --------------     -->
-                                <p>در مجموج {{ $n }} مشتری وجود دارد.</p>
+                                <p>در مجموج {{ $n }} مشتری حذف شده وجود دارد.</p>
                             </div>
                         </div>
                         <!-- .nk-block-head-content -->
@@ -21,24 +21,15 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('customer.creat') }}" class="dropdown-toggle btn btn-dark btn-dim " data-bs-toggle="modal" data-bs-target="#modalZoom"
+                                            <a href="{{ route('customers.list') }}" class="dropdown-toggle btn btn-dark btn-dim" data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form12').submit();">
-                                                <em class="icon ni ni-plus"></em>
+                                                <em class="icon ni ni-forward-ios"></em>
+{{--                                                <em class="icon ni ni-plus"></em>--}}
                                                 <span>
-                                                    افزودن مشتری
+                                                    لیست مشتریان
                                                 </span>
                                             </a>
-                                            <form id="form12" action="{{ route('customer.creat') }}" class="d-none"></form>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('customer.trash') }}" class="dropdown-toggle btn btn-light btn-dim" data-bs-toggle="modal" data-bs-target="#modalZoom"
-                                               onclick="event.preventDefault(); document.getElementById('form13').submit();">
-                                                <em class="icon ni ni-trash"></em>
-                                                <span>
-                                                    سطل زباله
-                                                </span>
-                                            </a>
-                                            <form id="form13" action="{{ route('customer.trash') }}" class="d-none"></form>
+                                            <form id="form12" action="{{ route('customers.list') }}" class="d-none"></form>
                                         </li>
                                     </ul>
                                 </div>
@@ -52,13 +43,14 @@
                 @if(session('deleted'))
                 <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
                     <em class="icon ni ni-check-circle"></em>
-                    مشتری "{{session('deleted')}}" با موفقیت به
-                    <a href="{{ route('customer.trash') }}" class="text-success" data-bs-toggle="modal" data-bs-target="#modalZoom"
-                       onclick="event.preventDefault(); document.getElementById('form13').submit();">
-                        <u>سطل زباله</u>
-                    </a>
-                    منتقل شد.
+                    مشتری "{{session('deleted')}}" با موفقیت به طور کامل حذف شد.
                 </div>
+                @endif
+                @if(session('restored'))
+                    <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
+                        <em class="icon ni ni-check-circle"></em>
+                        مشتری "{{session('restored')}}" با موفقیت بازگردانی شد.
+                    </div>
                 @endif
                 <div class="nk-block nk-block-lg">
 
@@ -69,7 +61,8 @@
                                 <tr class="nk-tb-item nk-tb-head">
                                     <th class="nk-tb-col nk-tb-col-check">
                                         <div class="custom-control custom-control-sm custom-checkbox notext">
-                                            *
+                                            <input type="checkbox" class="custom-control-input" id="uid" />
+                                            <label class="custom-control-label" for="uid"></label>
                                         </div>
                                     </th>
                                     <th class="nk-tb-col"><span class="sub-text">آیدی</span></th>
@@ -84,8 +77,8 @@
                                 <tr class="nk-tb-item">
                                     <td class="nk-tb-col nk-tb-col-check">
                                         <div class="custom-control custom-control-sm custom-checkbox notext">
-                                            <input type="checkbox" class="custom-control-input" id="s{{ $customer->id }}" />
-                                            <label class="custom-control-label" for="s{{ $customer->id }}"></label>
+                                            <input type="checkbox" class="custom-control-input" id="uid1" />
+                                            <label class="custom-control-label" for="uid1"></label>
                                         </div>
                                     </td>
                                     <td class="nk-tb-col tb-col-mb" data-order="35040.34">
@@ -109,17 +102,21 @@
                                     <td class="nk-tb-col nk-tb-col-tools">
                                         <ul class="nk-tb-actions gx-1">
                                             <li class="nk-tb-action-hidden">
-                                                <a href="#" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="ویرایش">
-                                                    <em class="icon ni ni-edit-alt-fill"></em>
+                                                <a href="{{ route('customer.restore' , ['customer' => $customer->id]) }}" onclick="event.preventDefault(); document.getElementById('restore_cus{{$customer->id}}').submit();"
+                                                   class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="بازگردانی">
+                                                    <em class="icon ni ni-redo"></em>
                                                 </a>
+                                                <form id="restore_cus{{$customer->id}}" method="post" action="{{ route('customer.restore' , ['customer' => $customer->id]) }}" class="d-none">@csrf</form>
                                             </li>
+                                            @if($customer->history == null)
                                             <li class="nk-tb-action-hidden">
-                                                <a href="{{ route('customer.delete' , ['customer' => $customer->id]) }}" onclick="event.preventDefault(); document.getElementById('delete_cus{{$customer->id}}').submit();"
-                                                   class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف">
+                                                <a href="{{ route('customer.delete.trash' , ['customer' => $customer->id]) }}" onclick="event.preventDefault(); document.getElementById('delete_cus{{$customer->id}}').submit();"
+                                                   class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف کامل">
                                                     <em class="icon ni ni-trash-fill"></em>
                                                 </a>
-                                                <form id="delete_cus{{$customer->id}}" method="post" action="{{ route('customer.delete' , ['customer' => $customer->id]) }}" class="d-none">@csrf @method('delete')</form>
+                                                <form id="delete_cus{{$customer->id}}" method="post" action="{{ route('customer.delete.trash' , ['customer' => $customer->id]) }}" class="d-none">@csrf @method('delete')</form>
                                             </li>
+                                            @endif
                                         </ul>
                                     </td>
                                 </tr>
