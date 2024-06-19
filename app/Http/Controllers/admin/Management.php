@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Group;
 use App\Models\Permission;
+use App\Models\Product;
 use App\Models\User;
 use Database\Seeders\permissions;
 use Illuminate\Http\Request;
@@ -108,13 +109,19 @@ class Management extends Controller
     // start products
     public function products_list()
     {
-
+        $count = Product::count();
+        $products = Product::where('deleted' , 0)->get();
+        return view('admin.management.products.list' , ['n' => $count , 'products' => $products]);
     }
     public function products_trash()
     {
 
     }
     public function product_create()
+    {
+
+    }
+    public function product_delete(Product $product)
     {
 
     }

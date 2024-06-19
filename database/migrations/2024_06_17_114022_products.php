@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('color');
             $table->string('category_id'); // دسته بندی
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->string('picture')->nullable();
             $table->string('owner'); // مالک
             $table->string('price_materials'); // قیمت مواد اولیه

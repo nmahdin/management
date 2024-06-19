@@ -29,8 +29,9 @@ Route::delete('/customers/trash/{customer}' , [Management::class , 'customers_de
 Route::get('/products/list' , [Management::class , 'products_list'])->name('products.list');
 Route::get('/products/trash' , [Management::class , 'products_trash'])->name('products.trash');
 Route::get('/products/create' , [Management::class , 'product_create'])->name('product.create');
+Route::delete('/products/delete/{product}' , [Management::class , 'product_delete'])->name('product.delete');
 Route::get('/products/edit/{product}' , [Management::class , 'product_edit'])->name('product.edit');
-Route::get('/products/detail' , [Management::class , 'product_detail'])->name('product.detail');
+Route::get('/products/detail/{product}' , [Management::class , 'product_detail'])->name('product.detail');
 Route::get('/products/categories/list' , [Management::class , 'products_categories_list'])->name('products.categories.list');
 Route::get('/products/categories/create' , [Management::class , 'products_category_create'])->name('products.category.create');
 Route::get('/products/categories/edit/{category}' , [Management::class , 'products_category_edit'])->name('products.category.edit');
