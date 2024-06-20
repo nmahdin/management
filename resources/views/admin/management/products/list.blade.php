@@ -31,7 +31,7 @@
                                             <form id="form12" action="{{ route('product.create') }}" class="d-none"></form>
                                         </li>
                                         <li>
-                                            <a href="{{ route('products.trash') }}" class="dropdown-toggle btn btn-light btn-dim" data-bs-toggle="modal" data-bs-target="#modalZoom"
+                                            <a href="{{ route('products.trash') }}" class="dropdown-toggle btn btn-light btn-dim" data-bs-toggle="modal" data-bs-target="#modalTrash"
                                                onclick="event.preventDefault(); document.getElementById('form13').submit();">
                                                 <em class="icon ni ni-trash"></em>
                                                 <span>
@@ -53,7 +53,7 @@
                 <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
                     <em class="icon ni ni-check-circle"></em>
                     محصول "{{session('deleted')}}" با موفقیت به
-                    <a href="{{ route('customer.trash') }}" class="text-success" data-bs-toggle="modal" data-bs-target="#modalZoom"
+                    <a href="{{ route('products.trash') }}" class="text-success" data-bs-toggle="modal" data-bs-target="#modalTrash"
                        onclick="event.preventDefault(); document.getElementById('form13').submit();">
                         <u>سطل زباله</u>
                     </a>
@@ -153,7 +153,9 @@
             </div>
         </div>
     </div>
-    @slot('script')
+    <x-admin.modal id="modalTrash" class="modal-body-md">در حال رفتن به صفحه محصولات خذف شده ...</x-admin.modal>
+
+@slot('script')
         <script src="/assets/js/libs/datatable-btns.js"></script>
     @endslot
 

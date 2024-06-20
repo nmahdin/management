@@ -29,7 +29,7 @@
                                                data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form133').submit();">
                                                 <em class="icon ni ni-plus"></em>
-                                                <span>
+                                                <span class="fw-normal">
                                                     افزودن دسته بندی
                                                 </span>
                                             </a>
@@ -42,7 +42,7 @@
                                                data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('cate_trash').submit();">
                                                 <em class="icon ni ni-trash"></em>
-                                                <span>
+                                                <span class="fw-normal">
                                                     سطل زباله
                                                 </span>
                                             </a>
@@ -108,14 +108,20 @@
                                                 </span>
                                             </td>
                                             <td class="tb-odr-info">
+                                                @if($category->notes)
                                                 <span class="tb-odr-info">
                                                     {{ $category->notes }}
                                                 </span>
+                                                @else
+                                                    <span class="tb-odr-info text-gray fw-light">
+                                                    بدون توضیح
+                                                </span>
+                                                @endif
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
                                                     <a href="#" class="btn btn-warning btn-dim"><em
-                                                            class="icon ni ni-edit-alt-fill"></em><span>ویرایش</span>
+                                                            class="icon ni ni-edit-alt-fill"></em><span class="fw-normal">ویرایش</span>
                                                     </a>
                                                 </div>
                                                 <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
@@ -156,6 +162,7 @@
             </div>
         </div>
     </div>
+
     @slot('script')
         <script src="/assets/js/libs/datatable-btns.js"></script>
     @endslot

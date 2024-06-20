@@ -105,13 +105,15 @@ class Management extends Controller
     // start products
     public function products_list()
     {
-        $count = Product::count();
+        $count = Product::where('deleted' , 0)->count();
         $products = Product::where('deleted' , 0)->get();
         return view('admin.management.products.list' , ['n' => $count , 'products' => $products]);
     }
     public function products_trash()
     {
-
+        $count = Product::where('deleted' , 1)->count();
+        $products = Product::where('deleted' , 1)->get();
+        return view('admin.management.products.trash' , ['n' => $count , 'products' => $products]);
     }
     public function product_create()
     {
@@ -119,7 +121,8 @@ class Management extends Controller
     }
     public function product_delete(Product $product)
     {
-
+        $product->update(['deleted' => 1]);
+        return back()->with('deleted' , $product->label);
     }
     public function product_edit()
     {
@@ -151,6 +154,12 @@ class Management extends Controller
         Category::create($data);
 
         return redirect(route('products.category.create'))->with('created', $data['label']);
+    }
+    public function products_category_trash_d(Category $category)
+    {
+        $name = $category->label;
+        $category->delete();
+        return redirect(route('products.category.trash'))->with('deleted' , $name);
     }
     public function products_category_edit()
     {

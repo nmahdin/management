@@ -41,6 +41,12 @@
                     </div>
                     <!-- .nk-block-between -->
                 </div>
+                @if($errors->any())
+                    <div class="alert alert-fill alert-danger alert-icon bg-danger-dim text-danger">
+                        <em class="icon ni ni-cross-circle"></em>
+                        دسته بندی ایجاد نشد!
+                    </div>
+                @endif
                 @if(session('created'))
                     <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
                         <em class="icon ni ni-check-circle"></em>
@@ -113,7 +119,7 @@
                                 <div class="row g-3">
                                     <div class="col-lg-7 offset-lg-5">
                                         <div class="form-group mt-2">
-                                            <button type="submit" class="btn btn-md btn-primary btn-dim">افزودن دسته بندی</button>
+                                            <button type="submit" class="btn btn-md btn-primary btn-dim"  data-bs-toggle="modal" data-bs-target="#modalCreate">افزودن دسته بندی</button>
                                         </div>
                                     </div>
                                 </div>
@@ -126,6 +132,7 @@
             </div>
         </div>
     </div>
+    <x-admin.modal id="modalCreate" class="modal-body-md">در حال ایجاد دسته بندی جدید ...</x-admin.modal>
     <div class="modal fade zoom  modal-sm" tabindex="-1" id="modalZoom" style="display: none;" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

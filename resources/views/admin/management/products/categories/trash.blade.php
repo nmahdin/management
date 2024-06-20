@@ -29,7 +29,7 @@
                                                data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form133').submit();">
                                                 <em class="icon ni ni-forward-ios"></em>
-                                                <span>
+                                                <span class="fw-normal">
                                                     لیست دسته بندی ها
                                                 </span>
                                             </a>
@@ -50,10 +50,17 @@
                         دسته بندی "{{session('restored')}}" با موفقیت به
                         <a href="{{ route('products.categories.list') }}" class="text-success" data-bs-toggle="modal"
                            data-bs-target="#modalZoom"
-                           onclick="event.preventDefault(); document.getElementById('form13').submit();">
+                           onclick="event.preventDefault(); document.getElementById('form133').submit();">
                             <u>لیست دسته بندی ها</u>
                         </a>
                         منتقل شد.
+                    </div>
+                @endif
+                @if(session('deleted'))
+                    <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
+                        <em class="icon ni ni-check-circle"></em>
+                        دسته بندی "{{session('deleted')}}" با موفقیت به
+                        طور کامل حذف شد.
                     </div>
                 @endif
                 @if($n == 0)
@@ -77,6 +84,9 @@
                                         <th class="tb-odr-info">
                                             <span class="tb-odr-info">نام فارسی</span>
                                         </th>
+                                        <th class="tb-odr-info">
+                                            <span class="tb-odr-info">توضیحات</span>
+                                        </th>
                                         <th class="tb-odr-action">&nbsp;</th>
                                     </tr>
                                     </thead>
@@ -87,31 +97,42 @@
                                                 <span class="tb-odr-info">{{ $category->name }}</span>
                                             </td>
                                             <td class="tb-odr-info">
-                                        <span class="tb-odr-info">
-                                            {{ $category->label }}
-                                        </span>
+                                                <span class="tb-odr-info">
+                                                    {{ $category->label }}
+                                                </span>
+                                            </td>
+                                            <td class="tb-odr-info">
+                                                @if($category->notes)
+                                                    <span class="tb-odr-info">
+                                                    {{ $category->notes }}
+                                                </span>
+                                                @else
+                                                    <span class="tb-odr-info text-gray fw-light">
+                                                    بدون توضیح
+                                                </span>
+                                                @endif
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
                                                     <a href="{{ route('products.category.restore' , ['category' => $category->id]) }}"
                                                        class="btn btn-warning btn-dim" data-bs-toggle="modal"
-                                                       data-bs-target="#modalZoom"
+                                                       data-bs-target="#modalrestore"
                                                        onclick="event.preventDefault(); document.getElementById('restore_trash{{$category->id}}').submit();"
-                                                    ><em class="icon ni ni-redo"></em><span>بازگردانی</span> </a>
+                                                    ><em class="icon ni ni-redo"></em><span class="fw-normal">بازگردانی</span> </a>
                                                     <form id="restore_trash{{$category->id}}" method="post"
                                                           action="{{ route('products.category.restore' , ['category' => $category->id]) }}"
                                                           class="d-none">@csrf</form>
 
                                                 </div>
-                                                @if($category->products == null)
+
+                                                @if($category->products->count() == 0)
                                                     <div class="tb-odr-btns d-none d-md-inline"
                                                          style=" margin-right: 3px">
                                                         <a href="{{ route('products.category.delete.trash' , ['category' => $category->id]) }}"
-                                                           data-bs-toggle="modal" data-bs-target="#modalZoom"
+                                                           data-bs-toggle="modal" data-bs-target="#modaldelete"
                                                            onclick="event.preventDefault(); document.getElementById('delete_trash{{$category->id}}').submit();"
                                                            class="btn btn-danger btn-dim"
-                                                           style="padding: 6px 9px !important;"><em
-                                                                class="icon ni ni-trash-fill"></em>حذف کامل</a>
+                                                           style="padding: 6px 9px !important;"><em class="icon ni ni-trash-fill"></em><span class="fw-normal">حذف کامل</span></a>
                                                     </div>
                                                     <form id="delete_trash{{$category->id}}" method="post"
                                                           action="{{ route('products.category.delete.trash' , ['category' => $category->id]) }}"
@@ -131,19 +152,10 @@
             </div>
         </div>
     </div>
-    <div class="modal fade zoom  modal-sm" tabindex="-1" id="modalZoom" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <span class="spinner-border text-gray" style="margin-bottom: -12px; font-size: 10px;" role="status">
-                    </span>
-                    <span class="m-2">
-                        درحال بارگذاری ...
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
+   <x-admin.modal id="modalGeneral">در حال بارگذاری ...</x-admin.modal>
+   <x-admin.modal id="modaldelete">در حال حذف کامل دسته بندی ...</x-admin.modal>
+   <x-admin.modal id="modalrestore">در حال بازگردانی دسته بندی ...</x-admin.modal>
+   <x-admin.modal id="modalZoom" class="modal-body-md">در حال بازگشت به لیست دسته بندی ها ...</x-admin.modal>
     @slot('script')
         <script src="/assets/js/libs/datatable-btns.js"></script>
     @endslot
