@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('product_id');
             $table->string('name');
             $table->string('color');
-            $table->string('category_id'); // دسته بندی
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->unsignedBigInteger('category_id'); // دسته بندی
+//            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->string('picture')->nullable();
-            $table->string('owner'); // مالک
+            $table->unsignedBigInteger('partner_id'); // مالک
+//            $table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade');
             $table->string('price_materials'); // قیمت مواد اولیه
             $table->string('salary')->nullable(); // دسمزد
             $table->string('profit')->nullable(); // سود

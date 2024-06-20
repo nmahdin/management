@@ -30,6 +30,8 @@ Route::get('/products/list' , [Management::class , 'products_list'])->name('prod
 Route::get('/products/trash' , [Management::class , 'products_trash'])->name('products.trash');
 Route::get('/products/create' , [Management::class , 'product_create'])->name('product.create');
 Route::delete('/products/delete/{product}' , [Management::class , 'product_delete'])->name('product.delete');
+Route::delete('/products/trash/d/{product}' , [Management::class , 'product_delete_trash'])->name('product.delete.trash');
+Route::post('/products/restore/{product}' , [Management::class , 'product_restore'])->name('product.restore');
 Route::get('/products/edit/{product}' , [Management::class , 'product_edit'])->name('product.edit');
 Route::get('/products/detail/{product}' , [Management::class , 'product_detail'])->name('product.detail');
 // categories

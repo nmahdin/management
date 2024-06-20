@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             users::class,
             permissions::class,
             customers::class,
+            products::class,
         ]);
     }
 }

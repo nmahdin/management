@@ -132,6 +132,19 @@ class Management extends Controller
     {
 
     }
+
+    public function product_delete_trash(Product $product)
+    {
+        $name = $product->name;
+        $product->delete();
+        return back()->with('deleted' , $name);
+    }
+
+    public function product_restore(Product $product)
+    {
+        $product->update(['deleted' => 0]);
+        return back()->with('restored' , $product->name);
+    }
     // category
     public function products_categories_list()
     {

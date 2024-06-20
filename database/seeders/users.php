@@ -15,7 +15,7 @@ class users extends Seeder
      */
     public function run(): void
     {
-        foreach (range(1, 40) as $n) {
+        foreach (range(1, 3) as $n) {
             DB::table('users')->insert([
                 'name' => "کاربر $n",
                 'username' => "user$n",
