@@ -15,17 +15,16 @@ class products extends Seeder
     {
         foreach (range(10, 30) as $n) {
             DB::table('products')->insert([
-                'name' => "",
-                'product_id' => "",
+                'name' => "محصول $n",
+                'product_id' => "24040$n",
                 'color' => 'قرمز',
-                'category_id' => 2,
+                'category_id' => 1,
                 'partner_id' => 1,
                 'price_materials' => 450000,
                 'total_price' => 600000,
                 'inventory' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
-
             ]);
         }
     }
