@@ -1,4 +1,4 @@
-<x-admin.main title="افزودن نقش">
+<x-admin.main title="افزودن دسته بندی">
 
     <div class="nk-content nk-content-fluid">
         <div class="container-xl wide-xl">
@@ -7,7 +7,7 @@
                     <div class="nk-block-between">
                         <div class="nk-block-head-content">
                             <!--   --------------- title --------------     -->
-                            <h3 class="nk-block-title page-title">افزودن نقش</h3>
+                            <h3 class="nk-block-title page-title">افزودن دسته بندی</h3>
                             <div class="nk-block-des text-soft">
                                 <!--   --------------- توضیح صفحه --------------     -->
 {{--                                <p>در مجموج {{ $n }} نفش وجود دارد.</p>--}}
@@ -22,16 +22,16 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('users.roles') }}"
-                                               class="dropdown-toggle btn btn-primary btn-dim"
+                                            <a href="{{ route('products.categories.list') }}"
+                                               class="dropdown-toggle btn btn-dark btn-dim"
                                                data-bs-toggle="modal" data-bs-target="#modalZoom"
-                                               onclick="event.preventDefault(); document.getElementById('form12').submit();">
+                                               onclick="event.preventDefault(); document.getElementById('form1').submit();">
                                                 <em class="icon ni ni-forward-ios"></em>
                                                 <span>
-                                                    لیست نقش ها
+                                                    لیست دسته بندی ها
                                                 </span>
                                             </a>
-                                            <form id="form12" action="{{ route('users.roles') }}" class="d-none"></form>
+                                            <form id="form1" action="{{ route('products.categories.list') }}" class="d-none"></form>
                                         </li>
                                     </ul>
                                 </div>
@@ -41,24 +41,35 @@
                     </div>
                     <!-- .nk-block-between -->
                 </div>
+                @if(session('created'))
+                    <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
+                        <em class="icon ni ni-check-circle"></em>
+                        دسته بندی "{{session('created')}}" با موفقیت
+                        ایجاد شد.
+                    </div>
+            @endif
                 <!-- .nk-block-head -->
                 <div class="nk-block nk-block-lg">
 
                     <div class="card card-preview">
                         <div class="card-inner">
-                            <form action="{{ route('users.role.creat') }}" method="POST" class="gy-3">
+                            <form action="{{ route('products.category.create') }}" method="POST" class="gy-3">
                                 @csrf
                                 <div class="row g-3 align-center">
                                     <div class="col-lg-3">
                                         <div class="form-group">
-                                            <label class="form-label" for="name">نام نقش</label>
-                                            <span class="form-note">برای شناسایی و نسبت دادن به کاربران</span>
+                                            <label class="form-label" for="name">نام دسته بندی</label>
+                                            <span class="form-note"></span>
                                         </div>
                                     </div>
                                     <div class="col-lg-5">
                                         <div class="form-group">
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control" id="name" name="name" value="{{ old('name' , '') }}" placeholder="انگلیسی وارد کنید">
+                                                <input type="text" class="form-control @error('name') error @enderror" id="name" name="name" value="{{ old('name' , '') }}" placeholder="انگلیسی وارد کنید">
+                                                @error('name')
+{{--                                                {{ dd($errors->defalt) }}--}}
+                                                <span id="fv-subject-error" class="invalid">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -66,14 +77,17 @@
                                 <div class="row g-3 align-center">
                                     <div class="col-lg-3">
                                         <div class="form-group">
-                                            <label class="form-label" for="label">برچسب</label>
+                                            <label class="form-label" for="label">برچسب دسته بندی</label>
                                             <span class="form-note">با این نام در برنامه دیده می شود</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-5">
                                         <div class="form-group">
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control" id="label" name="label" value="{{ old('label' , '') }}" placeholder="می توانید فارسی وارد کنید">
+                                                <input type="text" class="form-control @error('label') error @enderror" id="label" name="label" value="{{ old('label' , '') }}" placeholder="می توانید فارسی وارد کنید">
+                                                @error('label')
+                                                <span id="fv-subject-error" class="invalid">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -81,39 +95,25 @@
                                 <div class="row g-3 align-center">
                                     <div class="col-lg-3">
                                         <div class="form-group">
-                                            <label class="form-label" for="note">توضیحات</label>
-                                            <span class="form-note">توضیحات این نقش برای دانستن کارکرد های آن</span>
+                                            <label class="form-label" for="notes">توضیحات</label>
+                                            <span class="form-note">توضیحات این دسته بندی</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-8">
                                         <div class="form-group">
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control" id="note" name="note" value="{{ old('note' , '') }}" placeholder="اختیاری">
+                                                <input type="text" class="form-control @error('notes') error @enderror" id="notes" name="notes" value="{{ old('notes' , '') }}" placeholder="اختیاری">
+                                                @error('notes')
+                                                <span id="fv-subject-error" class="invalid">{{ $message }}</span>
+                                                @enderror
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row g-3 align-center">
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label class="form-label">لیست دسترسی ها</label>
-                                            <span class="form-note">این نقش به کدام بخش(ها) از برنامه دسترسی دارد.</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <div class="form-control-wrap">
-                                            <select class="form-select js-select2" id="permissions" name="permissions[]" data-search="on" multiple="multiple" data-placeholder="چندین دسترسی را انتخاب کنید">
-                                                @foreach(App\Models\Permission::all() as $permission)
-                                                <option value="{{ $permission->id }}">{{ $permission->label }}</option>
-                                                @endforeach
-                                            </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row g-3">
                                     <div class="col-lg-7 offset-lg-5">
                                         <div class="form-group mt-2">
-                                            <button type="submit" class="btn btn-lg btn-info btn-dim">افزودن</button>
+                                            <button type="submit" class="btn btn-md btn-primary btn-dim">افزودن دسته بندی</button>
                                         </div>
                                     </div>
                                 </div>

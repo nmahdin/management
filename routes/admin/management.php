@@ -32,8 +32,13 @@ Route::get('/products/create' , [Management::class , 'product_create'])->name('p
 Route::delete('/products/delete/{product}' , [Management::class , 'product_delete'])->name('product.delete');
 Route::get('/products/edit/{product}' , [Management::class , 'product_edit'])->name('product.edit');
 Route::get('/products/detail/{product}' , [Management::class , 'product_detail'])->name('product.detail');
+// categories
 Route::get('/products/categories/list' , [Management::class , 'products_categories_list'])->name('products.categories.list');
 Route::get('/products/categories/create' , [Management::class , 'products_category_create'])->name('products.category.create');
+Route::post('/products/categories/create' , [Management::class , 'products_category_create_post']);
 Route::get('/products/categories/edit/{category}' , [Management::class , 'products_category_edit'])->name('products.category.edit');
-Route::get('/products/categories/delete/{category}' , [Management::class , 'products_category_delete'])->name('products.category.delete');
+Route::delete('/products/categories/delete/{category}' , [Management::class , 'products_category_delete'])->name('products.category.delete');
+Route::get('/products/categories/trash' , [Management::class , 'products_category_trash'])->name('products.category.trash');
+Route::delete('/products/categories/trash/d/{category}' , [Management::class , 'products_category_trash_d'])->name('products.category.delete.trash');
+Route::post('/products/categories/trash/re/{category}' , [Management::class , 'products_category_trash_restore'])->name('products.category.restore');
 // end products
