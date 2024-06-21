@@ -14,14 +14,17 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
         $table->id();
         $table->unsignedBigInteger('customer_id');
+        $table->unsignedBigInteger('account_id');
         $table->date('date');
-        $table->unsignedBigInteger('products');
         $table->string('price');
         $table->string('transportation')->nullable();
+        $table->string('transportation_price')->default(0);
         $table->string('status');
         $table->string('notes')->nullable();
         $table->timestamps();
-    });
+        });
+
+
     }
 
     /**
