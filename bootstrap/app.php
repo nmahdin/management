@@ -16,7 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
 
             Route::middleware('web' , 'auth')
                 ->prefix('/management')->name('')
-                ->group(base_path('routes/admin/management.php'));
+                ->group(base_path('routes/admin/general.php'));
+
+            Route::middleware('web' , 'auth')
+                ->prefix('/financial')->name('')
+                ->group(base_path('routes/admin/financial.php'));
 
         },
     )

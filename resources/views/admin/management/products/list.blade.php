@@ -161,7 +161,7 @@
             </div>
         </div>
     </div>
-    <x-admin.modal id="modalTrash" class="modal-body-md">در حال رفتن به صفحه محصولات خذف شده ...</x-admin.modal>
+    <x-admin.modal id="modalTrash" class="modal-body-md">در حال رفتن به صفحه محصولات حذف شده ...</x-admin.modal>
 
 @slot('script')
         <script src="/assets/js/libs/datatable-btns.js"></script>

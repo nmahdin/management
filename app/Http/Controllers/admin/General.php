@@ -12,7 +12,7 @@ use App\Models\User;
 use Database\Seeders\permissions;
 use Illuminate\Http\Request;
 
-class Management extends Controller
+class General extends Controller
 {
     // start users
     public function users_all()
@@ -122,7 +122,7 @@ class Management extends Controller
     public function product_delete(Product $product)
     {
         $product->update(['deleted' => 1]);
-        return back()->with('deleted' , $product->label);
+        return back()->with('deleted' , $product->name);
     }
     public function product_edit()
     {
