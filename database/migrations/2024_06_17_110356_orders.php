@@ -17,13 +17,14 @@ return new class extends Migration
         $table->unsignedBigInteger('account_id');
         $table->date('date');
         $table->string('price');
+        $table->string('payments');
         $table->string('transportation')->nullable();
         $table->string('transportation_price')->default(0);
-        $table->string('status');
+        $table->unsignedBigInteger('status_id');
+        $table->string('type_id'); // فروش نمایشگاهیی و ...
         $table->string('notes')->nullable();
         $table->timestamps();
         });
-
 
     }
 

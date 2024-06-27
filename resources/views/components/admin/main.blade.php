@@ -14,6 +14,11 @@
     <title>{{ $title }} | هنر صدف</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="/assets/css/dashlite.rtl.css" />
+
+    <link rel="stylesheet" href="/assets/css/fonta/all.css" />
+    <link rel="stylesheet" href="/assets/css/fonta/sharp-light.css" />
+    <link rel="stylesheet" href="/assets/css/fonta/sharp-thin.css" />
+
     <link id="skin-default" rel="stylesheet" href="/assets/css/theme.css" />
 </head>
 
@@ -25,7 +30,8 @@
         <div class="nk-sidebar nk-sidebar-fixed is-light" data-content="sidebarMenu">
             <div class="nk-sidebar-element nk-sidebar-head">
                 <div class="nk-sidebar-brand">
-                    <a href="html/index.html" class="logo-link nk-sidebar-logo">
+                    <a href="" class="logo-link nk-sidebar-logo">
+
                         <img class="logo-light logo-img" src="/assets/images/logo.png" srcset="/assets/images/logo2x.png 2x" alt="لوگو" />
                         <img class="logo-dark logo-img" src="/assets/images/logo-dark.png" srcset="/assets/images/logo-dark2x.png 2x" alt="لوگوی تاریک" />
                         <img class="logo-small logo-img logo-img-small" src="/assets/images/logo-small.png" srcset="/assets/images/logo-small2x.png 2x" alt="لوگوی کوچک" />

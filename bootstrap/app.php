@@ -15,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->group(base_path('routes/admin/main.php'));
 
             Route::middleware('web' , 'auth')
-                ->prefix('/management')->name('')
+                ->prefix('/general')->name('')
                 ->group(base_path('routes/admin/general.php'));
 
             Route::middleware('web' , 'auth')
