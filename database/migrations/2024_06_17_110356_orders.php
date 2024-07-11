@@ -17,12 +17,17 @@ return new class extends Migration
         $table->unsignedBigInteger('account_id');
         $table->date('date');
         $table->string('price');
-        $table->string('payments');
-        $table->string('transportation')->nullable();
+        $table->string('payments'); // روش پرداخت
+        $table->unsignedBigInteger('account_id'); // حساب مقصد
+        $table->string('tax')->nullable(); // مالیات
+        $table->string('extra_expenses')->nullable(); // هزینه های اضافی
+        $table->string('services')->nullable(); // خدمات
+        $table->string('profit'); // سود
+        $table->string('discount')->default(0); // تخفیف
         $table->string('transportation_price')->default(0);
         $table->unsignedBigInteger('status_id');
         $table->string('type_id'); // فروش نمایشگاهیی و ...
-        $table->string('notes')->nullable();
+        $table->text('note')->nullable();
         $table->timestamps();
         });
 

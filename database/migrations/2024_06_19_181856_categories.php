@@ -15,8 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('label');
-            $table->string('notes')->nullable();
-            $table->integer('deleted')->default(0);
+            $table->text('notes')->nullable();
+
+            $table->unsignedBigInteger('categoryable_id');
+            $table->string('categoryable_type');
+
+            $table->boolean('deleted')->default(0);
             $table->timestamps();
         });
     }

@@ -46,7 +46,7 @@ Route::post('/products/categories/trash/re/{category}' , [General::class , 'prod
 // end products
 
 // start purchases
-Route::get('/purchases/list')->name('purchases.list');
+Route::get('/purchases/list' , [General::class , 'purchases_list'])->name('purchases.list');
 Route::get('/purchases/creat')->name('purchases.creat');
 Route::get('/purchases/delete/{purchase}')->name('purchases.delete');
 Route::get('/purchases/trash')->name('purchases.trash');
@@ -55,6 +55,7 @@ Route::get('/purchases/trash/{purchase}/re')->name('purchases.restore');
 // categories
 Route::get('/purchases/categories/list')->name('purchases.categories.list');
 Route::get('/purchases/category/creat')->name('purchases.category.creat');
+Route::post('/purchases/category/creat');
 Route::get('/purchases/category/delete/{purchase}')->name('purchases.category.delete');
 Route::get('/purchases/categories/trash')->name('purchases.categories.trash');
 Route::get('/purchases/category/trash/{purchase}/d')->name('purchases.category.delete.trash');

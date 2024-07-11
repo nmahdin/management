@@ -130,13 +130,13 @@
                     </a>
                     <ul class="nk-menu-sub">
                         <li class="nk-menu-item">
-                            <a href="{{ route('') }}" class="nk-menu-link"><span class="nk-menu-text">کلی</span></a>
+                            <a href="{{ route('transactions.general') }}" class="nk-menu-link"><span class="nk-menu-text">کلی</span></a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="{{ route('') }}" class="nk-menu-link"><span class="nk-menu-text">ورودی</span></a>
+                            <a href="{{ route('transactions.inputs') }}" class="nk-menu-link"><span class="nk-menu-text">ورودی</span></a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="{{ route('') }}" class="nk-menu-link"><span class="nk-menu-text">خروجی</span></a>
+                            <a href="{{ route('transactions.outputs') }}" class="nk-menu-link"><span class="nk-menu-text">خروجی</span></a>
                         </li>
                     </ul>
                     <!-- .nk-menu-sub -->
@@ -149,19 +149,19 @@
                     </a>
                     <ul class="nk-menu-sub">
                         <li class="nk-menu-item">
-                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">لیست فاکتورها</span></a>
+                            <a href="{{ route('orders.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست فاکتورها</span></a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">افزودن فاکتور</span></a>
+                            <a href="{{ route('orders.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن فاکتور</span></a>
                         </li>
                         <li class="nk-menu-item has-sub">
                             <a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-text">دسته های فروش</span></a>
                             <ul class="nk-menu-sub">
                                 <li class="nk-menu-item">
-                                    <a href="#" class="nk-menu-link"><span class="nk-menu-text">لیست دسته بندی ها</span></a>
+                                    <a href="{{ route('orders.categories.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست دسته بندی ها</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="#" class="nk-menu-link"><span class="nk-menu-text">افزودن دسته بندی</span></a>
+                                    <a href="{{ route('orders.categories.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن دسته بندی</span></a>
                                 </li>
                             </ul>
                             <!-- .nk-menu-sub -->
@@ -170,10 +170,10 @@
                             <a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-text">وضعیت های فاکتور</span></a>
                             <ul class="nk-menu-sub">
                                 <li class="nk-menu-item">
-                                    <a href="#" class="nk-menu-link"><span class="nk-menu-text">لیست وضعیت ها</span></a>
+                                    <a href="{{ route('orders.statuses.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست وضعیت ها</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="#" class="nk-menu-link"><span class="nk-menu-text">افزودن وضعیت</span></a>
+                                    <a href="{{ route('orders.statuses.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن وضعیت</span></a>
                                 </li>
                             </ul>
                             <!-- .nk-menu-sub -->
@@ -190,10 +190,10 @@
                     </a>
                     <ul class="nk-menu-sub">
                         <li class="nk-menu-item">
-                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">لیست فاکتورها</span></a>
+                            <a href="{{ route('partners.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست شریک ها</span></a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">افزودن فاکتور</span></a>
+                            <a href="{{ route('partners.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن شریک</span></a>
                         </li>
                     </ul>
                     <!-- .nk-menu-sub -->
@@ -206,10 +206,10 @@
                     </a>
                     <ul class="nk-menu-sub">
                         <li class="nk-menu-item">
-                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">لیست حساب ها</span></a>
+                            <a href="{{ route('accounts.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست حساب ها</span></a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">افزودن حساب</span></a>
+                            <a href="{{ route('accounts.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن حساب</span></a>
                         </li>
                     </ul>
                     <!-- .nk-menu-sub -->

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('product_id');
             $table->string('name');
             $table->string('color');
+
             $table->unsignedBigInteger('category_id'); // دسته بندی
 //            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->string('picture')->nullable();
@@ -27,9 +28,10 @@ return new class extends Migration
             $table->string('profit')->nullable(); // سود
             $table->string('total_price'); // قیمت تمام شده محصول
             $table->string('inventory'); // موجودی
+            $table->unsignedBigInteger('status_id');
             $table->string('label')->nullable(); // برچسب
-            $table->string('notes')->nullable();
-            $table->integer('deleted')->default(0);
+            $table->text('note')->nullable();
+            $table->boolean('deleted')->default(0);
             $table->timestamps();
         });
     }
