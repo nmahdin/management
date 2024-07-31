@@ -9,9 +9,21 @@ Route::get('/transactions/general' , [Financial::class , 'transactions_general']
 Route::get('/transactions/inputs' , [Financial::class , 'transactions_inputs'])->name('transactions.inputs');
 Route::get('/transactions/inputs/new' , [Financial::class , 'transactions_inputs_new'])->name('transactions.inputs.new');
 Route::post('/transactions/inputs/new' , [Financial::class , 'transactions_inputs_new_post']);
+Route::get('/transactions/inputs/edit/{input}/' , [Financial::class , 'transactions_inputs_edit'])->name('transactions.input.edit');
+Route::post('/transactions/inputs/edit/{input}/' , [Financial::class , 'transactions_inputs_edit_post']);
+Route::delete('/transactions/inputs/delete/{input}/' , [Financial::class , 'transactions_inputs_delete'])->name('transactions.input.delete');
+Route::get('/transactions/inputs/trash/' , [Financial::class , 'transactions_inputs_trash_list'])->name('transactions.inputs.trash');
+Route::delete('/transactions/inputs/trash/delete/{input}/' , [Financial::class , 'transactions_inputs_trash_delete'])->name('transactions.inputs.trash');
+Route::post('/transactions/inputs/trash/restore/{input}/' , [Financial::class , 'transactions_inputs_trash_restore'])->name('transactions.inputs.trash');
 Route::get('/transactions/outputs' , [Financial::class , 'transactions_outputs'])->name('transactions.outputs');
 Route::get('/transactions/outputs/new' , [Financial::class , 'transactions_outputs_new'])->name('transactions.outputs.new');
 Route::post('/transactions/outputs/new' , [Financial::class , 'transactions_outputs_new_post']);
+Route::delete('/transactions/outputs/delete/{output}/' , [Financial::class , 'transactions_outputs_delete'])->name('transactions.output.delete');
+Route::get('/transactions/outputs/edit/{output}/' , [Financial::class , 'transactions_outputs_edit'])->name('transactions.output.edit');
+Route::post('/transactions/outputs/edit/{output}/' , [Financial::class , 'transactions_outputs_edit_post']);
+Route::get('/transactions/outputs/trash/' , [Financial::class , 'transactions_outputs_trash_list'])->name('transactions.inputs.trash');
+Route::delete('/transactions/outputs/trash/delete/{output}/' , [Financial::class , 'transactions_outputs_trash_delete'])->name('transactions.inputs.trash');
+Route::post('/transactions/outputs/trash/restore/{output}/' , [Financial::class , 'transactions_outputs_trash_restore'])->name('transactions.inputs.trash');
 // end Transactions
 
 // start orders

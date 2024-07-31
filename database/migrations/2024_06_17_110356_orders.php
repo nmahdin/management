@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
         $table->id();
         $table->unsignedBigInteger('customer_id');
-        $table->unsignedBigInteger('account_id');
-        $table->date('date');
+        $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+//        $table->unsignedBigInteger('account_id');
+        $table->string('date');
         $table->string('price');
         $table->string('payments'); // روش پرداخت
         $table->unsignedBigInteger('account_id'); // حساب مقصد
@@ -24,7 +25,7 @@ return new class extends Migration
         $table->string('services')->nullable(); // خدمات
         $table->string('profit'); // سود
         $table->string('discount')->default(0); // تخفیف
-        $table->string('transportation_price')->default(0);
+        $table->integer('transportation_price')->default(0);
         $table->unsignedBigInteger('status_id');
         $table->string('type_id'); // فروش نمایشگاهیی و ...
         $table->text('note')->nullable();

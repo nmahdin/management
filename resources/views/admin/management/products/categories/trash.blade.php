@@ -124,6 +124,7 @@
                                                           class="d-none">@csrf</form>
 
                                                 </div>
+{{--                                                {{ dd($category->products); }}--}}
 
                                                 @if($category->products->count() == 0)
                                                     <div class="tb-odr-btns d-none d-md-inline"

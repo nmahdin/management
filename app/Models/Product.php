@@ -18,9 +18,9 @@ class Product extends Model
         return $this->belongsTo(Partner::class);
     }
 
-    public function category(): MorphOne
+    public function category(): BelongsTo
     {
-        return $this->morphOne(Category::class , 'categoryable');
+        return $this->belongsTo(Category::class);
     }
 
     public function orders(): BelongsToMany

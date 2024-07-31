@@ -23,6 +23,7 @@ class products extends Seeder
                 'price_materials' => 450000,
                 'total_price' => 600000,
                 'inventory' => 4,
+                'status_id' => 0,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

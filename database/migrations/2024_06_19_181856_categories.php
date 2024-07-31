@@ -16,10 +16,6 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('label');
             $table->text('notes')->nullable();
-
-            $table->unsignedBigInteger('categoryable_id');
-            $table->string('categoryable_type');
-
             $table->boolean('deleted')->default(0);
             $table->timestamps();
         });

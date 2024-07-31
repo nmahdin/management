@@ -120,7 +120,7 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="#" class="btn btn-warning btn-dim"><em
+                                                    <a href="{{ route('products.category.edit' , ['category' => $category->id]) }}" class="btn btn-warning btn-dim"><em
                                                             class="icon ni ni-edit-alt-fill"></em><span class="fw-normal">ویرایش</span>
                                                     </a>
                                                 </div>

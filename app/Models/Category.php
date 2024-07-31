@@ -11,8 +11,8 @@ class Category extends Model
     protected $fillable = ['name' , 'label' , 'notes' , 'deleted'];
 
 
-    public function categoryable()
+    public function products()
     {
-        return $this->morphTo();
+        return $this->hasMany(Product::class);
     }
 }

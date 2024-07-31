@@ -109,8 +109,14 @@
                                     <td class="nk-tb-col nk-tb-col-tools">
                                         <ul class="nk-tb-actions gx-1">
                                             <li class="nk-tb-action-hidden">
-                                                <a href="#" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="ویرایش">
+                                                <a href="{{ route('customer.edit' , ['customer' => $customer->id]) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="ویرایش">
                                                     <em class="icon ni ni-edit-alt-fill"></em>
+                                                </a>
+                                            </li>
+                                            <li class="nk-tb-action-hidden">
+                                                <a href="{{ route('customer.info' , ['customer' => $customer->id]) }}"
+                                                   class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="مشاهده جزئیات">
+                                                    <em class="icon ni ni-info-fill"></em>
                                                 </a>
                                             </li>
                                             <li class="nk-tb-action-hidden">
@@ -135,6 +141,7 @@
             </div>
         </div>
     </div>
+    <x-admin.modal id="modalInfo" class="modal-body-md">در حال رفتن به صفحه جزئیات مشتری ...</x-admin.modal>
     <div class="modal fade zoom  modal-sm" tabindex="-1" id="modalZoom" style="display: none;" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

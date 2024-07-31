@@ -16,8 +16,11 @@ Route::post('/users/roles/creat' , [General::class , 'users_roles_creat_post']);
 
 // start customers
 Route::get('/customers/list' , [General::class , 'customers_list'])->name('customers.list');
-Route::get('/customers/creat' , [General::class , 'customers_creat'])->name('customer.creat');
-Route::post('/customers/creat' , [General::class , 'customer_create_post']);
+Route::get('/customers/create' , [General::class , 'customers_create'])->name('customer.creat');
+Route::post('/customers/create' , [General::class , 'customer_create_post']);
+Route::get('/customers/info/{customer}' , [General::class , 'customer_info'])->name('customer.info');
+Route::get('/customers/edit/{customer}' , [General::class , 'customer_edit'])->name('customer.edit');
+Route::post('/customers/edit/{customer}' , [General::class , 'customer_edit_post']);
 Route::delete('/customers/delete/{customer}' , [General::class , 'customers_delete'])->name('customer.delete');
 Route::get('/customers/trash/' , [General::class , 'customers_trash'])->name('customer.trash');
 Route::post('/customers/restore/{customer}' , [General::class , 'customers_restore'])->name('customer.restore');
@@ -29,6 +32,7 @@ Route::delete('/customers/trash/{customer}' , [General::class , 'customers_delet
 Route::get('/products/list' , [General::class , 'products_list'])->name('products.list');
 Route::get('/products/trash' , [General::class , 'products_trash'])->name('products.trash');
 Route::get('/products/create' , [General::class , 'product_create'])->name('product.create');
+Route::post('/products/create' , [General::class , 'product_create_post']);
 Route::delete('/products/delete/{product}' , [General::class , 'product_delete'])->name('product.delete');
 Route::delete('/products/trash/d/{product}' , [General::class , 'product_delete_trash'])->name('product.delete.trash');
 Route::post('/products/restore/{product}' , [General::class , 'product_restore'])->name('product.restore');
@@ -39,6 +43,7 @@ Route::get('/products/categories/list' , [General::class , 'products_categories_
 Route::get('/products/categories/create' , [General::class , 'products_category_create'])->name('products.category.create');
 Route::post('/products/categories/create' , [General::class , 'products_category_create_post']);
 Route::get('/products/categories/edit/{category}' , [General::class , 'products_category_edit'])->name('products.category.edit');
+Route::post('/products/categories/edit/{category}' , [General::class , 'products_category_edit_post']);
 Route::delete('/products/categories/delete/{category}' , [General::class , 'products_category_delete'])->name('products.category.delete');
 Route::get('/products/categories/trash' , [General::class , 'products_category_trash'])->name('products.category.trash');
 Route::delete('/products/categories/trash/d/{category}' , [General::class , 'products_category_trash_d'])->name('products.category.delete.trash');
