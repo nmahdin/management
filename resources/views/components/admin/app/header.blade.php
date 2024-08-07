@@ -30,8 +30,8 @@
                         </li>
                         <!-- .nk-menu-item -->
                         <li class="nk-menu-item">
-                            <a href="#" class="nk-menu-link">
-                                <span class="nk-menu-text">تراکنش ها</span>
+                            <a href="{{ route('cart.list') }}" class="nk-menu-link">
+                                <span class="nk-menu-text">سبد خرید</span>
                             </a>
                         </li>
                         <!-- .nk-menu-item -->
