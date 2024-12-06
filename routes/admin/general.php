@@ -67,6 +67,8 @@ Route::get('/products/statuses/trash/list' , [General::class , 'products_statuse
 Route::get('/purchases/list' , [General::class , 'purchases_list'])->name('purchases.list');
 Route::get('/purchases/create' , [General::class , 'purchases_create'])->name('purchases.create');
 Route::post('/purchases/create' , [General::class , 'purchases_create_post']);
+Route::get('/purchases/edit/{purchase}' , [General::class , 'purchases_edit'])->name('purchases.edit');
+Route::post('/purchases/edit/{purchase}' , [General::class , 'purchases_edit_store']);
 Route::delete('/purchases/delete/{purchase}' , [General::class , 'purchases_delete'])->name('purchases.delete');
 Route::get('/purchases/detail/{purchase}' , [General::class , 'purchases_detail'])->name('purchases.detail');
 Route::get('/purchases/trash' , [General::class , 'purchases_trash'])->name('purchases.trash');

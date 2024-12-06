@@ -206,9 +206,10 @@ class General extends Controller
         $path = "/assets/img/products";
 
         $product = Product::create($data);
-
-        $file->move(public_path($path), $product->id .'.'. $file->getClientOriginalExtension());
-        $product->update(['picture' => $path.'/'. $product->id .'.'. $file->getClientOriginalExtension()]);
+        if ($file != null) {
+            $file->move(public_path($path), $product->id .'.'. $file->getClientOriginalExtension());
+            $product->update(['picture' => $path.'/'. $product->id .'.'. $file->getClientOriginalExtension()]);
+        }
 
         return redirect(route('product.create'))->with('created', $data['name']);
     }
@@ -468,6 +469,41 @@ class General extends Controller
     {
         $purchase->update(['deleted' => 0]);
         return back()->with('restored' , $purchase->name);
+    }
+    public function purchases_edit(Purchase $purchase)
+    {
+        return view('admin.financial.purchases.edit' , ['purchase' => $purchase]);
+    }
+    public function purchases_edit_store(Request $request , Purchase $purchase)
+    {
+        $data = $request->validate([
+            'code' => ['required' , Rule::unique('purchases')->ignore($purchase->code , 'code') ],
+            'picture' => ['nullable'],
+            'name' => ['required'],
+            'color' => ['required'],
+            'amount' => ['required'],
+            'unit' => ['required'],
+            'unit_price' => ['integer' , 'required'],
+            'total_price' => ['integer' ,'required'],
+            'date' => ['required'],
+            'category_id' => ['required' , 'exists:purchases_category,id'],
+            'seller_id' => ['required'],
+            'notes' => ['nullable'],
+        ]);
+
+        if ($request->hasFile('picture')) {
+            $file = $request->picture;
+            $path = "/assets/files/purchases";
+            $file->move(public_path($path), now()->timestamp .'.'.$file->getClientOriginalExtension());
+
+            $data['picture'] = now()->timestamp .'.'.$file->getClientOriginalExtension();
+        }
+        if ($data['date'] !== $purchase->date)
+            $data['date'] = Custom::changDate($data['date']);
+
+        $purchase->update($data);
+
+        return redirect(route('purchases.list'))->with('created', $data['name']);
     }
     // categories
     public function purchases_categories_list()

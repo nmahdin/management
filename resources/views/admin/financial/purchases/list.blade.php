@@ -62,6 +62,13 @@
                     منتقل شد.
                 </div>
                 @endif
+                @if(session('updated'))
+                    <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
+                        <em class="icon ni ni-check-circle"></em>
+                        خرید "{{session('updated')}}" با موفقیت
+                        ویرایش شد.
+                    </div>
+                @endif
                 @if($n == 0)
                     <div class="alert alert-fill alert-light alert-icon">
                         <em class="icon ni ni-alert-circle"></em>
@@ -132,7 +139,7 @@
                                                         </a>
                                                     </li>
                                                     <li class="nk-tb-action-hidden">
-                                                        <a href="{{ route('product.edit' , ['product' => $purchase->id]) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="ویرایش">
+                                                        <a href="{{ route('purchases.edit' , ['purchase' => $purchase->id]) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="ویرایش">
                                                             <em class="icon ni ni-edit-alt-fill"></em>
                                                         </a>
                                                     </li>

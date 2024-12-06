@@ -99,7 +99,7 @@
                                                 </li>
                                                 <li>
                                                     <div class="fs-14px text-muted">دسته بندی</div>
-                                                    <div class="fs-16px fw-bold text-secondary">{{ \App\Models\Category::find($product->category_id)->first()->name }}</div>
+                                                    <div class="fs-16px fw-bold text-secondary">{{ \App\Models\Category::where('id' , $product->category_id)->first()->name }}</div>
                                                 </li>
                                             </ul>
                                         </div>
