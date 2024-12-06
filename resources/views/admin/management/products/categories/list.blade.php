@@ -11,7 +11,7 @@
                             <div class="nk-block-des text-soft">
                                 <!--   --------------- توضیح صفحه --------------     -->
                                 @if($n !== 0)
-                                <p>در مجموج {{ $n }} دسته بندی وجود دارد.</p>
+                                    <p>در مجموج {{ $n }} دسته بندی وجود دارد.</p>
                                 @endif
                             </div>
                         </div>
@@ -69,11 +69,11 @@
                         منتقل شد.
                     </div>
                 @endif
-            <!-- .nk-block-head -->
+                <!-- .nk-block-head -->
                 @if($n == 0)
                     <div class="alert alert-fill alert-light alert-icon">
                         <em class="icon ni ni-alert-circle"></em>
-                    هیچ دسته بندی ای وجود ندارد! سطل زباله را بررسی کنید.
+                        هیچ دسته بندی ای وجود ندارد! سطل زباله را بررسی کنید.
                     </div>
                 @endif
 
@@ -85,15 +85,12 @@
                                     <thead class="tb-odr-head">
                                     <tr class="tb-odr-item">
                                         <th class="tb-odr-info">
-                                            <span class="tb-odr-info">نام انگلیسی</span>
-                                        </th>
-                                        <th class="tb-odr-info">
-                                            <span class="tb-odr-info">نام فارسی</span>
+                                            <span class="tb-odr-info">نام</span>
                                         </th>
                                         <th class="tb-odr-info">
                                             <span class="tb-odr-info">توضیحات</span>
                                         </th>
-                                        <th class="tb-odr-action">&nbsp;</th>
+                                        <th class="tb-odr-action">اقدام</th>
                                     </tr>
                                     </thead>
                                     <tbody class="tb-odr-body">
@@ -103,13 +100,8 @@
                                                 <span class="tb-odr-info">{{ $category->name }}</span>
                                             </td>
                                             <td class="tb-odr-info">
-                                                <span class="tb-odr-info">
-                                                    {{ $category->label }}
-                                                </span>
-                                            </td>
-                                            <td class="tb-odr-info">
                                                 @if($category->notes)
-                                                <span class="tb-odr-info">
+                                                    <span class="tb-odr-info">
                                                     {{ $category->notes }}
                                                 </span>
                                                 @else
@@ -120,8 +112,10 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('products.category.edit' , ['category' => $category->id]) }}" class="btn btn-warning btn-dim"><em
-                                                            class="icon ni ni-edit-alt-fill"></em><span class="fw-normal">ویرایش</span>
+                                                    <a href="{{ route('products.category.edit' , ['category' => $category->id]) }}"
+                                                       class="btn btn-warning btn-dim"><em
+                                                            class="icon ni ni-edit-alt-fill"></em><span
+                                                            class="fw-normal">ویرایش</span>
                                                     </a>
                                                 </div>
                                                 <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
@@ -144,8 +138,8 @@
                         </div>
                         <!-- .card-preview -->
                     </div>
-                 @endif
-            <!-- .nk-block -->
+                @endif
+                <!-- .nk-block -->
             </div>
         </div>
     </div>

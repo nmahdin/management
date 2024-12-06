@@ -26,7 +26,7 @@
                                             <a href="{{ route('product.create') }}" class="dropdown-toggle btn btn-dark btn-dim " data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form12').submit();">
                                                 <em class="icon ni ni-plus"></em>
-                                                <span>
+                                                <span class="fw-normal">
                                                     افزودن محصول
                                                 </span>
                                             </a>
@@ -36,7 +36,7 @@
                                             <a href="{{ route('products.trash') }}" class="dropdown-toggle btn btn-light btn-dim" data-bs-toggle="modal" data-bs-target="#modalTrash"
                                                onclick="event.preventDefault(); document.getElementById('form13').submit();">
                                                 <em class="icon ni ni-trash"></em>
-                                                <span>
+                                                <span class="fw-normal">
                                                     سطل زباله
                                                 </span>
                                             </a>
@@ -91,10 +91,15 @@
                                     <tbody>
                                     @foreach($products as $product)
                                         <tr class="nk-tb-item">
+{{--                                            <td class="nk-tb-col nk-tb-col-check">--}}
+{{--                                                <div class="custom-control custom-control-sm custom-checkbox notext">--}}
+{{--                                                    <input type="checkbox" class="custom-control-input" id="s{{ $product->id }}" />--}}
+{{--                                                    <label class="custom-control-label" for="s{{ $product->id }}"></label>--}}
+{{--                                                </div>--}}
+{{--                                            </td>--}}
                                             <td class="nk-tb-col nk-tb-col-check">
-                                                <div class="custom-control custom-control-sm custom-checkbox notext">
-                                                    <input type="checkbox" class="custom-control-input" id="s{{ $product->id }}" />
-                                                    <label class="custom-control-label" for="s{{ $product->id }}"></label>
+                                                <div class="user-avatar sq" style="background: white">
+                                                    <img src="{{ $product->picture }}" alt="">
                                                 </div>
                                             </td>
                                             <td class="nk-tb-col tb-col-sm" data-order="35040.34">
@@ -109,10 +114,10 @@
                                                 </div>
                                             </td>
                                             <td class="nk-tb-col tb-col-sm">
-                                                <span class="badge badge-dim bg-dark fw-light">{{ $product->category->label ?? 'بدون دسته بندی' }}</span>
+                                                <span class="badge badge-dim bg-dark fw-light">{{ $product->category->name ?? 'بدون دسته بندی' }}</span>
                                             </td>
                                             <td class="nk-tb-col tb-col-md">
-                                                <span class="badge badge-dim bg-info badge-sm" style="font-size: 15px; border-radius: 7px">{{ $product->total_price }}</span>
+                                                <span class="badge badge-dim bg-info badge-sm" style="font-size: 15px; border-radius: 7px"><span>{{ number_format($product->total_price , 0, ',') }}</span></span>
                                             </td>
                                             <td class="nk-tb-col tb-col-sm">
                                                 <span>{{ $product->inventory }}</span>
@@ -120,7 +125,12 @@
                                             <td class="nk-tb-col nk-tb-col-tools">
                                                 <ul class="nk-tb-actions gx-1">
                                                     <li class="nk-tb-action-hidden">
-                                                        <a href="#" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="ویرایش">
+                                                        <a href="{{ route('product.detail' , ['product' => $product->id]) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="جزئیات">
+                                                            <em class="icon ni ni-info-fill"></em>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nk-tb-action-hidden">
+                                                        <a href="{{ route('product.edit' , ['product' => $product->id]) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="ویرایش">
                                                             <em class="icon ni ni-edit-alt-fill"></em>
                                                         </a>
                                                     </li>

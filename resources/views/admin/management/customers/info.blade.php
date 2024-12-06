@@ -76,16 +76,21 @@
                                     <div class="card-inner card-inner-sm">
                                         <ul class="btn-toolbar justify-center gx-1">
                                             <li>
-                                                <a href="{{ route('customer.edit' , ['customer' => $customer->id]) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip"
+                                                <a href="{{ route('customer.edit' , ['customer' => $customer->id]) }}"
+                                                   class="btn btn-trigger btn-icon" data-bs-toggle="tooltip"
                                                    data-bs-placement="top" title="ویرایش مشتری">
                                                     <em class="icon ni ni-edit-alt-fill"></em></a>
                                             </li>
                                             <li>
-                                                <a href="{{ route('customer.delete' , ['customer' => $customer->id]) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip"
-                                                   data-bs-placement="top" title="حذف مشتری" onclick="event.preventDefault(); document.getElementById('delete_cus{{$customer->id}}').submit();">
+                                                <a href="{{ route('customer.delete' , ['customer' => $customer->id]) }}"
+                                                   class="btn btn-trigger btn-icon" data-bs-toggle="tooltip"
+                                                   data-bs-placement="top" title="حذف مشتری"
+                                                   onclick="event.preventDefault(); document.getElementById('delete_cus{{$customer->id}}').submit();">
                                                     <em class="icon ni ni-trash-fill"></em></a>
 
-                                                <form id="delete_cus{{$customer->id}}" method="post" action="{{ route('customer.delete' , ['customer' => $customer->id]) }}" class="d-none">@csrf @method('delete')</form>
+                                                <form id="delete_cus{{$customer->id}}" method="post"
+                                                      action="{{ route('customer.delete' , ['customer' => $customer->id]) }}"
+                                                      class="d-none">@csrf @method('delete')</form>
 
 
                                             </li>
@@ -109,6 +114,14 @@
                                                 <span class="sub-text">شماره تماس :</span>
                                                 <span>{{ $customer->number }}</span>
                                             </div>
+                                            @if($customer->birthday)
+                                                <div class="col-sm-6 col-md-4 col-xl-12">
+                                                    <span class="sub-text">تاریخ تولد:</span>
+                                                    <span>
+                                                    {{ $customer->birthday }}
+                                                </span>
+                                                </div>
+                                            @endif
                                             <div class="col-sm-6 col-md-4 col-xl-12">
                                                 <span class="sub-text">نشانی صورتحساب:</span>
                                                 <span>
@@ -118,9 +131,7 @@
                                                         بدون آدرس ثبت شده
                                                     @endif
                                                 </span>
-
                                             </div>
-
                                         </div>
                                     </div>
                                     <!-- .card-inner -->
@@ -214,8 +225,9 @@
                                                                         <li class="preview-item">
                                                                             <div class="user-avatar sq md bg-white"
                                                                                  style="border-radius: 10px">
-                                                                                <img src="/assets/images/com_ways/phone.jpg"
-                                                                                     alt="تماس">
+                                                                                <img
+                                                                                    src="/assets/images/com_ways/phone.jpg"
+                                                                                    alt="تماس">
                                                                             </div>
                                                                             <span
                                                                                 class="badge rounded-pill badge-dim bg-dark"
@@ -252,8 +264,9 @@
                                                                         <li class="preview-item">
                                                                             <div class="user-avatar sq md bg-white"
                                                                                  style="border-radius: 10px">
-                                                                                <img src="/assets/images/com_ways/bale.jpg"
-                                                                                     alt="بله">
+                                                                                <img
+                                                                                    src="/assets/images/com_ways/bale.jpg"
+                                                                                    alt="بله">
                                                                             </div>
                                                                             <span
                                                                                 class="badge rounded-pill badge-dim bg-dark"
@@ -264,8 +277,9 @@
                                                                         <li class="preview-item">
                                                                             <div class="user-avatar sq md bg-white"
                                                                                  style="border-radius: 10px">
-                                                                                <img src="/assets/images/com_ways/eitaa.jpg"
-                                                                                     alt="ایتا">
+                                                                                <img
+                                                                                    src="/assets/images/com_ways/eitaa.jpg"
+                                                                                    alt="ایتا">
                                                                             </div>
                                                                             <span
                                                                                 class="badge rounded-pill badge-dim bg-dark"
@@ -290,6 +304,26 @@
                                         </div>
                                         <!-- .row -->
                                     </div>
+                                    @if (! is_null($customer->notes))
+                                        <div class="nk-block">
+                                            <h6 class="lead-text mb-3">توضحیات و یادداشت ها</h6>
+                                            <div class="row g-3">
+                                                <div class="col-12 col-lg-6 col-xl-12">
+                                                    <div class="card-inner">
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <ul class="preview-list g-2">
+                                                                {{ $customer->notes }}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- .col -->
+                                                <!-- .col -->
+                                            </div>
+                                            <!-- .row -->
+                                        </div>
+                                    @endif
+
                                 </div>
                                 <!-- .card-inner -->
                             </div>

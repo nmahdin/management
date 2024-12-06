@@ -21,15 +21,25 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id'); // دسته بندی
 //            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->string('picture')->nullable();
-            $table->unsignedBigInteger('partner_id'); // مالک
+            $table->string('partner_id'); // مالک
 //            $table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade');
             $table->string('price_materials'); // قیمت مواد اولیه
-            $table->string('salary')->nullable(); // دسمزد
-            $table->string('profit')->nullable(); // سود
+            $table->string('salary')->default(0); // دسمزد
+            $table->string('profit')->default(0); // سود
+            $table->string('materials_profit')->default(0); // سود مواد اولیه
+            $table->string('additional_costs')->default(0); // هزینه های دیگر
             $table->string('total_price'); // قیمت تمام شده محصول
             $table->string('inventory'); // موجودی
             $table->unsignedBigInteger('status_id');
             $table->string('label')->nullable(); // برچسب
+            $table->text('note')->nullable();
+            $table->boolean('deleted')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::create('products_statuses', function (Blueprint $table) {
+            $table->id();
+            $table->string('name'); // نام
             $table->text('note')->nullable();
             $table->boolean('deleted')->default(0);
             $table->timestamps();
@@ -42,5 +52,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('products');
+        Schema::dropIfExists('statuses');
     }
 };

@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
             $table->string('label');
-            $table->integer('total_price')->default(0);
-            $table->integer('count')->default(0);
+            $table->integer('deleted')->default(0);
             $table->timestamps();
         });
     }

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['product_id' , 'name' , 'color' , 'category_id' , 'picture' , 'partner_id' , 'price_materials' , 'salary' , 'profit' , 'total_price' , 'inventory', 'label' , 'note' , 'status_id' , 'deleted'];
+    protected $fillable = ['product_id' , 'name' , 'color' , 'category_id' , 'picture' , 'partner_id' , 'price_materials' , 'salary' , 'profit' , 'total_price' , 'inventory', 'label' , 'note' , 'status_id' , 'deleted' , 'materials_profit' , 'additional_costs'];
 
     public function owner(): BelongsTo
     {

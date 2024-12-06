@@ -4,7 +4,10 @@ namespace App\Http\Controllers\admin;
 
 use App\helper\Cart\Cart;
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 
 class Main extends Controller
@@ -48,5 +51,64 @@ class Main extends Controller
         $name = Cart::get($id)['Product']->name;
         Cart::delete($id);
         return back()->with('deleted' , $name);
+    }
+
+    public function enter_order(Request  $request)
+    {
+//        dd($request->all());
+        if ($request->customer_id) {
+            $customer = Customer::findOrFail($request->customer_id);
+        } else {
+            $data = $request->validate([
+                'name' => ['required', 'max:250'],
+                'number' => ['min:8', 'max:12', Rule::unique('customers')],
+            ]);
+
+            $customer = Customer::create([
+                'name' => $data['name'],
+                'number' => $data['number'],
+            ]);
+        }
+
+        $cart = Cart::all();
+        $cartItems = $cart;
+        if($cartItems->count()) {
+            $price = $cartItems->sum(function($cart) {
+                return $cart['Product']->total_price * $cart['qnty'];
+            });
+
+            $profit = $cartItems->sum(function($cart) {
+                return $cart['Product']->profit * $cart['qnty'];
+            });
+
+            $orderItems = $cartItems->mapWithKeys(function($cart) {
+                return [$cart['Product']->id => [ 'quantity' => $cart['qnty']] ];
+            });
+            $discount = $price - $request->price;
+
+            $order = Customer::findOrFail($customer->id)->orders()->create([
+                'price' => $request->price,
+                'profit' => $profit, // سود
+                'date' => date('Y-m-d'),
+                'discount' => $discount,
+                'type_id' => $request->type_id,
+
+                'account_id' => '34',
+                'status_id' => '34',
+                'payments' => $request->payments,
+
+
+//            $table->string('payments'); // روش پرداخت
+//            $table->unsignedBigInteger('account_id'); // حساب مقصد
+//            $table->unsignedBigInteger('status_id');
+
+            ]);
+
+            $order->products()->attach($orderItems);
+
+            return 'ok';
+        }
+
+        return back();
     }
 }

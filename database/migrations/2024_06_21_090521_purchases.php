@@ -11,7 +11,42 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::create('purchases', function (Blueprint $table) {
+            $table->id();
+            $table->string('code')->unique();
+            $table->string('picture')->nullable();
+            $table->string('name');
+            $table->string('color');
+            $table->string('amount');
+            $table->string('unit');
+            $table->integer('unit_price');
+            $table->integer('total_price');
+            $table->date('date');
+            $table->unsignedBigInteger('category_id');
+            $table->integer('seller_id');
+            $table->text('notes')->nullable();
+            $table->boolean('deleted')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::create('purchases_category', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('notes')->nullable();
+            $table->boolean('deleted')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::create('sellers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->integer('number')->nullable();
+            $table->integer('phone')->nullable();
+            $table->string('address')->nullable();
+            $table->text('notes')->nullable();
+            $table->boolean('deleted')->default(0);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -19,6 +54,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('purchases_category');
+        Schema::dropIfExists('sellers');
+        Schema::dropIfExists('purchases');
     }
 };

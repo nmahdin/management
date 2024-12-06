@@ -27,7 +27,7 @@
                                                data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form1').submit();">
                                                 <em class="icon ni ni-forward-ios"></em>
-                                                <span>
+                                                <span class="fw-normal">
                                                     لیست دسته بندی ها
                                                 </span>
                                             </a>
@@ -71,27 +71,8 @@
                                     <div class="col-lg-5">
                                         <div class="form-group">
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control @error('name') error @enderror" id="name" name="name" value="{{ old('name' , '') }}" placeholder="انگلیسی وارد کنید">
+                                                <input type="text" class="form-control @error('name') error @enderror" id="name" name="name" value="{{ old('name' , '') }}" placeholder="مثلاً روسری">
                                                 @error('name')
-{{--                                                {{ dd($errors->defalt) }}--}}
-                                                <span id="fv-subject-error" class="invalid">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row g-3 align-center">
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label class="form-label" for="label">برچسب دسته بندی</label>
-                                            <span class="form-note">با این نام در برنامه دیده می شود</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-5">
-                                        <div class="form-group">
-                                            <div class="form-control-wrap">
-                                                <input type="text" class="form-control @error('label') error @enderror" id="label" name="label" value="{{ old('label' , '') }}" placeholder="می توانید فارسی وارد کنید">
-                                                @error('label')
                                                 <span id="fv-subject-error" class="invalid">{{ $message }}</span>
                                                 @enderror
                                             </div>
@@ -108,7 +89,7 @@
                                     <div class="col-lg-8">
                                         <div class="form-group">
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control @error('notes') error @enderror" id="notes" name="notes" value="{{ old('notes' , '') }}" placeholder="اختیاری">
+                                                <textarea class="form-control @error('notes') error @enderror" placeholder="اختیاری" id="notes" name="notes">{{ old('notes' , '') }}</textarea>
                                                 @error('notes')
                                                 <span id="fv-subject-error" class="invalid">{{ $message }}</span>
                                                 @enderror

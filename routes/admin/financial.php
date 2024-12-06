@@ -36,16 +36,16 @@ Route::delete('/orders/delete/{orders}' , [Financial::class , 'orders_delete'])-
 Route::get('/orders/trash' , [Financial::class , 'orders_trash_list'])->name('orders.trash');
 Route::delete('/orders/trash/{orders}/d' , [Financial::class , 'orders_trash_delete'])->name('orders.trash.delete');
 Route::post('/orders/trash/{orders}/re' , [Financial::class , 'orders_trash_restore'])->name('orders.trash.restore');
-// categories
-Route::get('orders/categories/list', [Financial::class , 'orders_categories_list'])->name('orders.categories.list');
-Route::get('orders/categories/create', [Financial::class , 'orders_categories_create'])->name('orders.categories.create');
-Route::post('orders/categories/create', [Financial::class , 'orders_categories_create_post']);
-Route::get('/orders/categories/edit/{categories}' , [Financial::class , 'orders_categories_edit'])->name('orders.categories.edit');
-Route::post('/orders/categories/edit/{categories}' , [Financial::class , 'orders_categories_edit_post']);
-Route::delete('/orders/categories/delete/{categories}' , [Financial::class , 'orders_categories_delete'])->name('orders.categories.delete');
-Route::get('/orders/categories/trash' , [Financial::class , 'orders_categories_trash_list'])->name('orders.categories.trash');
-Route::delete('/orders/categories/trash/{categories}/d' , [Financial::class , 'orders_categories_trash_delete'])->name('orders.categories.trash.delete');
-Route::post('/orders/categories/trash/{categories}/re' , [Financial::class , 'orders_categories_trash_restore'])->name('orders.categories.trash.restore');
+// types
+Route::get('orders/types/list', [Financial::class , 'orders_types_list'])->name('orders.types.list');
+Route::get('orders/types/create', [Financial::class , 'orders_type_create'])->name('orders.type.create');
+Route::post('orders/types/create', [Financial::class , 'orders_type_create_post']);
+Route::get('/orders/types/edit/{type}' , [Financial::class , 'orders_type_edit'])->name('orders.type.edit');
+Route::post('/orders/types/edit/{type}' , [Financial::class , 'orders_type_edit_post']);
+Route::delete('/orders/types/delete/{type}' , [Financial::class , 'orders_type_delete'])->name('orders.type.delete');
+Route::get('/orders/types/trash' , [Financial::class , 'orders_types_trash_list'])->name('orders.types.trash');
+Route::delete('/orders/types/trash/{type}/d' , [Financial::class , 'orders_type_trash_delete'])->name('orders.type.trash.delete');
+Route::post('/orders/types/trash/{type}/re' , [Financial::class , 'orders_type_trash_restore'])->name('orders.type.trash.restore');
 // statuses
 Route::get('/orders/statuses/list', [Financial::class , 'orders_statuses_list'])->name('orders.statuses.list');
 Route::get('/orders/statuses/create', [Financial::class , 'orders_statuses_create'])->name('orders.statuses.create');
@@ -62,23 +62,23 @@ Route::post('/orders/statuses/trash/{statuses}/re' , [Financial::class , 'orders
 Route::get('/partners/list' , [Financial::class , 'partners_list'])->name('partners.list');
 Route::get('/partners/create' , [Financial::class , 'partners_create'])->name('partners.create');
 Route::post('/partners/create' , [Financial::class , 'partners_create_post']);
-Route::get('/partners/edit/{partners}' , [Financial::class , 'partners_edit'])->name('partners.edit');
-Route::post('/partners/edit/{partners}' , [Financial::class , 'partners_edit_post']);
-Route::delete('/partners/delete/{partners}' , [Financial::class , 'partners_delete'])->name('partners.delete');
+Route::get('/partners/edit/{partner}' , [Financial::class , 'partners_edit'])->name('partner.edit');
+Route::post('/partners/edit/{partner}' , [Financial::class , 'partners_edit_post']);
+Route::delete('/partners/delete/{partner}' , [Financial::class , 'partners_delete'])->name('partner.delete');
 Route::get('/partners/trash' , [Financial::class , 'partners_trash_list'])->name('partners.trash');
-Route::delete('/partners/trash/{partners}/d' , [Financial::class , 'partners_trash_delete'])->name('partners.trash.delete');
-Route::post('/partners/trash/{partners}/re' , [Financial::class , 'partners_trash_restore'])->name('partners.trash.restore');
+Route::delete('/partners/trash/{partner}/d' , [Financial::class , 'partners_trash_delete'])->name('partner.trash.d');
+Route::post('/partners/trash/{partner}/re' , [Financial::class , 'partners_trash_restore'])->name('partner.trash.r');
 // end partners
 
 // start accounts
 Route::get('/accounts/list' , [Financial::class , 'accounts_list'])->name('accounts.list');
-Route::get('/accounts/create' , [Financial::class , 'accounts_create'])->name('accounts.create');
+Route::get('/accounts/create' , [Financial::class , 'accounts_create'])->name('account.create');
 Route::post('/accounts/create' , [Financial::class , 'accounts_create_post']);
-Route::get('/accounts/edit/{accounts}' , [Financial::class , 'accounts_edit'])->name('accounts.edit');
-Route::post('/accounts/edit/{accounts}' , [Financial::class , 'accounts_edit_post']);
-Route::get('/accounts/delete/{accounts}' , [Financial::class , 'accounts_delete'])->name('accounts.delete');
+Route::get('/accounts/edit/{account}' , [Financial::class , 'accounts_edit'])->name('account.edit');
+Route::post('/accounts/edit/{account}' , [Financial::class , 'accounts_edit_post']);
+Route::delete('/accounts/delete/{account}' , [Financial::class , 'accounts_delete'])->name('account.delete');
 Route::get('/accounts/trash' , [Financial::class , 'accounts_trash_list'])->name('accounts.trash');
-Route::delete('/accounts/trash/{accounts}/d' , [Financial::class , 'accounts_trash_delete'])->name('accounts.trash.delete');
-Route::post('/accounts/trash/{accounts}/re' , [Financial::class , 'accounts_trash_restore'])->name('accounts.trash.restore');
+Route::delete('/accounts/trash/{account}/d' , [Financial::class , 'accounts_trash_delete'])->name('accounts.trash.delete');
+Route::post('/accounts/trash/{account}/re' , [Financial::class , 'accounts_trash_restore'])->name('accounts.trash.restore');
 // end accounts
 

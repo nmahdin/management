@@ -18,8 +18,9 @@
     <link rel="stylesheet" href="/assets/css/fonta/all.css" />
     <link rel="stylesheet" href="/assets/css/fonta/sharp-light.css" />
     <link rel="stylesheet" href="/assets/css/fonta/sharp-thin.css" />
-
+    {{ $style ?? '' }}
     <link id="skin-default" rel="stylesheet" href="/assets/css/theme.css" />
+    @livewireStyles
 </head>
 
 <body class="has-rtl nk-body ui-rounder has-sidebar" dir="rtl">
@@ -70,6 +71,7 @@
 <script src="/assets/js/scripts.js"></script>
 <script src="/assets/js/charts/gd-campaign.js"></script>
 {{ $script ?? '' }}
+@livewireScripts
 </body>
 
 </html>

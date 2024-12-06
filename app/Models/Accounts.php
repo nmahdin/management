@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Accounts extends Model
 {
     use HasFactory;
-    protected $fillable = ['name' , 'label' , 'inputs' , 'outputs'];
+    protected $fillable = ['number' , 'label' , 'inputs' , 'outputs' , 'payment_label' , 'count' , 'deleted' , 'note'];
 }

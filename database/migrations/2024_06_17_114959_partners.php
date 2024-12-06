@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('partners', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('label');
-            $table->integer('debt')->default(0);
+            $table->integer('property')->default(0);
             $table->string('note')->nullable();
-            $table->string('deleted')->default(0);
+            $table->integer('deleted')->default(0);
             $table->timestamps();
         });
     }

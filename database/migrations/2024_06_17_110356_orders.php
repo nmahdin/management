@@ -32,6 +32,19 @@ return new class extends Migration
         $table->timestamps();
         });
 
+        Schema::create('order_product', function (Blueprint $table) {
+            $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('product_id');
+            $table->integer('quantity');
+            $table->primary(['order_id' , 'product_id']);
+        });
+
+        Schema::create('customer_order', function (Blueprint $table) {
+            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('order_id');
+            $table->primary(['customer_id' , 'order_id']);
+        });
+
     }
 
     /**
@@ -39,6 +52,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('order_product');
+        Schema::dropIfExists('customer_order');
         Schema::dropIfExists('orders');
     }
 };

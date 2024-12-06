@@ -25,7 +25,7 @@
                                                onclick="event.preventDefault(); document.getElementById('form12').submit();">
                                                 <em class="icon ni ni-forward-ios"></em>
 {{--                                                <em class="icon ni ni-plus"></em>--}}
-                                                <span>
+                                                <span class="fw-normal">
                                                     لیست محصولات
                                                 </span>
                                             </a>
@@ -43,7 +43,7 @@
                 @if(session('created'))
                 <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
                     <em class="icon ni ni-check-circle"></em>
-                    محصول "{{session('created')}}" با موفقیت ایچاد شد.
+                    محصول "{{session('created')}}" با موفقیت ایجاد شد.
                 </div>
                 @endif
                 <div class="nk-block nk-block-lg">
@@ -52,14 +52,14 @@
                             <div class="card-head">
                                 <h5 class="card-title">اطلاعات محصول</h5>
                             </div>
-                            <form action="{{ route('product.create') }}" method="post">
+                            <form action="{{ route('product.create') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row g-4">
                                     <div class="col-lg-3">
                                         <div class="form-group">
                                             <label class="form-label" for="product_id">کد محصول</label>
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control @error('product_id') error @enderror" id="product_id" name="product_id">
+                                                <input type="text" class="form-control @error('product_id') error @enderror" id="product_id" name="product_id" value="{{ old('product_id' , '') }}">
                                                 @error('product_id')
                                                 <span id="fv-full-name-error" class="invalid">{{$message}}</span>
                                                 @enderror
@@ -70,7 +70,7 @@
                                         <div class="form-group">
                                             <label class="form-label" for="name">نام محصول</label>
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control @error('name') error @enderror" id="name" name="name">
+                                                <input type="text" class="form-control @error('name') error @enderror" id="name" name="name" value="{{ old('name' , '') }}">
                                                 @error('name')
                                                 <span id="fv-full-name-error" class="invalid">{{$message}}</span>
                                                 @enderror
@@ -81,7 +81,7 @@
                                         <div class="form-group">
                                             <label class="form-label" for="color">رنگ</label>
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control @error('color') error @enderror" id="color" name="color">
+                                                <input type="text" class="form-control @error('color') error @enderror" id="color" name="color" value="{{ old('color' , '') }}">
                                                 @error('color')
                                                 <span id="fv-full-name-error" class="invalid">{{$message}}</span>
                                                 @enderror
@@ -93,8 +93,8 @@
                                             <label class="form-label">دسته بندی</label>
                                             <div class="form-control-wrap">
                                                 <select class="form-select js-select2" name="category_id"  data-search="on">
-                                                    @foreach(\App\Models\Category::all() as $category)
-                                                        <option value="{{ $category->id }}" >{{ $category->label }}</option>
+                                                    @foreach(\App\Models\Category::where('deleted' , 0)->get() as $category)
+                                                        <option value="{{ $category->id }}" >{{ $category->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -105,8 +105,9 @@
                                             <label class="form-label">مالک محصول</label>
                                             <div class="form-control-wrap">
                                                 <select class="form-select js-select2" name="partner_id"  data-search="on">
-                                                    @foreach(\App\Models\Partner::all() as $partner)
-                                                        <option value="{{ $partner->id }}" >{{ $partner->label }}</option>
+                                                    <option value="-1" >مشترک</option>
+                                                    @foreach(\App\Models\Partner::where('deleted' , 0)->get() as $partner)
+                                                        <option value="{{ $partner->id }}" >{{ $partner->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -117,8 +118,8 @@
                                             <label class="form-label">وضعیت محصول</label>
                                             <div class="form-control-wrap">
                                                 <select class="form-select js-select2" name="status_id"  data-search="on">
-                                                    @foreach(\App\Models\Partner::all() as $partner)
-                                                        <option value="{{ $partner->id }}" >{{ $partner->label }}</option>
+                                                    @foreach(\App\Models\ProductStatus::where('deleted' , 0)->get() as $status)
+                                                        <option value="{{ $status->id }}" >{{ $status->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -128,7 +129,7 @@
                                         <div class="form-group">
                                             <label class="form-label" for="label">برچسب</label>
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control @error('label') error @enderror" id="label" name="label">
+                                                <input type="text" class="form-control @error('label') error @enderror" id="label" name="label" value="{{ old('label' , '') }}">
                                                 @error('label')
                                                 <span id="fv-full-name-error" class="invalid">{{$message}}</span>
                                                 @enderror
@@ -142,7 +143,7 @@
                                                 <div class="form-text-hint">
                                                     <span class="overline-title">تومان</span>
                                                 </div>
-                                                <input type="text" class="form-control @error('price_materials') error @enderror" id="price_materials" name="price_materials">
+                                                <input type="text" class="form-control @error('price_materials') error @enderror" id="price_materials" name="price_materials" value="{{ old('price_materials' , '') }}">
                                                 @error('price_materials')
                                                 <span id="fv-full-name-error" class="invalid">{{$message}}</span>
                                                 @enderror
@@ -156,7 +157,7 @@
                                                 <div class="form-text-hint">
                                                     <span class="overline-title">تومان</span>
                                                 </div>
-                                                <input type="text" class="form-control @error('salary') error @enderror" id="salary" name="salary">
+                                                <input type="text" class="form-control @error('salary') error @enderror" id="salary" name="salary" value="{{ old('salary' , '') }}">
                                                 @error('salary')
                                                 <span id="fv-full-name-error" class="invalid">{{$message}}</span>
                                                 @enderror
@@ -170,7 +171,7 @@
                                                 <div class="form-text-hint">
                                                     <span class="overline-title">تومان</span>
                                                 </div>
-                                                <input type="text" class="form-control @error('profit') error @enderror" id="profit" name="profit">
+                                                <input type="text" class="form-control @error('profit') error @enderror" id="profit" name="profit" value="{{ old('profit' , '') }}">
                                                 @error('profit')
                                                 <span id="fv-full-name-error" class="invalid">{{$message}}</span>
                                                 @enderror
@@ -178,13 +179,65 @@
                                         </div>
                                     </div>
 
-
-
-
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-label" for="materials_profit">سود مواد اولیه</label>
+                                            <div class="form-control-wrap">
+                                                <div class="form-text-hint">
+                                                    <span class="overline-title">تومان</span>
+                                                </div>
+                                                <input type="text" class="form-control @error('materials_profit') error @enderror" id="materials_profit" name="materials_profit" value="{{ old('materials_profit' , '') }}">
+                                                @error('materials_profit')
+                                                <span id="fv-full-name-error" class="invalid">{{$message}}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-label" for="additional_costs">هزینه های دیگر</label>
+                                            <div class="form-control-wrap">
+                                                <div class="form-text-hint">
+                                                    <span class="overline-title">تومان</span>
+                                                </div>
+                                                <input type="text" class="form-control @error('additional_costs') error @enderror" id="additional_costs" name="additional_costs" value="{{ old('additional_costs' , '') }}">
+                                                @error('additional_costs')
+                                                <span id="fv-full-name-error" class="invalid">{{$message}}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-label" for="inventory">موجودی اولیه</label>
+                                            <div class="form-control-wrap number-spinner-wrap">
+                                                <button type="button" class="btn btn-icon btn-outline-light number-spinner-btn number-minus" data-number="minus"><em class="icon ni ni-minus"></em></button>
+                                                <input type="number" class="form-control number-spinner @error('inventory') error @enderror" name="inventory" id="inventory" value="{{ old('inventory' , 0) }}">
+                                                <button type="button" class="btn btn-icon btn-outline-light number-spinner-btn number-plus" data-number="plus"><em class="icon ni ni-plus"></em></button>
+                                                @error('inventory')
+                                                <span id="fv-full-name-error" class="invalid">{{$message}}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-12">
                                         <div class="form-group">
-                                            <label class="form-label" for="notes">یادداشت</label>
-                                            <textarea class="form-control form-control-sm" name="notes" id="notes" placeholder="یادداشت ، نکته یا یادآوری در مورد محصول"></textarea>
+                                            <label class="form-label" for="customFileLabel">آپلود تصویر محصول</label>
+                                            <div class="form-control-wrap">
+                                                <div class="form-file">
+                                                    <input type="file" class="form-file-input @error('picture') error @enderror" id="picture" name="picture">
+                                                    @error('picture')
+                                                    <span id="fv-full-name-error" class="invalid">{{$message}}</span>
+                                                    @enderror
+                                                    <label class="form-file-label" for="picture">انتخاب فایل</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label class="form-label" for="note">یادداشت</label>
+                                            <textarea class="form-control form-control-sm" name="note" id="note" placeholder="یادداشت ، نکته یا یادآوری در مورد محصول">{{ old('notes' , '') }}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-12">

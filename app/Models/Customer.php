@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     use HasFactory;
-    protected $fillable = ['id', 'name' , 'deleted' , 'number' , 'city' , 'address' , 'history' , 'com_ways' , 'notes'];
+    protected $fillable = ['id', 'name' , 'deleted' , 'number' , 'city' , 'address' , 'history' , 'com_ways' , 'notes' , 'birthday'];
 
     public function orders() {
         return $this->hasMany(Order::class);

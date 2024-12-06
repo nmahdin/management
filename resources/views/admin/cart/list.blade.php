@@ -19,7 +19,7 @@
                         <div class="nk-block-head-content">
                             <div class="toggle-wrap nk-block-tools-toggle">
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em
-                                            class="icon ni ni-more-v"></em></a>
+                                        class="icon ni ni-more-v"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
@@ -35,19 +35,6 @@
                                                 <form id="form12" action="{{ route('products.list') }}"
                                                       class="d-none"></form>
                                             </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('products.trash') }}"
-                                               class="dropdown-toggle btn btn-light btn-dim" data-bs-toggle="modal"
-                                               data-bs-target="#modalTrash"
-                                               onclick="event.preventDefault(); document.getElementById('form13').submit();">
-                                                <em class="icon ni ni-trash"></em>
-                                                <span>
-                                                    سطل زباله
-                                                </span>
-                                            </a>
-                                            <form id="form13" action="{{ route('products.trash') }}"
-                                                  class="d-none"></form>
                                         </li>
                                     </ul>
                                 </div>
@@ -75,95 +62,176 @@
                     <div class="nk-block nk-block-lg">
                         <div class="card card-preview">
                             <div class="card-inner">
-                                <table class="datatable-init nk-tb-list nk-tb-ulist" data-auto-responsive="false">
-                                    <thead>
-                                    <tr class="nk-tb-item nk-tb-head">
-                                        <th class="nk-tb-col nk-tb-col-check">
-                                        <span>
-                                            انتخاب
-                                        </span>
-                                        </th>
-                                        <th class="nk-tb-col"><span class="">کد محصول</span></th>
-                                        <th class="nk-tb-col tb-col-lg"><span class="">نام محصول</span></th>
-                                        <th class="nk-tb-col tb-col-md"><span class="sub-text">قیمت محصول</span></th>
-                                        <th class="nk-tb-col tb-col-sm"><span class="sub-text">تعداد</span></th>
-                                        <th class="nk-tb-col nk-tb-col-tools text-end"></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach(App\helper\Cart\Cart::all() as $cart)
-                                        @php
-
-                                            $product = $cart['Product'];
-                                        @endphp
-                                        <tr class="nk-tb-item">
-                                            <td class="nk-tb-col nk-tb-col-check">
-                                                <div class="custom-control custom-control-sm custom-checkbox notext">
-                                                    <input type="checkbox" class="custom-control-input" id="sgj"/>
-                                                    <label class="custom-control-label" for="sgjgj"></label>
-                                                </div>
-                                            </td>
-                                            <td class="nk-tb-col tb-col-sm" data-order="35040.34">
-                                                <span class="fw-light"><a
-                                                            href="{{ route('product.detail' , ['product' => $product]) }}">jhghjghjg</a></span>
-                                            </td>
-                                            <td class="nk-tb-col tb-col-lg">
-                                                <div class="user-card">
-                                                    <div class="user-info">
-                                                        <span class="tb-lead"><a
-                                                                    href="{{ route('product.detail' , ['product' => $product]) }}">{{ $product->name }}</a><span
-                                                                    class="dot dot-success d-md-none ms-1"></span></span>
-                                                        <span>{{ $product->color }}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="nk-tb-col tb-col-md">
-                                                <span class="badge badge-dim bg-info badge-sm"
-                                                      style="font-size: 15px; border-radius: 7px">{{ $product->total_price }}</span>
-                                            </td>
-                                            <td class="nk-tb-col tb-col-sm">
-                                                <span>{{ $cart['qnty'] }}</span>
-                                            </td>
-                                            <td class="nk-tb-col nk-tb-col-tools">
-                                                <ul class="nk-tb-actions gx-1">
-                                                    <li class="nk-tb-action-hidden">
-                                                        <a href="#" class="btn btn-trigger btn-icon"
-                                                           data-bs-toggle="tooltip" data-bs-placement="top"
-                                                           title="ویرایش">
-                                                            <em class="icon ni ni-edit-alt-fill"></em>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nk-tb-action-hidden">
-                                                        <a href="#"
-                                                           onclick="event.preventDefault(); document.getElementById('delete_pro{{$cart['id']}}').submit();"
-                                                           class="btn btn-trigger btn-icon" data-bs-toggle="tooltip"
-                                                           data-bs-placement="top" title="حذف">
-                                                            <em class="icon ni ni-trash-fill"></em>
-                                                        </a>
-                                                        <form id="delete_pro{{ $cart['id'] }}" method="post"
-                                                              action="{{ route('cart.delete' ,  $cart['id']) }}"
-                                                              class="d-none">@csrf @method('delete')</form>
-                                                    </li>
-                                                    <li class="nk-tb-action-hidden">
-                                                        <a href="{{ route('cart.add' , $cart['id']) }}"
-                                                           class="btn btn-trigger btn-icon" data-bs-toggle="tooltip"
-                                                           data-bs-placement="top" title="افزودن به سبد خرید">
-                                                            <em class="icon ni ni-cart-fill"></em>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    <!-- .nk-tb-item  -->
-                                    </tbody>
-                                </table>
                                 @php
                                     $total = \App\helper\Cart\Cart::all()->sum(function ($cart){
                                         return $cart['price'] * $cart['qnty'];
                                     });
                                 @endphp
-                                قیمت کل: <span>{{ $total }}</span>
+
+                                <div class="row gy-3">
+                                    <div class="col-md-12">
+                                        <table class="table">
+                                            <thead class="table-light">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">نام محصول</th>
+                                                <th scope="col">قیمت محصول</th>
+                                                <th scope="col">تعداد</th>
+                                                <th scope="col">اقدام</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach(App\helper\Cart\Cart::all() as $cart)
+                                                @php
+                                                    $product = $cart['Product'];
+                                                @endphp
+                                                <tr>
+                                                    <th scope="row">{{$product->id }}</th>
+                                                    <td>{{ $product->name }} - رنگ: {{ $product->color }}</td>
+                                                    <td>{{ number_format("$product->total_price") }}</td>
+                                                    <td>{{ $cart['qnty'] }}</td>
+                                                    <td>
+                                                        <a href="#"
+                                                           onclick="event.preventDefault(); document.getElementById('delete_pro{{$cart['id']}}').submit();"
+                                                           class="btn btn-trigger btn-icon">
+                                                            <em class="icon ni ni-trash-fill"></em>
+                                                        </a>
+                                                        <form id="delete_pro{{ $cart['id'] }}" method="post"
+                                                              action="{{ route('cart.delete' ,  $cart['id']) }}"
+                                                              class="d-none">@csrf @method('delete')</form>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- .col -->
+                                </div>
+                                <form action="{{ route('cart.enter') }}" method="post" id="cart">
+                                    @csrf
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="price">مبلغ قابل پرداخت سبد خرید:
+                                                [{{ number_format($total) }}]</label>
+                                            <div class="form-control-wrap">
+                                                <input type="text" data-msg="الزامی"
+                                                       class="form-control form-control-lg required" id="price"
+                                                       value="{{ $total }}" name="price" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="type_id">دسته بندی فروش</label>
+                                            <div class="form-control-wrap">
+                                                <select class="form-select js-select2" id="type_id" name="type_id">
+                                                    @foreach(\App\Models\Type::all() as $type)
+                                                        <option
+                                                            value="{{ $type->id }}">{{ $type->label }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">ایجاد مشتری</label>
+                                        <div class="row g-4">
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="name">نام و نام
+                                                        خانوادگی</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text"
+                                                               class="form-control @error('name') error @enderror"
+                                                               id="name" name="name">
+                                                        @error('name')
+                                                        <span id="fv-full-name-error"
+                                                              class="invalid">{{$message}}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="number">شماره
+                                                        موبایل</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text"
+                                                               class="form-control @error('number') error @enderror"
+                                                               id="number" name="number">
+                                                        @error('number')
+                                                        <span id="fv-full-name-error"
+                                                              class="invalid">{{$message}}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label class="form-label"
+                                                           for="notes">یادداشت</label>
+                                                    <textarea class="form-control form-control-sm"
+                                                              name="notes" id="notes"
+                                                              placeholder="یادداشت یا نکته یا یادآوری در مورد مشتری"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="form-control-wrap">
+                                            <select class="form-select js-select2" name="customer_id"
+                                                    data-search="on">
+                                                <option value="0">جست و جوی مشتری</option >
+                                                @foreach(\App\Models\Customer::all() as $customer)
+                                                    <option
+                                                        value="{{ $customer->id }}">{{ $customer->name }}
+                                                        - {{ $customer->number }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCart"> ثبت و ادامه</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal fade zoom" tabindex="-1" id="modalCart" aria-hidden="true" style="display: none;">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">انتخاب روش پرداخت</h5>
+                                                    <a href="#" class="close" data-bs-dismiss="modal" aria-label="بستن">
+                                                        <em class="icon ni ni-cross"></em>
+                                                    </a>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        @foreach(\App\Models\Accounts::all() as $account)
+                                                            <div class="custom-control custom-radio">
+                                                                <input type="radio" id="{{ $account->id }}" value="{{ $account->id }}" name="payments" class="custom-control-input">
+                                                                <label class="custom-control-label" for="{{ $account->id }}" >{{ $account->payment_label }}</label>
+                                                            </div>
+                                                            <br>
+                                                        @endforeach
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-lg btn-primary btn-dim">ثبت سفارش</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
+
                             </div>
                         </div>
                         <!-- .card-preview -->
@@ -189,8 +257,12 @@
     </div>
     <x-admin.modal id="modalTrash" class="modal-body-md">در حال رفتن به صفحه محصولات حذف شده ...</x-admin.modal>
 
+
+
     @slot('script')
         <script src="/assets/js/libs/datatable-btns.js"></script>
+        <script src="/assets/js/persian-date.js"></script>
+        <script src="/assets/js/persian-datepicker.js"></script>
     @endslot
 
 </x-admin.main>

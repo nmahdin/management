@@ -25,7 +25,7 @@
                                                onclick="event.preventDefault(); document.getElementById('pro_list').submit();">
 {{--                                                <em class="icon ni ni-plus"></em>--}}
                                                 <em class="icon ni ni-forward-ios"></em>
-                                                <span>
+                                                <span class="fw-normal">
                                                     لیست محصولات
                                                 </span>
                                             </a>

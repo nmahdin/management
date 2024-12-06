@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('com_ways')->nullable();
             $table->string('history')->nullable();
+            $table->string('birthday')->nullable();
             $table->string('notes')->nullable();
             $table->integer('deleted')->default(0);
             $table->timestamps();

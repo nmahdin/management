@@ -21,14 +21,14 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('customer.creat') }}" class="dropdown-toggle btn btn-dark btn-dim " data-bs-toggle="modal" data-bs-target="#modalZoom"
+                                            <a href="{{ route('customer.create') }}" class="dropdown-toggle btn btn-dark btn-dim " data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form12').submit();">
                                                 <em class="icon ni ni-plus"></em>
                                                 <span>
                                                     افزودن مشتری
                                                 </span>
                                             </a>
-                                            <form id="form12" action="{{ route('customer.creat') }}" class="d-none"></form>
+                                            <form id="form12" action="{{ route('customer.create') }}" class="d-none"></form>
                                         </li>
                                         <li>
                                             <a href="{{ route('customer.trash') }}" class="dropdown-toggle btn btn-light btn-dim" data-bs-toggle="modal" data-bs-target="#modalZoom"

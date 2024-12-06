@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('number')->unique();
             $table->string('label');
+            $table->string('payment_label');
+            $table->integer('count')->default(0);
             $table->string('inputs')->default(0);
             $table->string('outputs')->default(0);
+            $table->boolean('payment')->default(1);
+            $table->boolean('deleted')->default(0);
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }
