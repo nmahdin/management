@@ -78,10 +78,10 @@ Route::post('/purchases/trash/{purchase}/re' , [General::class , 'purchases_tras
 Route::get('/purchases/categories/list' , [General::class , 'purchases_categories_list'])->name('purchases.categories.list');
 Route::get('/purchases/category/create' , [General::class , 'purchases_categories_create'])->name('purchases.category.create');
 Route::post('/purchases/category/create' , [General::class , 'purchases_categories_create_post']);
-Route::get('/purchases/category/delete/{category}' , [General::class , 'purchases_categories_delete'])->name('purchases.categories.delete');
+Route::delete('/purchases/category/delete/{purchases_category}' , [General::class , 'purchases_categories_delete'])->name('purchases.categories.delete');
 Route::get('/purchases/categories/trash' , [General::class , 'purchases_categories_trash'])->name('purchases.categories.trash');
-Route::get('/purchases/category/trash/{category}/d' , [General::class , 'purchases_categories_trash_delete'])->name('purchases.categories.delete.trash');
-Route::get('/purchases/category/trash/{category}/re' , [General::class , 'purchases_categories_trash_restore'])->name('purchases.categories.restore');
+Route::delete('/purchases/category/trash/{category}/d' , [General::class , 'purchases_categories_trash_delete'])->name('purchases.categories.delete.trash');
+Route::post('/purchases/category/trash/{category}/re' , [General::class , 'purchases_categories_trash_restore'])->name('purchases.categories.restore');
 // sellers
 Route::get('/purchases/sellers/list' , [General::class , 'sellers_list'])->name('purchases.sellers.list');
 Route::get('/purchases/sellers/create' , [General::class , 'sellers_create'])->name('purchases.sellers.create');

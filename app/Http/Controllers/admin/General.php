@@ -11,6 +11,7 @@ use App\Models\Permission;
 use App\Models\Product;
 use App\Models\ProductStatus;
 use App\Models\Purchase;
+use App\Models\PurchasesCategory;
 use App\Models\Status;
 use App\Models\User;
 use Database\Seeders\permissions;
@@ -508,7 +509,9 @@ class General extends Controller
     // categories
     public function purchases_categories_list()
     {
-
+        $n = PurchasesCategory::where('deleted' , 0)->count();
+        $categories = PurchasesCategory::where('deleted' , 0)->get();
+        return view('admin.financial.purchases.categories.list' , ['n' => $n , 'categories' => $categories]);
     }
     public function purchases_categories_create()
     {
@@ -518,13 +521,18 @@ class General extends Controller
     {
 
     }
-    public function purchases_categories_delete()
+    public function purchases_categories_delete(PurchasesCategory $purchases_category)
     {
-
+//        $gk = PurchasesCategory::find(2)->get();
+//        dd($gk);
+        $purchases_category->update(['deleted' => 1]);
+        return back()->with('deleted' , $purchases_category->name);
     }
     public function purchases_categories_trash()
     {
-
+        $n = PurchasesCategory::where('deleted' , 1)->count();
+        $categories = PurchasesCategory::where('deleted' , 1)->get();
+        return view('admin.financial.purchases.categories.trash' , ['n' => $n , 'categories' => $categories]);
     }
     public function purchases_categories_trash_delete()
     {

@@ -7,11 +7,11 @@
     <meta charset="utf-8" />
     <meta name="author" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
+    <meta name="description" content="سیستم مدیریت مهد کودک" />
     <!-- Fav Icon  -->
     <link rel="shortcut icon" href="/assets/images/favicon.png" />
     <!-- Page Title  -->
-    <title>{{ $title }} | هنر صدف</title>
+    <title>{{ $title }} | نورسین</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="/assets/css/dashlite.rtl.css" />
 
@@ -43,20 +43,20 @@
                 </div>
             </div>
             <!-- .nk-sidebar-element -->
-            <x-admin.app.sidebar/>
+            <x-dashboard.app.sidebar/>
             <!-- .nk-sidebar-element -->
         </div>
         <!-- sidebar @e -->
         <!-- wrap @s -->
         <div class="nk-wrap">
             <!-- main header @s -->
-            <x-admin.app.header/>
+            <x-dashboard.app.header/>
             <!-- main header @e -->
             <!-- content @s -->
             {{ $slot }}
             <!-- content @e -->
             <!-- footer @s -->
-            <x-admin.app.footer/>
+            <x-dashboard.app.footer/>
             <!-- footer @e -->
         </div>
         <!-- wrap @e -->
