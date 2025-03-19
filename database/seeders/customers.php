@@ -18,6 +18,8 @@ class customers extends Seeder
             DB::table('customers')->insert([
                 'name' => "مشتری $n",
                 'number' => "091254386$n",
+                'com_ways' => json_encode(["telegram","instagram","eitaa"]),
+                'gender' => 'female',
                 'created_at' => now(),
                 'updated_at' => now(),
 

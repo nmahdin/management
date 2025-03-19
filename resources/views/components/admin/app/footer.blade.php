@@ -5,7 +5,7 @@
             <div class="nk-footer-links">
                 <ul class="nav nav-sm">
                     <li class="nav-item">
-                        <a class="nav-link"><em class="icon ni ni-repeat-v"></em><span class="ms-1">نسخه آزمایشی 0.7.0</span></a>
+                        <a class="nav-link"><em class="icon ni ni-repeat-v"></em><span class="ms-1">نسخه آزمایشی 0.8 </span></a>
                     </li>
                 </ul>
             </div>

@@ -52,10 +52,10 @@
                     </a>
                     <ul class="nk-menu-sub">
                         <li class="nk-menu-item">
-                            <a href="{{ route('customers.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست مشتریان</span><span class="badge rounded-pill badge-dim bg-gray">{{ \App\Models\Customer::where('deleted' , 0)->count() }}</span></a>
+                            <a href="{{ route('customers.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست مشتریان</span><span class="badge rounded-pill badge-dim bg-gray">{{ \App\Models\Customer::count() }}</span></a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="{{ route('customer.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن مشتری</span></a>
+                            <a href="{{ route('customers.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن مشتری</span></a>
                         </li>
                     </ul>
                     <!-- .nk-menu-sub -->
@@ -69,10 +69,10 @@
                     <ul class="nk-menu-sub">
                         <li class="nk-menu-item">
                             <a href="{{ route('products.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست محصولات</span>
-                                <span class="badge rounded-pill badge-dim bg-gray">{{ \App\Models\Product::where('deleted' , 0)->count() }}</span></a>
+                                <span class="badge rounded-pill badge-dim bg-gray">{{ \App\Models\Product::count() }}</span></a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="{{ route('product.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن محصول</span></a>
+                            <a href="{{ route('products.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن محصول</span></a>
                         </li>
                         <li class="nk-menu-item has-sub">
                             <a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-text">دسته بندی ها</span></a>
@@ -81,7 +81,7 @@
                                     <a href="{{ route('products.categories.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست دسته بندی ها</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="{{ route('products.category.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن دسته بندی</span></a>
+                                    <a href="{{ route('products.categories.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن دسته بندی</span></a>
                                 </li>
                             </ul>
                             <!-- .nk-menu-sub -->
@@ -109,7 +109,7 @@
                                     <a href="{{ route('purchases.categories.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست دسته بندی ها</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="{{ route('purchases.category.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن دسته بندی</span></a>
+                                    <a href="{{ route('purchases.categories.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن دسته بندی</span></a>
                                 </li>
                             </ul>
                             <!-- .nk-menu-sub -->
@@ -149,10 +149,10 @@
                             <a href="{{ route('transactions.general') }}" class="nk-menu-link"><span class="nk-menu-text">کلی</span></a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="{{ route('transactions.inputs') }}" class="nk-menu-link"><span class="nk-menu-text">ورودی</span></a>
+                            <a href="{{ route('transactions.inputs.index') }}" class="nk-menu-link"><span class="nk-menu-text">ورودی</span></a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="{{ route('transactions.outputs') }}" class="nk-menu-link"><span class="nk-menu-text">خروجی</span></a>
+                            <a href="{{ route('transactions.outputs.index') }}" class="nk-menu-link"><span class="nk-menu-text">خروجی</span></a>
                         </li>
                     </ul>
                     <!-- .nk-menu-sub -->
@@ -177,7 +177,7 @@
                                     <a href="{{ route('orders.types.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست دسته بندی ها</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="{{ route('orders.type.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن دسته بندی</span></a>
+                                    <a href="{{ route('orders.types.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن دسته بندی</span></a>
                                 </li>
                             </ul>
                             <!-- .nk-menu-sub -->
@@ -225,7 +225,7 @@
                             <a href="{{ route('accounts.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست حساب ها</span></a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="{{ route('account.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن حساب</span></a>
+                            <a href="{{ route('accounts.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن حساب</span></a>
                         </li>
                     </ul>
                     <!-- .nk-menu-sub -->
@@ -274,25 +274,35 @@
                         <span class="nk-menu-text">تنظیمات</span>
                     </a>
                     <ul class="nk-menu-sub">
-{{--                        <li class="nk-menu-item">--}}
-{{--                            <a href="{{ route('users.all') }}" class="nk-menu-link"><span class="nk-menu-text">وضعیت های محصولات</span></a>--}}
-{{--                        </li>--}}
-{{--                        <li class="nk-menu-item">--}}
-{{--                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">افزودن وضعیت</span></a>--}}
-{{--                        </li>--}}
                         <li class="nk-menu-item has-sub">
-                            <a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-text">وضعیت های محصولات</span></a>
+                            <a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-text">دسته بندی مشتریان</span></a>
                             <ul class="nk-menu-sub">
                                 <li class="nk-menu-item">
-                                    <a href="{{ route('products.status.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن وضعیت</span></a>
+                                    <a href="{{ route('customers.categories.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن دسته بندی</span></a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="{{ route('products.statuses.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست وضعیت ها</span></a>
+                                    <a href="{{ route('customers.categories.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست دسته بندی ها</span></a>
                                 </li>
                             </ul>
+
                             <!-- .nk-menu-sub -->
                         </li>
+                        <li class="nk-menu-sub">
+                            <li class="nk-menu-item has-sub">
+                                <a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-text">وضعیت های محصولات</span></a>
+                                <ul class="nk-menu-sub">
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('products.statuses.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن وضعیت</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('products.statuses.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست وضعیت ها</span></a>
+                                    </li>
+                                </ul>
+                                <!-- .nk-menu-sub -->
+                            </li>
+                        </li>
                     </ul>
+
                     <!-- .nk-menu-sub -->
                 </li>
             </ul>

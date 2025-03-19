@@ -23,6 +23,7 @@ class CreatCustomer extends Component
     public $com_ways = [];
 //    #[Validate('required' , 'max:250')]
     public $notes;
+    public $gender;
 
 //    public function rules()
 //    {
@@ -34,6 +35,7 @@ class CreatCustomer extends Component
 
     public function save()
     {
+//        dd($this->gender);
 //        dd($this->com_ways);
         $validated = $this->validate([
             'name' => ['required', 'max:250'],
@@ -41,7 +43,9 @@ class CreatCustomer extends Component
             'city' => ['required', 'min:1', 'max:255'],
             'address' => ['max:250'],
             'com_ways' => ['required', 'array'],
-            'birthday' => [],
+            'birthday' => ['nullable'],
+            'notes' => ['nullable'],
+            'gender' => ['required' , 'in:male,female'],
         ]);
 
 //        $this->validate();
@@ -54,10 +58,12 @@ class CreatCustomer extends Component
             'address' => $this->address,
             'com_ways' => json_encode($this->com_ways),
             'birthday' => $this->birthday,
+            'notes' => $this->notes,
+            'gender' => $this->gender,
         ]);
 
         session()->flash('created', $customer->name);
-        $this->reset(['name', 'number', 'city', 'address', 'com_ways', 'notes']);
+        $this->reset(['name', 'number', 'city', 'address', 'com_ways', 'notes' , 'gender', 'birthday']);
 //        return $this->;
     }
     public function render()

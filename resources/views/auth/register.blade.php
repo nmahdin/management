@@ -1,66 +1,92 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+@extends('layouts.member.q')
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+@section('title')
+    ثبت نام مدیر
+@endsection
+
+@section('content')
+
+    <div class="nk-block nk-block-middle">
+        <div class=" nk-split-stretch d-flex justify-center align-center flex-column">
+            <div class="wide-xs-fix">
+
+                <div class="card bg-white">
+                    <div class="card-header">ثبت نام مدیر</div>
+                    <div class="card-inner">
+                        <p>ثبت نام ادمین برای دسترسی به پنل ادمین</p>
+                        <form method="post" action="{{ route('admin.register') }}">
+                            @csrf
+                            <div class="form-group">
+                                <label class="form-label" for="name">نام</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control form-control-lg @error('name') error @enderror" name="name" value="{{ old('name') }}" id="name" required autofocus autocomplete="username" placeholder="نام وارد کنید">
+                                    @error('name')
+                                    <span id="fv-message-error" class="invalid">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="number">نام کاربری</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control form-control-lg @error('number') error @enderror" name="number" value="{{ old('number') }}" id="number" required autofocus autocomplete="username" placeholder="نام کابری وارد کنید">
+                                    @error('number')
+                                    <span id="fv-message-error" class="invalid">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="password">رمز عبور</label>
+                                <div class="form-control-wrap">
+                                    <input type="password" class="form-control form-control-lg @error('password') error @enderror" name="password" value="{{ old('password') }}"  id="password" required autofocus autocomplete="username" placeholder="رمز عبور وارد کنید">
+                                    @error('password')
+                                    <span id="fv-message-error" class="invalid">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="number">تکرار رمز عبور</label>
+                                <div class="form-control-wrap">
+                                    <input type="password" class="form-control form-control-lg @error('password_confirmation') error @enderror" name="password_confirmation"  id="password_confirmation" required autofocus autocomplete="username" placeholder="رمز عبور را مجدد تکرار کنید">
+                                    @error('password_confirmation')
+                                    <span id="fv-message-error" class="invalid">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <input type="text" style="display: none" name="full_admin" id="full_admin" value="@if(session('setup')) 1 @endif">
+
+                            <div class="form-group">
+                                <button class="btn btn-lg btn-primary btn-block">ثبت نام</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
         </div>
+        <div class="nk-block-head">
+            <div class="nk-block-head-content">
+                <h5 class="nk-block-title"></h5>
+                <div class="nk-block-des">
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                </div>
+            </div>
         </div>
+        <!-- .nk-block-head -->
 
-        <!-- username -->
-        <div class="mt-4">
-            <x-input-label for="username" :value="__('username')" />
-            <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('username')" class="mt-2" />
-        </div>
+        <!-- form -->
+    </div>
+    <!-- .nk-block -->
 
-        <!-- number -->
-        <div class="mt-4">
-            <x-input-label for="number" :value="__('number')" />
-            <x-text-input id="number" class="block mt-1 w-full" type="text" name="number" :value="old('number')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('number')" class="mt-2" />
-        </div>
+    <!-- nk-block -->
+@endsection
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+{{--<form method="POST" action="{{ route('login') }}">--}}
+{{--    @csrf--}}
+{{--    <input id="name" type="text" name="name"  required autofocus autocomplete="username" />--}}
+{{--<input id="number" type="text" name="number"  required autofocus autocomplete="username" />--}}
+{{--<input style="display: none" id="password" type="password" name="password" value="12345678" required autocomplete="current-password" />--}}
+{{--<input style="display: none" id="password_confirmation" type="password" name="password_confirmation" value="12345678" required autocomplete="current-password" />--}}
+{{--    <button>send</button>--}}
+{{--</form>--}}
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>

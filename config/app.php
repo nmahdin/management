@@ -103,6 +103,7 @@ return [
         ...array_filter(
             explode(',', env('APP_PREVIOUS_KEYS', ''))
         ),
+
     ],
 
     /*
@@ -126,5 +127,6 @@ return [
 //    'aliases' => [
 //        'Cart' => App\helper\Cart\Cart::class,
 //    ],
+    'locale' => 'fa',
 
 ];

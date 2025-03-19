@@ -20,8 +20,19 @@ return new class extends Migration
             $table->string('com_ways')->nullable();
             $table->string('history')->nullable();
             $table->string('birthday')->nullable();
+            $table->string('gender');
+            $table->foreignId('category_id')->nullable();
             $table->string('notes')->nullable();
-            $table->integer('deleted')->default(0);
+            $table->string('attachment')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
+        Schema::create('customer_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('category_name');
+            $table->string('notes')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -32,5 +43,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('customers');
+        Schema::dropIfExists('customers_categories');
     }
 };

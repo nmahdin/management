@@ -11,7 +11,7 @@
     <!-- Fav Icon  -->
     <link rel="shortcut icon" href="/assets/images/favicon.png" />
     <!-- Page Title  -->
-    <title>{{ $title }} | نورسین</title>
+    <title>{{ $title }} | صدف پرداز</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="/assets/css/dashlite.rtl.css" />
 
@@ -31,11 +31,11 @@
         <div class="nk-sidebar nk-sidebar-fixed is-light" data-content="sidebarMenu">
             <div class="nk-sidebar-element nk-sidebar-head">
                 <div class="nk-sidebar-brand">
-                    <a href="" class="logo-link nk-sidebar-logo">
-
-                        <img class="logo-light logo-img" src="/assets/images/logo.png" srcset="/assets/images/logo2x.png 2x" alt="لوگو" />
-                        <img class="logo-dark logo-img" src="/assets/images/logo-dark.png" srcset="/assets/images/logo-dark2x.png 2x" alt="لوگوی تاریک" />
-                        <img class="logo-small logo-img logo-img-small" src="/assets/images/logo-small.png" srcset="/assets/images/logo-small2x.png 2x" alt="لوگوی کوچک" />
+                    <a href="{{ route('dashboard') }}" class="logo-link nk-sidebar-logo">
+                      <span class="fw-medium text-neutral-900">صدف پرداز</span>
+{{--                        <img class="logo-light logo-img" src="/assets/images/logo.png" srcset="/assets/images/logo2x.png 2x" alt="لوگو" />--}}
+{{--                        <img class="logo-dark logo-img" src="/assets/images/logo-dark.png" srcset="/assets/images/logo-dark2x.png 2x" alt="لوگوی تاریک" />--}}
+{{--                        <img class="logo-small logo-img logo-img-small" src="/assets/images/logo-small.png" srcset="/assets/images/logo-small2x.png 2x" alt="لوگوی کوچک" />--}}
                     </a>
                 </div>
                 <div class="nk-menu-trigger me-n2">
@@ -43,20 +43,20 @@
                 </div>
             </div>
             <!-- .nk-sidebar-element -->
-            <x-dashboard.app.sidebar/>
+            <x-admin.app.sidebar/>
             <!-- .nk-sidebar-element -->
         </div>
         <!-- sidebar @e -->
         <!-- wrap @s -->
         <div class="nk-wrap">
             <!-- main header @s -->
-            <x-dashboard.app.header/>
+            <x-admin.app.header/>
             <!-- main header @e -->
             <!-- content @s -->
             {{ $slot }}
             <!-- content @e -->
             <!-- footer @s -->
-            <x-dashboard.app.footer/>
+            <x-admin.app.footer/>
             <!-- footer @e -->
         </div>
         <!-- wrap @e -->

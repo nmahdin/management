@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Web;
+use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,7 +22,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/1', [Web::class, 'index']);
+Route::get('/1', [WebController::class, 'index']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -35,3 +35,7 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+Route::middleware('auth')->group(function () {
+    require __DIR__.'/dashboard/main.php';
+});
+
