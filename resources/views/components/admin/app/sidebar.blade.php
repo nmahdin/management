@@ -125,7 +125,7 @@
                     </a>
                     <ul class="nk-menu-sub">
                         <li class="nk-menu-item">
-                            <a href="{{ route('purchases.sellers.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست فروشندگان</span><span class="badge rounded-pill badge-dim bg-gray">{{ \App\Models\Seller::where('deleted' , 0)->count() }}</span></a>
+                            <a href="{{ route('purchases.sellers.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست فروشندگان</span><span class="badge rounded-pill badge-dim bg-gray">{{ \App\Models\Seller::count() }}</span></a>
                         </li>
                         <li class="nk-menu-item">
                             <a href="{{ route('purchases.sellers.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن فروشنده</span></a>

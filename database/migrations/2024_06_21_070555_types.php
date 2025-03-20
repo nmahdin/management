@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('total_price')->default(0);
             $table->integer('count')->default(0);
             $table->text('note')->nullable();
-            $table->integer('deleted')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

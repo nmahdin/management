@@ -101,24 +101,24 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
-                                                    <a href="{{ route('products.statuses.trash.r' , ['status' => $status->id]) }}"
+                                                    <a href="{{ route('products.statuses.trash.restore' , ['id' => $status->id]) }}"
                                                        onclick="event.preventDefault(); document.getElementById('restore_sta{{$status->id}}').submit();"
                                                        class="btn btn-warning btn-dim"
                                                        style="padding: 6px 9px !important;"><em class="icon ni ni-redo"></em><span class="fw-normal">بازگردانی</span></a>
                                                     <form id="restore_sta{{$status->id}}" method="post"
-                                                          action="{{ route('products.statuses.trash.r' , ['status' => $status->id]) }}"
+                                                          action="{{ route('products.statuses.trash.restore' , ['id' => $status->id]) }}"
                                                           class="d-none">@csrf @method('post')</form>
 
                                                 </div>
 
                                                 <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
-                                                    <a href="{{ route('products.statuses.trash.d' , ['status' => $status->id]) }}"
+                                                    <a href="{{ route('products.statuses.trash.delete' , ['id' => $status->id]) }}"
                                                        onclick="event.preventDefault(); document.getElementById('delete_sta{{$status->id}}').submit();"
                                                        class="btn btn-danger btn-dim"
                                                        style="padding: 6px 9px !important;"><em
                                                             class="icon ni ni-trash-fill"></em><span class="fw-normal">حذف کامل</span></a>
                                                     <form id="delete_sta{{$status->id}}" method="post"
-                                                          action="{{ route('products.statuses.trash.d' , ['status' => $status->id]) }}"
+                                                          action="{{ route('products.statuses.trash.delete' , ['id' => $status->id]) }}"
                                                           class="d-none">@csrf @method('delete')</form>
 
                                                 </div>

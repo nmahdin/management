@@ -97,12 +97,12 @@
                                                 </div>
                                             </td>
                                             <td class="nk-tb-col tb-col-sm" data-order="35040.34">
-                                                <span class="fw-light"><a href="{{ route('product.detail' , ['product' => $product]) }}">{{ $product->product_id }}</a></span>
+                                                <span class="fw-light">{{ $product->product_id }}</span>
                                             </td>
                                             <td class="nk-tb-col tb-col-lg">
                                                 <div class="user-card">
                                                     <div class="user-info">
-                                                        <span class="tb-lead"><a href="{{ route('product.detail' , ['product' => $product]) }}">{{ $product->name }}</a><span class="dot dot-success d-md-none ms-1"></span></span>
+                                                        <span class="tb-lead">{{ $product->name }}<span class="dot dot-success d-md-none ms-1"></span></span>
                                                         <span>{{ $product->color }}</span>
                                                     </div>
                                                 </div>
@@ -119,18 +119,18 @@
                                             <td class="nk-tb-col nk-tb-col-tools">
                                                 <ul class="nk-tb-actions gx-1">
                                                     <li class="nk-tb-action-hidden">
-                                                        <a href="{{ route('product.restore' , ['product' => $product->id]) }}" onclick="event.preventDefault(); document.getElementById('restore_pro{{$product->id}}').submit();"
+                                                        <a href="{{ route('products.restore' , ['id' => $product->id]) }}" onclick="event.preventDefault(); document.getElementById('restore_pro{{$product->id}}').submit();"
                                                            class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="بازگردانی">
                                                             <em class="icon ni ni-redo"></em>
-                                                            <form id="restore_pro{{$product->id}}" method="post" action="{{ route('product.restore' , ['product' => $product->id]) }}" class="d-none">@csrf </form>
+                                                            <form id="restore_pro{{$product->id}}" method="post" action="{{ route('products.restore' , ['id' => $product->id]) }}" class="d-none">@csrf </form>
                                                         </a>
                                                     </li>
                                                     <li class="nk-tb-action-hidden">
-                                                        <a href="{{ route('product.delete.trash' , ['product' => $product->id]) }}" onclick="event.preventDefault(); document.getElementById('delete_pro{{$product->id}}').submit();"
+                                                        <a href="{{ route('products.delete.trash' , ['id' => $product->id]) }}" onclick="event.preventDefault(); document.getElementById('delete_pro{{$product->id}}').submit();"
                                                            class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف کامل">
                                                             <em class="icon ni ni-trash-fill"></em>
                                                         </a>
-                                                        <form id="delete_pro{{$product->id}}" method="post" action="{{ route('product.delete.trash' , ['product' => $product->id]) }}" class="d-none">@csrf @method('delete')</form>
+                                                        <form id="delete_pro{{$product->id}}" method="post" action="{{ route('products.delete.trash' , ['id' => $product->id]) }}" class="d-none">@csrf @method('delete')</form>
                                                     </li>
                                                 </ul>
                                             </td>

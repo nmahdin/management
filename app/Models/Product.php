@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['product_id' , 'name' , 'color' , 'category_id' , 'picture' , 'partner_id' , 'price_materials' , 'salary' , 'profit' , 'total_price' , 'inventory', 'label' , 'note' , 'status_id' , 'deleted' , 'materials_profit' , 'additional_costs'];
+    use SoftDeletes;
+    protected $fillable = ['product_id' , 'name' , 'color' , 'category_id' , 'picture' , 'partner_id' , 'price_materials' , 'salary' , 'profit' , 'total_price' , 'inventory', 'label' , 'note' , 'status_id'  , 'materials_profit' , 'additional_costs'];
 
     public function owner(): BelongsTo
     {

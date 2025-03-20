@@ -11,11 +11,11 @@ class PartnersController extends Controller
     // start partners
     public function partners_list()
     {
-        return view('dashboard.financial.partners.list' , ['partners' => Partner::where('deleted' , 0)->get() , 'n' => Partner::where('deleted' , 0)->count()]);
+        return view('dashboard.partners.list' , ['partners' => Partner::all() , 'n' => Partner::count()]);
     }
     public function partners_create()
     {
-        return view('dashboard.financial.partners.create');
+        return view('dashboard.partners.create');
     }
     public function partners_create_post(Request $request)
     {
@@ -24,14 +24,16 @@ class PartnersController extends Controller
             'note' => ['nullable'],
         ]);
         Partner::create($data);
-        return redirect(route('partners.create'))->with('created', $data['name']);
+        return back()->with('created', $data['name']);
     }
-    public function partners_edit(Partner $partner)
+    public function partners_edit($id)
     {
-        return view('dashboard.financial.partners.edit' , ['partner' => $partner]);
+        $partner = Partner::findOrFail($id);
+        return view('dashboard.partners.edit' , ['partner' => $partner]);
     }
-    public function partners_edit_post(Partner $partner , Request $request)
+    public function partners_edit_post($id , Request $request)
     {
+        $partner = Partner::findOrFail($id);
         $data = $request->validate([
             'name' => ['required', 'max:255'],
             'note' => ['nullable'],
@@ -39,25 +41,27 @@ class PartnersController extends Controller
         $partner->update($data);
         return redirect(route('partners.list'))->with('edited', $data['name']);
     }
-    public function partners_delete(Partner  $partner)
+    public function partners_delete($id)
     {
-        $partner->update(['deleted' => 1]);
-        return redirect(route('partners.list'))->with('deleted' , $partner->name);
+        $partner = Partner::findOrFail($id);
+        $partner->delete();
+        return back()->with('deleted' , $partner->name);
     }
     public function partners_trash_list()
     {
-        return view('dashboard.financial.partners.trash' , ['partners' => Partner::where('deleted' , 1)->get() , 'n' => Partner::where('deleted' , 1)->count()]);
+        return view('dashboard.partners.trash' , ['partners' => Partner::onlyTrashed()->get() , 'n' => Partner::onlyTrashed()->count()]);
     }
-    public function partners_trash_delete(Partner  $partner)
+    public function partners_trash_delete($id)
     {
-        $name =  $partner->name;
-        $partner->delete();
-        return redirect(route('partners.trash'))->with('deleted' , $name);
+        $partner = Partner::onlyTrashed()->findOrFail($id);
+        $partner->forceDelete();
+        return back()->with('deleted' , $partner->name);
     }
-    public function partners_trash_restore(Partner  $partner)
+    public function partners_trash_restore($id)
     {
-        $partner->update(['deleted' => 0]);
-        return redirect(route('partners.trash'))->with('restored' , $partner->name);
+        $partner = Partner::onlyTrashed()->findOrFail($id);
+        $partner->restore();
+        return back()->with('restored' , $partner->name);
     }
     // end partners
 }

@@ -59,7 +59,7 @@
 
                     <div class="card card-preview">
                         <div class="card-inner">
-                            <form action="{{ route('partner.edit', ['partner' => $partner->id]) }}" method="post">
+                            <form action="{{ route('partners.edit', ['id' => $partner->id]) }}" method="post">
                                 @csrf
                                 <div class="row g-4">
                                     <div class="col-lg-4">

@@ -91,38 +91,53 @@
                                     <div class="col-lg-2">
                                         <div class="form-group">
                                             <label class="form-label">دسته بندی</label>
-                                            <div class="form-control-wrap">
-                                                <select class="form-select js-select2" name="category_id"  data-search="on">
-                                                    @foreach(\App\Models\Category::where('deleted' , 0)->get() as $category)
-                                                        <option value="{{ $category->id }}" >{{ $category->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                            @if(\App\Models\Category::count() == 0)
+                                                <p>ابتدا برای محصولات دسته بندی اضافه کنید.</p>
+                                            @else
+                                                <div class="form-control-wrap">
+                                                    <select class="form-select js-select2" name="category_id"  data-search="on">
+                                                        @foreach(\App\Models\Category::all() as $category)
+                                                            <option value="{{ $category->id }}" >{{ $category->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            @endif
+
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="form-label">مالک محصول</label>
-                                            <div class="form-control-wrap">
-                                                <select class="form-select js-select2" name="partner_id"  data-search="on">
-                                                    <option value="-1" >مشترک</option>
-                                                    @foreach(\App\Models\Partner::where('deleted' , 0)->get() as $partner)
-                                                        <option value="{{ $partner->id }}" >{{ $partner->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                            @if(\App\Models\Partner::count() == 0)
+                                                <p>ابتدا برای محصولات مالک اضافه کنید.</p>
+                                            @else
+                                                <div class="form-control-wrap">
+                                                    <select class="form-select js-select2" name="partner_id"  data-search="on">
+                                                        <option value="-1" >مشترک</option>
+                                                        @foreach(\App\Models\Partner::all() as $partner)
+                                                            <option value="{{ $partner->id }}" >{{ $partner->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            @endif
+
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="form-label">وضعیت محصول</label>
-                                            <div class="form-control-wrap">
-                                                <select class="form-select js-select2" name="status_id"  data-search="on">
-                                                    @foreach(\App\Models\ProductStatus::where('deleted' , 0)->get() as $status)
-                                                        <option value="{{ $status->id }}" >{{ $status->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                            @if(\App\Models\ProductStatus::count() == 0)
+                                                <p>ابتدا برای محصولات وضعیت اضافه کنید.</p>
+                                            @else
+                                                <div class="form-control-wrap">
+                                                    <select class="form-select js-select2" name="status_id"  data-search="on">
+                                                        @foreach(\App\Models\ProductStatus::all() as $status)
+                                                            <option value="{{ $status->id }}" >{{ $status->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            @endif
+
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
@@ -222,7 +237,7 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group">
-                                            <label class="form-label" for="customFileLabel">آپلود تصویر محصول</label>
+                                            <label class="form-label" for="picture">آپلود تصویر محصول</label>
                                             <div class="form-control-wrap">
                                                 <div class="form-file">
                                                     <input type="file" class="form-file-input @error('picture') error @enderror" id="picture" name="picture">
@@ -237,7 +252,7 @@
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label class="form-label" for="note">یادداشت</label>
-                                            <textarea class="form-control form-control-sm" name="note" id="note" placeholder="یادداشت ، نکته یا یادآوری در مورد محصول">{{ old('notes' , '') }}</textarea>
+                                            <textarea class="form-control form-control-sm" name="note" id="note" placeholder="یادداشت ، نکته یا یادآوری در مورد محصول">{{ old('note' , '') }}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-12">

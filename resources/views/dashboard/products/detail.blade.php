@@ -65,7 +65,12 @@
                                     <div class="product-gallery me-xl-1 me-xxl-5">
                                         <div class="slider-init" id="sliderFor" data-slick='{"arrows": false, "fade": true, "asNavFor":"#sliderNav", "slidesToShow": 1, "slidesToScroll": 1}'>
                                             <div class="slider-item rounded">
-                                                <img src="{{ $product->picture }}" class="rounded w-100" alt="" />
+                                                @if($product->picture)
+                                                    <img src="{{ $product->picture }}" class="rounded w-100" alt="عکس محصول" />
+                                                @else
+                                                    <img src="/assets/img/products/no.png" class="rounded w-100" alt="بدون عکس" />
+                                                @endif
+
                                             </div>
                                         </div>
                                         <!-- .slider-init -->

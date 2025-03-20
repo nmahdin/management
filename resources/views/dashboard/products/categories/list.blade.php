@@ -61,7 +61,7 @@
                     <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
                         <em class="icon ni ni-check-circle"></em>
                         دسته بندی "{{session('deleted')}}" با موفقیت به
-                        <a href="{{ route('products.category.trash') }}" class="text-success" data-bs-toggle="modal"
+                        <a href="{{ route('products.categories.trash') }}" class="text-success" data-bs-toggle="modal"
                            data-bs-target="#modalZoom"
                            onclick="event.preventDefault(); document.getElementById('cate_trash').submit();">
                             <u>سطل زباله</u>
@@ -118,17 +118,20 @@
                                                             class="fw-normal">ویرایش</span>
                                                     </a>
                                                 </div>
-                                                <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
-                                                    <a href="{{ route('products.categories.delete' , ['category' => $category->id]) }}"
-                                                       onclick="event.preventDefault(); document.getElementById('delete_cate{{$category->id}}').submit();"
-                                                       class="btn btn-danger btn-dim"
-                                                       style="padding: 6px 9px !important;"><em
-                                                            class="icon ni ni-trash-fill"></em></a>
-                                                    <form id="delete_cate{{$category->id}}" method="post"
-                                                          action="{{ route('products.categories.delete' , ['category' => $category->id]) }}"
-                                                          class="d-none">@csrf @method('delete')</form>
+                                                @if($category->products->count() == 0)
+                                                    <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
+                                                        <a href="{{ route('products.categories.delete' , ['category' => $category->id]) }}"
+                                                           onclick="event.preventDefault(); document.getElementById('delete_cate{{$category->id}}').submit();"
+                                                           class="btn btn-danger btn-dim"
+                                                           style="padding: 6px 9px !important;"><em
+                                                                class="icon ni ni-trash-fill"></em></a>
+                                                        <form id="delete_cate{{$category->id}}" method="post"
+                                                              action="{{ route('products.categories.delete' , ['category' => $category->id]) }}"
+                                                              class="d-none">@csrf @method('delete')</form>
 
-                                                </div>
+                                                    </div>
+                                                @endif
+
                                             </td>
                                         </tr>
                                     @endforeach

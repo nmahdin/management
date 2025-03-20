@@ -25,7 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id');
             $table->integer('seller_id');
             $table->text('notes')->nullable();
-            $table->boolean('deleted')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('notes')->nullable();
-            $table->boolean('deleted')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -44,7 +44,7 @@ return new class extends Migration
             $table->integer('phone')->nullable();
             $table->string('address')->nullable();
             $table->text('notes')->nullable();
-            $table->boolean('deleted')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

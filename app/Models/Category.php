@@ -4,11 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @method static count()
+ */
 class Category extends Model
 {
     use HasFactory;
-    protected $fillable = ['name' , 'label' , 'notes' , 'deleted'];
+    use SoftDeletes;
+    protected $fillable = ['name' , 'label' , 'notes' ];
 
 
     public function products()

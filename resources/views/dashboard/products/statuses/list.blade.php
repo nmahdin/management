@@ -107,9 +107,9 @@
                                                 <span class="tb-odr-info">{{ $status->name }}</span>
                                             </td>
                                             <td class="tb-odr-info">
-                                                @if($status->notes)
+                                                @if($status->note)
                                                 <span class="tb-odr-info">
-                                                    {{ $status->notes }}
+                                                    {{ $status->note }}
                                                 </span>
                                                 @else
                                                     <span class="tb-odr-info text-gray fw-light">
@@ -119,18 +119,18 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('products.statuses.edit' , ['status' => $status->id]) }}" class="btn btn-warning btn-dim"><em
+                                                    <a href="{{ route('products.statuses.edit' , ['id' => $status->id]) }}" class="btn btn-warning btn-dim"><em
                                                             class="icon ni ni-edit-alt-fill"></em><span class="fw-normal">ویرایش</span>
                                                     </a>
                                                 </div>
                                                 <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
-                                                    <a href="{{ route('products.statuses.delete' , ['status' => $status->id]) }}"
+                                                    <a href="{{ route('products.statuses.delete' , ['id' => $status->id]) }}"
                                                        onclick="event.preventDefault(); document.getElementById('delete_sta{{$status->id}}').submit();"
                                                        class="btn btn-danger btn-dim"
                                                        style="padding: 6px 9px !important;"><em
                                                             class="icon ni ni-trash-fill"></em></a>
                                                     <form id="delete_sta{{$status->id}}" method="post"
-                                                          action="{{ route('products.status.delete' , ['status' => $status->id]) }}"
+                                                          action="{{ route('products.statuses.delete' , ['id' => $status->id]) }}"
                                                           class="d-none">@csrf @method('delete')</form>
 
                                                 </div>

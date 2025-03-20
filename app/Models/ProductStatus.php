@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductStatus extends Model
 {
+
     use HasFactory;
-    protected $fillable = ['name', 'note' , 'deleted'];
+    use SoftDeletes;
+    protected $fillable = ['name', 'note' ];
     protected $table = 'products_statuses';
 }

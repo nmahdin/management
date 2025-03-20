@@ -114,13 +114,13 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('products.categories.restore' , ['category' => $category->id]) }}"
+                                                    <a href="{{ route('products.categories.restore' , ['id' => $category->id]) }}"
                                                        class="btn btn-warning btn-dim" data-bs-toggle="modal"
                                                        data-bs-target="#modalrestore"
                                                        onclick="event.preventDefault(); document.getElementById('restore_trash{{$category->id}}').submit();"
                                                     ><em class="icon ni ni-redo"></em><span class="fw-normal">بازگردانی</span> </a>
                                                     <form id="restore_trash{{$category->id}}" method="post"
-                                                          action="{{ route('products.categories.restore' , ['category' => $category->id]) }}"
+                                                          action="{{ route('products.categories.restore' , ['id' => $category->id]) }}"
                                                           class="d-none">@csrf</form>
 
                                                 </div>
@@ -129,14 +129,14 @@
                                                 @if($category->products->count() == 0)
                                                     <div class="tb-odr-btns d-none d-md-inline"
                                                          style=" margin-right: 3px">
-                                                        <a href="{{ route('products.categories.delete.trash' , ['category' => $category->id]) }}"
+                                                        <a href="{{ route('products.categories.delete.trash' , ['id' => $category->id]) }}"
                                                            data-bs-toggle="modal" data-bs-target="#modaldelete"
                                                            onclick="event.preventDefault(); document.getElementById('delete_trash{{$category->id}}').submit();"
                                                            class="btn btn-danger btn-dim"
                                                            style="padding: 6px 9px !important;"><em class="icon ni ni-trash-fill"></em><span class="fw-normal">حذف کامل</span></a>
                                                     </div>
                                                     <form id="delete_trash{{$category->id}}" method="post"
-                                                          action="{{ route('products.categories.delete.trash' , ['category' => $category->id]) }}"
+                                                          action="{{ route('products.categories.delete.trash' , ['id' => $category->id]) }}"
                                                           class="d-none">@csrf @method('delete')</form>
                                                 @endif
                                             </td>

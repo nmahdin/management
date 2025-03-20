@@ -119,21 +119,24 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('partner.edit' , ['partner' => $partner->id]) }}" class="btn btn-warning btn-dim"><em
+                                                    <a href="{{ route('partners.edit' , ['id' => $partner->id]) }}" class="btn btn-warning btn-dim"><em
                                                             class="icon ni ni-edit-alt-fill"></em><span class="fw-normal">ویرایش</span>
                                                     </a>
                                                 </div>
-                                                <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
-                                                    <a href="{{ route('partner.delete' , ['partner' => $partner->id]) }}"
-                                                       onclick="event.preventDefault(); document.getElementById('delete_sta{{$partner->id}}').submit();"
-                                                       class="btn btn-danger btn-dim"
-                                                       style="padding: 6px 9px !important;"><em
-                                                            class="icon ni ni-trash-fill"></em></a>
-                                                    <form id="delete_sta{{$partner->id}}" method="post"
-                                                          action="{{ route('partner.delete' , ['partner' => $partner->id]) }}"
-                                                          class="d-none">@csrf @method('delete')</form>
+                                                @if($partner->products->count() == 0)
+                                                    <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
+                                                        <a href="{{ route('partners.delete' , ['id' => $partner->id]) }}"
+                                                           onclick="event.preventDefault(); document.getElementById('delete_sta{{$partner->id}}').submit();"
+                                                           class="btn btn-danger btn-dim"
+                                                           style="padding: 6px 9px !important;"><em
+                                                                class="icon ni ni-trash-fill"></em></a>
+                                                        <form id="delete_sta{{$partner->id}}" method="post"
+                                                              action="{{ route('partners.delete' , ['id' => $partner->id]) }}"
+                                                              class="d-none">@csrf @method('delete')</form>
 
-                                                </div>
+                                                    </div>
+                                                @endif
+
                                             </td>
                                         </tr>
                                     @endforeach

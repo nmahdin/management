@@ -21,7 +21,7 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('products.detail' , $product->id) }}" class="dropdown-toggle btn btn-info btn-dim" data-bs-toggle="modal" data-bs-target="#modalZoom"
+                                            <a href="{{ route('products.detail' , $product->id) }}" class="dropdown-toggle btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form13').submit();">
                                                 <em class="icon ni ni-forward-ios"></em>
                                                 {{--                                                <em class="icon ni ni-plus"></em>--}}
@@ -51,10 +51,10 @@
                     <!-- .nk-block-between -->
                 </div>
                 <!-- .nk-block-head -->
-                @if(session('edited'))
+                @if(session('picture'))
                 <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
                     <em class="icon ni ni-check-circle"></em>
-                    محصول "{{session('edited')}}" با موفقیت ویرایش شد.
+                   {{session('picture')}}
                 </div>
                 @endif
                 <div class="nk-block nk-block-lg">
@@ -63,7 +63,7 @@
                             <div class="card-head">
                                 <h5 class="card-title">اطلاعات محصول</h5>
                             </div>
-                            <form action="{{ route('products.edit' , $product->id) }}" method="post">
+                            <form action="{{ route('products.edit' , $product->id) }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row g-4">
                                     <div class="col-lg-3">
@@ -105,7 +105,7 @@
                                             <div class="form-control-wrap">
                                                 <select class="form-select js-select2" name="category_id"  data-search="on">
                                                     <option value="{{ $product->category_id }}" >{{ \App\Models\Category::findOrFail($product->category_id)->name }}</option>
-                                                    @foreach(\App\Models\Category::where('deleted' , 0)->get() as $category)
+                                                    @foreach(\App\Models\Category::all() as $category)
                                                         @if($category->id != $product->category_id)
                                                             <option value="{{ $category->id }}" >{{ $category->name }}</option>
                                                         @endif
@@ -125,7 +125,7 @@
                                                         <option value="{{ $product->partner_id }}" >{{ \App\Models\Partner::findOrFail($product->partner_id)->name }}</option>
                                                         <option value="-1" >مشترک</option>
                                                     @endif
-                                                    @foreach(\App\Models\Partner::where('deleted' , 0)->get() as $partner)
+                                                    @foreach(\App\Models\Partner::all() as $partner)
                                                         @if($partner->id != $product->partner_id)
                                                             <option value="{{ $partner->id }}" >{{ $partner->name }}</option>
                                                         @endif
@@ -140,7 +140,7 @@
                                             <div class="form-control-wrap">
                                                 <select class="form-select js-select2" name="status_id"  data-search="on">
                                                     <option value="{{ $product->status_id }}" >{{ \App\Models\ProductStatus::findOrFail($product->status_id)->name }}</option>
-                                                    @foreach(\App\Models\ProductStatus::where('deleted' , 0)->get() as $status)
+                                                    @foreach(\App\Models\ProductStatus::all() as $status)
                                                         @if($status->id != $product->status_id)
                                                           <option value="{{ $status->id }}" >{{ $status->name }}</option>
                                                         @endif
@@ -244,8 +244,26 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label class="form-label" for="picture">آپلود تصویر محصول</label>
+                                            <div class="form-control-wrap">
+                                                <div class="form-file">
+                                                    <input type="file" class="form-file-input @error('picture') error @enderror" id="picture" name="picture">
+                                                    @error('picture')
+                                                    <span id="fv-full-name-error" class="invalid">{{$message}}</span>
+                                                    @enderror
+                                                    <label class="form-file-label" for="picture">انتخاب فایل</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @if($product->picture)
+                                            <div class="justify-content-center">
+                                                <a href="{{ route('products.delete.picture' , $product->id) }}" class="btn btn-dim btn-danger btn-block fw-normal w-100" onclick="event.preventDefault(); document.getElementById('delete_pi').submit();">حذف عکس موجود</a>
+                                            </div>
 
-
+                                        @endif
+                                    </div>
 
                                     <div class="col-12">
                                         <div class="form-group">
@@ -254,12 +272,13 @@
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-lg btn-primary btn-dim"  data-bs-toggle="modal" data-bs-target="#modalCreate">ذخیره اطلاعات</button>
+                                        <div class="form-group d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-xl btn-primary btn-dim w-70 btn-block fw-medium"  data-bs-toggle="modal" data-bs-target="#modalCreate">ذخیره اطلاعات</button>
                                         </div>
                                     </div>
                                 </div>
                             </form>
+                            <form id="delete_pi" method="post" action="{{ route('products.delete.picture' , $product->id) }}" class="d-none">@csrf @method('delete')</form>
                         </div>
                     </div>
                     <!-- .card-preview -->

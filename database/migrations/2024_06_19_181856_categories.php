@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->text('notes')->nullable();
-            $table->boolean('deleted')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

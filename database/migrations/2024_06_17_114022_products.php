@@ -33,7 +33,7 @@ return new class extends Migration
             $table->unsignedBigInteger('status_id');
             $table->string('label')->nullable(); // برچسب
             $table->text('note')->nullable();
-            $table->boolean('deleted')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -41,7 +41,7 @@ return new class extends Migration
             $table->id();
             $table->string('name'); // نام
             $table->text('note')->nullable();
-            $table->boolean('deleted')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
