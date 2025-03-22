@@ -109,12 +109,12 @@
                                                 dd
                                             </td>
                                             <td class="nk-tb-col tb-col-sm" data-order="35040.34">
-                                                <span class="fw-light"><a href="{{ route('purchases.detail' , ['purchase' => $purchase]) }}">{{ $purchase->code }}</a></span>
+                                                <span class="fw-light"><a href="{{ route('purchases.detail' , ['id' => $purchase]) }}">{{ $purchase->code }}</a></span>
                                             </td>
                                             <td class="nk-tb-col tb-col-lg">
                                                 <div class="user-card">
                                                     <div class="user-info">
-                                                        <span class="tb-lead"><a href="{{ route('purchases.detail' , ['purchase' => $purchase]) }}">{{ $purchase->name }}</a><span class="dot dot-success d-md-none ms-1"></span></span>
+                                                        <span class="tb-lead"><a href="{{ route('purchases.detail' , ['id' => $purchase]) }}">{{ $purchase->name }}</a><span class="dot dot-success d-md-none ms-1"></span></span>
                                                         <span>{{ $purchase->color }}</span>
                                                     </div>
                                                 </div>
@@ -134,21 +134,21 @@
                                             <td class="nk-tb-col nk-tb-col-tools">
                                                 <ul class="nk-tb-actions gx-1">
                                                     <li class="nk-tb-action-hidden">
-                                                        <a href="{{ route('purchases.detail' , ['purchase' => $purchase->id]) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="جزئیات">
+                                                        <a href="{{ route('purchases.detail' , ['id' => $purchase->id]) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="جزئیات">
                                                             <em class="icon ni ni-info-fill"></em>
                                                         </a>
                                                     </li>
                                                     <li class="nk-tb-action-hidden">
-                                                        <a href="{{ route('purchases.edit' , ['purchase' => $purchase->id]) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="ویرایش">
+                                                        <a href="{{ route('purchases.edit' , ['id' => $purchase->id]) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="ویرایش">
                                                             <em class="icon ni ni-edit-alt-fill"></em>
                                                         </a>
                                                     </li>
                                                     <li class="nk-tb-action-hidden">
-                                                        <a href="{{ route('purchases.delete' , ['purchase' => $purchase->id]) }}" onclick="event.preventDefault(); document.getElementById('delete_pro{{$purchase->id}}').submit();"
+                                                        <a href="{{ route('purchases.delete' , ['id' => $purchase->id]) }}" onclick="event.preventDefault(); document.getElementById('delete_pro{{$purchase->id}}').submit();"
                                                            class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف">
                                                             <em class="icon ni ni-trash-fill"></em>
                                                         </a>
-                                                        <form id="delete_pro{{$purchase->id}}" method="post" action="{{ route('purchases.delete' , ['purchase' => $purchase->id]) }}" class="d-none">@csrf @method('delete')</form>
+                                                        <form id="delete_pro{{$purchase->id}}" method="post" action="{{ route('purchases.delete' , ['id' => $purchase->id]) }}" class="d-none">@csrf @method('delete')</form>
                                                     </li>
                                                 </ul>
                                             </td>

@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ['id' , 'customer_id' , 'date' , 'products' , 'price' , 'extra_expenses' , 'status_id' , 'note' , 'tax' , 'services' , 'profit' , 'discount' , 'payments' , 'account_id' , 'type_id'];
+    use SoftDeletes;
+    protected $fillable = ['id' , 'customer_id' , 'user_id' , 'date' , 'products' , 'price' , 'extra_expenses' , 'status' , 'note' , 'tax' , 'services' , 'profit' , 'discount' , 'payments' , 'account_id' , 'type_id'];
 
     public function customer() {
         return $this->belongsTo(Customer::class);
@@ -17,5 +19,15 @@ class Order extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class);
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(type::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(user::class);
     }
 }

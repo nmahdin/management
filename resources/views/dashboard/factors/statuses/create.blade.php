@@ -1,4 +1,4 @@
-<x-admin.main title="افزودن وضعیت های فاکتور">
+<x-admin.main title="افزودن وضعیت فاکتور">
 
     <div class="nk-content nk-content-fluid">
         <div class="container-xl wide-xl">
@@ -7,7 +7,7 @@
                     <div class="nk-block-between">
                         <div class="nk-block-head-content">
                             <!--   --------------- title --------------     -->
-                            <h3 class="nk-block-title page-title">افزودن وضعیت های فاکتور</h3>
+                            <h3 class="nk-block-title page-title">افزودن وضعیت فاکتور</h3>
                             <div class="nk-block-des text-soft">
                                 <!--   --------------- توضیح صفحه --------------     -->
                                 {{--                                <p>در مجموج {{ $n }} نفش وجود دارد.</p>--}}
@@ -22,7 +22,7 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('products.categories.list') }}"
+                                            <a href="{{ route('orders.statuses.list') }}"
                                                class="dropdown-toggle btn btn-dark btn-dim"
                                                data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form1').submit();">
@@ -31,7 +31,7 @@
                                                     وضعیت های فاکتور ها
                                                 </span>
                                             </a>
-                                            <form id="form1" action="{{ route('products.categories.list') }}" class="d-none"></form>
+                                            <form id="form1" action="{{ route('orders.statuses.list') }}" class="d-none"></form>
                                         </li>
                                     </ul>
                                 </div>
@@ -82,15 +82,15 @@
                                 <div class="row g-3 align-center">
                                     <div class="col-lg-3">
                                         <div class="form-group">
-                                            <label class="form-label" for="note">توضیحات</label>
+                                            <label class="form-label" for="notes">توضیحات</label>
                                             {{--                                            <span class="form-note">توضیحات این دسته بندی</span>--}}
                                         </div>
                                     </div>
                                     <div class="col-lg-8">
                                         <div class="form-group">
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control @error('note') error @enderror" id="note" name="note" value="{{ old('note' , '') }}" placeholder="اختیاری">
-                                                @error('note')
+                                                <input type="text" class="form-control @error('notes') error @enderror" id="notes" name="notes" value="{{ old('notes' , '') }}" placeholder="اختیاری">
+                                                @error('notes')
                                                 <span id="fv-subject-error" class="invalid">{{ $message }}</span>
                                                 @enderror
                                             </div>

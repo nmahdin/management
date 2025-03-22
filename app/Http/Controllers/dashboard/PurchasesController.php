@@ -8,6 +8,7 @@ use App\Models\Purchase;
 use App\Models\PurchasesCategory;
 use App\Models\Seller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
 
 class PurchasesController extends Controller
@@ -15,8 +16,8 @@ class PurchasesController extends Controller
     // start purchases
     public function purchases_list()
     {
-        $n = Purchase::Where('deleted', 0)->count();
-        $purchases = Purchase::Where('deleted', 0)->get();
+        $n = Purchase::count();
+        $purchases = Purchase::all();
         return view('dashboard.purchases.list', ['n' => $n, 'purchases' => $purchases]);
     }
 
@@ -53,47 +54,66 @@ class PurchasesController extends Controller
         $data['date'] = Custom::changDate($data['date']);
         Purchase::create($data);
 
-        return redirect(route('purchases.create'))->with('created', $data['name']);
+        return back()->with('created', $data['name']);
     }
 
-    public function purchases_detail(Purchase $purchase)
+    public function purchases_detail($id)
     {
+        $purchase = Purchase::findOrFail($id);
         return view('dashboard.purchases.detail', ['purchase' => $purchase]);
     }
 
-    public function purchases_delete(Purchase $purchase)
+    public function purchases_delete_picture($id)
     {
-        $purchase->update(['deleted' => 1]);
+        $purchase = Purchase::findOrFail($id);
+//        dd(public_path('assets/files/purchases/'.$purchase->picture));
+        if ($purchase->picture != null) {
+            if (File::exists(public_path('/assets/files/purchases/'.$purchase->picture))) {
+                File::delete(public_path('/assets/files/purchases/'.$purchase->picture));
+                $purchase->update(['picture' => null]);
+            }
+            return back()->with('picture' , 'عکس با موفقیت حذف شد.');
+        }
+        return back()->with('picture' , 'عکس برای حذف وجود نداشت.');
+
+    }
+
+    public function purchases_delete($id)
+    {
+        $purchase = Purchase::findOrFail($id);
+        $purchase->delete();
         return back()->with('deleted', $purchase->name);
     }
 
     public function purchases_trash()
     {
-        $purchases = Purchase::where('deleted', 1)->get();
-        $n = Purchase::where('deleted', 1)->count();
+        $purchases = Purchase::onlyTrashed()->get();
+        $n = Purchase::onlyTrashed()->count();
         return view('dashboard.purchases.trash', ['purchases' => $purchases, 'n' => $n]);
     }
 
-    public function purchases_trash_delete(Purchase $purchase)
+    public function purchases_trash_delete($id)
     {
-        $name = $purchase->name;
-        $purchase->delete();
-        return back()->with('deleted', $name);
+        $purchase = Purchase::onlyTrashed()->findOrFail($id);
+        $purchase->forceDelete();
+        return back()->with('deleted', $purchase->name);
     }
 
-    public function purchases_trash_restore(Purchase $purchase)
+    public function purchases_trash_restore($id)
     {
-        $purchase->update(['deleted' => 0]);
+        $purchase = Purchase::onlyTrashed()->findOrFail($id);
+        $purchase->restore();
         return back()->with('restored', $purchase->name);
     }
 
-    public function purchases_edit(Purchase $purchase)
+    public function purchases_edit($id)
     {
-        return view('dashboard.purchases.edit', ['purchase' => $purchase]);
+        return view('dashboard.purchases.edit', ['purchase' => Purchase::findOrFail($id)]);
     }
 
-    public function purchases_edit_store(Request $request, Purchase $purchase)
+    public function purchases_edit_store(Request $request, $id)
     {
+        $purchase = Purchase::findOrFail($id);
         $data = $request->validate([
             'code' => ['required', Rule::unique('purchases')->ignore($purchase->code, 'code')],
             'picture' => ['nullable'],
@@ -113,6 +133,10 @@ class PurchasesController extends Controller
             $file = $request->picture;
             $path = "/assets/files/purchases";
             $file->move(public_path($path), now()->timestamp . '.' . $file->getClientOriginalExtension());
+            if (File::exists(public_path('/assets/files/purchases/'.$purchase->picture))) {
+                File::delete(public_path('/assets/files/purchases/'.$purchase->picture));
+                $purchase->update(['picture' => null]);
+            }
 
             $data['picture'] = now()->timestamp . '.' . $file->getClientOriginalExtension();
         }
@@ -127,8 +151,8 @@ class PurchasesController extends Controller
     // categories
     public function purchases_categories_list()
     {
-        $n = PurchasesCategory::where('deleted', 0)->count();
-        $categories = PurchasesCategory::where('deleted', 0)->get();
+        $n = PurchasesCategory::count();
+        $categories = PurchasesCategory::all();
         return view('dashboard.purchases.categories.list', ['n' => $n, 'categories' => $categories]);
     }
 
@@ -144,39 +168,56 @@ class PurchasesController extends Controller
             'notes' => ['nullable'],
         ]);
         PurchasesCategory::create($data);
-        return redirect(route('purchases.category.create'))->with('created', $data['name']);
+        return back()->with('created', $data['name']);
     }
 
-    public function purchases_categories_delete(PurchasesCategory $purchases_category)
+    public function purchases_categories_edit($id) {
+        return view('dashboard.purchases.categories.edit', ['category' => PurchasesCategory::findOrFail($id)]);
+    }
+
+    public function purchases_categories_update($id) {
+        $purchases_category = PurchasesCategory::findOrFail($id);
+        $data = request()->validate([
+            'name' => ['required', 'max:255', Rule::unique('purchases_category')->ignore($purchases_category->name, 'name')],
+            'notes' => ['nullable'],
+        ]);
+        $purchases_category->update($data);
+        return redirect(route('purchases.categories.list'))->with('created', $data['name']);
+    }
+
+    public function purchases_categories_delete($id)
     {
-//        $gk = PurchasesCategory::find(2)->get();
-//        dd($gk);
-        $purchases_category->update(['deleted' => 1]);
+        $purchases_category = PurchasesCategory::findOrFail($id);
+        $purchases_category->delete();
         return back()->with('deleted', $purchases_category->name);
     }
 
     public function purchases_categories_trash()
     {
-        $n = PurchasesCategory::where('deleted', 1)->count();
-        $categories = PurchasesCategory::where('deleted', 1)->get();
+        $n = PurchasesCategory::onlyTrashed()->count();
+        $categories = PurchasesCategory::onlyTrashed()->get();
         return view('dashboard.purchases.categories.trash', ['n' => $n, 'categories' => $categories]);
     }
 
-    public function purchases_categories_trash_delete()
+    public function purchases_categories_trash_delete($id)
     {
-
+        $purchases_category = PurchasesCategory::onlyTrashed()->findOrFail($id);
+        $purchases_category->forceDelete();
+        return back()->with('deleted', $purchases_category->name);
     }
 
-    public function purchases_categories_trash_restore()
+    public function purchases_categories_trash_restore($id)
     {
-
+        $purchases_category = PurchasesCategory::onlyTrashed()->findOrFail($id);
+        $purchases_category->restore();
+        return back()->with('restored', $purchases_category->name);
     }
 
     // sellers
     public function sellers_list()
     {
-        $n = Seller::where('deleted', 0)->count();
-        $sellers = Seller::where('deleted', 0)->get();
+        $n = Seller::count();
+        $sellers = Seller::all();
         return view('dashboard.purchases.sellers.list', ['n' => $n, 'sellers' => $sellers]);
     }
 
@@ -185,16 +226,19 @@ class PurchasesController extends Controller
         return view('dashboard.purchases.sellers.create');
     }
 
-    public function sellers_edit(Seller $seller)
+    public function sellers_edit($id)
     {
+        $seller = Seller::findOrFail($id);
         return view('dashboard.purchases.sellers.edit', compact('seller'));
     }
 
-    public function sellers_edit_post(Request $request, Seller $seller)
+    public function sellers_edit_post(Request $request, $id)
     {
+        $seller = Seller::findOrFail($id);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:11',
+            'number' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
             'address' => 'nullable|string',
             'note' => 'nullable|string'
         ]);
@@ -202,45 +246,47 @@ class PurchasesController extends Controller
         $seller->update($validated);
 
         return redirect()->route('purchases.sellers.list')
-            ->with('success', "فروشنده {$seller->name} با موفقیت ویرایش شد");
+            ->with('edited', $seller->name);
     }
 
     public function sellers_create_post()
     {
         $data = request()->validate([
             'name' => ['required', 'max:255', 'unique:sellers'],
-            'number' => ['nullable', 'integer'],
-            'phone' => ['nullable', 'integer'],
+            'number' => ['nullable', 'string'],
+            'phone' => ['nullable', 'string'],
             'address' => ['nullable', 'max:255'],
             'notes' => ['nullable'],
         ]);
         Seller::create($data);
-        return redirect(route('purchases.sellers.create'))->with('created', $data['name']);
+        return back()->with('created', $data['name']);
     }
 
-    public function sellers_delete(Seller $seller)
+    public function sellers_delete($id)
     {
-        $seller->update(['deleted' => 1]);
+        $seller = Seller::findOrFail($id);
+        $seller->delete();
         return redirect(route('purchases.sellers.list'))->with('deleted' , $seller->name);
     }
 
     public function sellers_trash()
     {
-        $sellers = Seller::where('deleted', 1)->get();
-        $n = Seller::where('deleted', 1)->count();
+        $sellers = Seller::onlyTrashed()->get();
+        $n = Seller::onlyTrashed()->count();
         return view('dashboard.purchases.sellers.trash' , ['sellers' => $sellers , 'n' => $n]);
     }
 
-    public function sellers_trash_delete(Seller $seller)
+    public function sellers_trash_delete($id)
     {
-        $name = $seller->name;
-        $seller->delete();
-        return redirect(route('purchases.sellers.trash'))->with('deleted' , $name);
+        $seller = Seller::onlyTrashed()->findOrFail($id);
+        $seller->forceDelete();
+        return redirect(route('purchases.sellers.trash'))->with('deleted' , $seller->name);
     }
 
-    public function sellers_trash_restore(Seller $seller)
+    public function sellers_trash_restore($id)
     {
-        $seller->update(['deleted' => 0]);
+        $seller = Seller::onlyTrashed()->findOrFail($id);
+        $seller->restore();
         return redirect(route('purchases.sellers.trash'))->with('restored' , $seller->name);
     }
 

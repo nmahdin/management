@@ -52,7 +52,7 @@
 
                     <div class="card card-preview">
                         <div class="card-inner">
-                            <form action="{{ route('account.edit' , $account->id) }}" method="POST" class="gy-3">
+                            <form action="{{ route('accounts.edit' , $account->id) }}" method="POST" class="gy-3">
                                 @csrf
                                 <div class="row g-3 align-center">
                                     <div class="col-lg-3">

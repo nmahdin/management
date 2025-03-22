@@ -182,18 +182,18 @@
                             </ul>
                             <!-- .nk-menu-sub -->
                         </li>
-                        <li class="nk-menu-item has-sub">
-                            <a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-text">وضعیت های فاکتور</span></a>
-                            <ul class="nk-menu-sub">
-                                <li class="nk-menu-item">
-                                    <a href="{{ route('orders.statuses.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست وضعیت ها</span></a>
-                                </li>
-                                <li class="nk-menu-item">
-                                    <a href="{{ route('orders.statuses.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن وضعیت</span></a>
-                                </li>
-                            </ul>
-                            <!-- .nk-menu-sub -->
-                        </li>
+{{--                        <li class="nk-menu-item has-sub">--}}
+{{--                            <a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-text">وضعیت های فاکتور</span></a>--}}
+{{--                            <ul class="nk-menu-sub">--}}
+{{--                                <li class="nk-menu-item">--}}
+{{--                                    <a href="{{ route('orders.statuses.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست وضعیت ها</span></a>--}}
+{{--                                </li>--}}
+{{--                                <li class="nk-menu-item">--}}
+{{--                                    <a href="{{ route('orders.statuses.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن وضعیت</span></a>--}}
+{{--                                </li>--}}
+{{--                            </ul>--}}
+{{--                            <!-- .nk-menu-sub -->--}}
+{{--                        </li>--}}
                     </ul>
 
                     <!-- .nk-menu-sub -->

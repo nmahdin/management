@@ -10,5 +10,5 @@ class Status extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $fillable = ['label'];
+    protected $fillable = ['label' , 'notes' , 'color'];
 }

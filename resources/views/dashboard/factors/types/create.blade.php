@@ -23,16 +23,16 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('products.categories.list') }}"
+                                            <a href="{{ route('orders.types.list') }}"
                                                class="dropdown-toggle btn btn-dark btn-dim"
                                                data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form1').submit();">
                                                 <em class="icon ni ni-forward-ios"></em>
-                                                <span>
+                                                <span class="fw-normal">
                                                     لیست دسته بندی های فروش
                                                 </span>
                                             </a>
-                                            <form id="form1" action="{{ route('products.categories.list') }}" class="d-none"></form>
+                                            <form id="form1" action="{{ route('orders.types.list') }}" class="d-none"></form>
                                         </li>
                                     </ul>
                                 </div>
@@ -60,7 +60,7 @@
 
                     <div class="card card-preview">
                         <div class="card-inner">
-                            <form action="{{ route('orders.type.create') }}" method="POST" class="gy-3">
+                            <form action="{{ route('orders.types.create') }}" method="POST" class="gy-3">
                                 @csrf
                                 <div class="row g-3 align-center">
                                     <div class="col-lg-3">
@@ -90,7 +90,7 @@
                                     <div class="col-lg-8">
                                         <div class="form-group">
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control @error('note') error @enderror" id="note" name="note" value="{{ old('note' , '') }}" placeholder="اختیاری">
+                                                <input type="text" class="form-control @error('not') error @enderror" id="note" name="note" value="{{ old('note' , '') }}" placeholder="اختیاری">
                                                 @error('note')
                                                 <span id="fv-subject-error" class="invalid">{{ $message }}</span>
                                                 @enderror

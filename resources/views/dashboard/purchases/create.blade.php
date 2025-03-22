@@ -102,11 +102,16 @@
                                         <div class="form-group">
                                             <label class="form-label">دسته بندی</label>
                                             <div class="form-control-wrap">
-                                                <select class="form-select js-select2 @error('category_id') error @enderror" name="category_id"  data-search="on">
-                                                    @foreach(\App\Models\PurchasesCategory::where('deleted' , 0)->get() as $category)
-                                                        <option value="{{ $category->id }}" >{{ $category->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                                @if(\App\Models\PurchasesCategory::count() != 0)
+                                                    <select class="form-select js-select2 @error('category_id') error @enderror" name="category_id"  data-search="on">
+                                                        @foreach(\App\Models\PurchasesCategory::all() as $category)
+                                                            <option value="{{ $category->id }}" >{{ $category->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                @else
+                                                    <p>ابتدا برای خرید ها دسته بندی اضافه کنید.</p>
+                                                @endif
+
                                                 @error('category_id')
                                                 <span id="fv-full-name-error" class="invalid">{{$message}}</span>
                                                 @enderror
@@ -117,12 +122,17 @@
                                         <div class="form-group">
                                             <label class="form-label" for="seller_id">فروشنده کالا</label>
                                             <div class="form-control-wrap">
-                                                <select class="form-select js-select2 @error('seller_id') error @enderror" name="seller_id" id="seller_id" data-search="on">
-                                                    <option value="-1" >نا مشخص</option>
-                                                    @foreach(\App\Models\Seller::where('deleted' , 0)->get() as $seller)
-                                                        <option value="{{ $seller->id }}" >{{ $seller->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                                @if(\App\Models\Seller::count() != 0)
+                                                    <select class="form-select js-select2 @error('seller_id') error @enderror" name="seller_id" id="seller_id" data-search="on">
+                                                        <option value="-1" >نا مشخص</option>
+                                                        @foreach(\App\Models\Seller::all() as $seller)
+                                                            <option value="{{ $seller->id }}" >{{ $seller->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                @else
+                                                    <p>ابتدا برای خرید ها فروشنده اضافه کنید.</p>
+                                                @endif
+
                                                 @error('seller_id')
                                                 <span id="fv-full-name-error" class="invalid">{{$message}}</span>
                                                 @enderror

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->text('notes')->nullable();
-            $table->boolean('deleted')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -25,16 +25,21 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('type');
-            $table->string('date');
-            $table->integer('amount');
+            $table->date('date');
+            $table->bigInteger('amount');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('account_id');
             $table->foreign('account_id')->references('id')->on('accounts');
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('transactions_categories');
             $table->string('status');
             $table->string('reference'); // دلیل یا مرجع
-            $table->string('attached'); //پیوست
-            $table->text('notes');
+            $table->string('source_type'); // مرجع
+            $table->string('source_id')->nullable(); // مرجع
+            $table->string('attached')->nullable(); //پیوست
+            $table->softDeletes();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
 

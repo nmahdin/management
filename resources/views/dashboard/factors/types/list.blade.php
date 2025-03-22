@@ -1,4 +1,4 @@
-<x-admin.main title="لیست دسته بندی ها">
+<x-admin.main title="لیست دسته بندی های خرید">
 
     <div class="nk-content nk-content-fluid">
         <div class="container-xl wide-xl">
@@ -7,7 +7,7 @@
                     <div class="nk-block-between">
                         <div class="nk-block-head-content">
                             <!--   --------------- title --------------     -->
-                            <h3 class="nk-block-title page-title">لیست دسته بندی ها</h3>
+                            <h3 class="nk-block-title page-title">لیست دسته بندی های خرید</h3>
                             <div class="nk-block-des text-soft">
                                 <!--   --------------- توضیح صفحه --------------     -->
                                 @if($n !== 0)
@@ -24,7 +24,7 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('products.category.create') }}"
+                                            <a href="{{ route('orders.types.create') }}"
                                                class="dropdown-toggle btn btn-dark btn-dim"
                                                data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form133').submit();">
@@ -33,11 +33,11 @@
                                                     افزودن دسته بندی
                                                 </span>
                                             </a>
-                                            <form id="form133" action="{{ route('products.category.create') }}"
+                                            <form id="form133" action="{{ route('orders.types.create') }}"
                                                   class="d-none"></form>
                                         </li>
                                         <li>
-                                            <a href="{{ route('products.category.trash') }}"
+                                            <a href="{{ route('orders.types.trash') }}"
                                                class="dropdown-toggle btn btn-light btn-dim" data-bs-toggle="modal"
                                                data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('cate_trash').submit();">
@@ -46,7 +46,7 @@
                                                     سطل زباله
                                                 </span>
                                             </a>
-                                            <form id="cate_trash" action="{{ route('products.category.trash') }}"
+                                            <form id="cate_trash" action="{{ route('orders.types.trash') }}"
                                                   class="d-none"></form>
                                         </li>
                                     </ul>
@@ -61,12 +61,18 @@
                     <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
                         <em class="icon ni ni-check-circle"></em>
                         دسته بندی "{{session('deleted')}}" با موفقیت به
-                        <a href="{{ route('products.category.trash') }}" class="text-success" data-bs-toggle="modal"
+                        <a href="{{ route('orders.types.trash') }}" class="text-success" data-bs-toggle="modal"
                            data-bs-target="#modalZoom"
                            onclick="event.preventDefault(); document.getElementById('cate_trash').submit();">
                             <u>سطل زباله</u>
                         </a>
                         منتقل شد.
+                    </div>
+                @endif
+                @if(session('edited'))
+                    <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
+                        <em class="icon ni ni-check-circle"></em>
+                        دسته بندی "{{session('edited')}}" با موفقیت ویرایش شد.
                     </div>
                 @endif
             <!-- .nk-block-head -->
@@ -85,10 +91,13 @@
                                     <thead class="tb-odr-head">
                                     <tr class="tb-odr-item">
                                         <th class="tb-odr-info">
-                                            <span class="tb-odr-info">نام انگلیسی</span>
+                                            <span class="tb-odr-info">نام</span>
                                         </th>
                                         <th class="tb-odr-info">
-                                            <span class="tb-odr-info">نام فارسی</span>
+                                            <span class="tb-odr-info">تعداد فروش</span>
+                                        </th>
+                                        <th class="tb-odr-info">
+                                            <span class="tb-odr-info">مجموع مبالغ فروش</span>
                                         </th>
                                         <th class="tb-odr-info">
                                             <span class="tb-odr-info">توضیحات</span>
@@ -97,20 +106,25 @@
                                     </tr>
                                     </thead>
                                     <tbody class="tb-odr-body">
-                                    @foreach($categories as $category)
+                                    @foreach($types as $type)
                                         <tr class="tb-odr-item">
                                             <td class="tb-odr-info">
-                                                <span class="tb-odr-info">{{ $category->name }}</span>
+                                                <span class="tb-odr-info">{{ $type->label }}</span>
                                             </td>
                                             <td class="tb-odr-info">
                                                 <span class="tb-odr-info">
-                                                    {{ $category->label }}
+                                                    {{ $type->count }}
                                                 </span>
                                             </td>
                                             <td class="tb-odr-info">
-                                                @if($category->notes)
                                                 <span class="tb-odr-info">
-                                                    {{ $category->notes }}
+                                                    {{ $type->total_price }}
+                                                </span>
+                                            </td>
+                                            <td class="tb-odr-info">
+                                                @if($type->note)
+                                                <span class="tb-odr-info">
+                                                    {{ $type->note }}
                                                 </span>
                                                 @else
                                                     <span class="tb-odr-info text-gray fw-light">
@@ -120,21 +134,23 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('products.category.edit' , ['category' => $category->id]) }}" class="btn btn-warning btn-dim"><em
+                                                    <a href="{{ route('orders.types.edit' , ['id' => $type->id]) }}" class="btn btn-warning btn-dim"><em
                                                             class="icon ni ni-edit-alt-fill"></em><span class="fw-normal">ویرایش</span>
                                                     </a>
                                                 </div>
-                                                <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
-                                                    <a href="{{ route('products.category.delete' , ['category' => $category->id]) }}"
-                                                       onclick="event.preventDefault(); document.getElementById('delete_cate{{$category->id}}').submit();"
-                                                       class="btn btn-danger btn-dim"
-                                                       style="padding: 6px 9px !important;"><em
-                                                            class="icon ni ni-trash-fill"></em></a>
-                                                    <form id="delete_cate{{$category->id}}" method="post"
-                                                          action="{{ route('products.category.delete' , ['category' => $category->id]) }}"
-                                                          class="d-none">@csrf @method('delete')</form>
+                                                @if($type->count == 0)
+                                                    <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
+                                                        <a href="{{ route('orders.types.delete' , ['id' => $type->id]) }}"
+                                                           onclick="event.preventDefault(); document.getElementById('delete_cate{{$type->id}}').submit();"
+                                                           class="btn btn-danger btn-dim"
+                                                           style="padding: 6px 9px !important;"><em
+                                                                class="icon ni ni-trash-fill"></em></a>
+                                                        <form id="delete_cate{{$type->id}}" method="post"
+                                                              action="{{ route('orders.types.delete' , ['id' => $type->id]) }}"
+                                                              class="d-none">@csrf @method('delete')</form>
 
-                                                </div>
+                                                    </div>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

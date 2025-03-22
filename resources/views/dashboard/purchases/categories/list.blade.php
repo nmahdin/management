@@ -24,7 +24,7 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('products.categories.create') }}"
+                                            <a href="{{ route('purchases.categories.create') }}"
                                                class="dropdown-toggle btn btn-dark btn-dim"
                                                data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form133').submit();">
@@ -33,7 +33,7 @@
                                                     افزودن دسته بندی
                                                 </span>
                                             </a>
-                                            <form id="form133" action="{{ route('products.categories.create') }}"
+                                            <form id="form133" action="{{ route('purchases.categories.create') }}"
                                                   class="d-none"></form>
                                         </li>
                                         <li>
@@ -61,7 +61,7 @@
                     <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
                         <em class="icon ni ni-check-circle"></em>
                         دسته بندی "{{session('deleted')}}" با موفقیت به
-                        <a href="{{ route('products.category.trash') }}" class="text-success" data-bs-toggle="modal"
+                        <a href="{{ route('products.categories.trash') }}" class="text-success" data-bs-toggle="modal"
                            data-bs-target="#modalZoom"
                            onclick="event.preventDefault(); document.getElementById('cate_trash').submit();">
                             <u>سطل زباله</u>
@@ -112,20 +112,20 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('products.categories.edit' , ['category' => $category->id]) }}"
+                                                    <a href="{{ route('purchases.categories.edit' , ['id' => $category->id]) }}"
                                                        class="btn btn-warning btn-dim"><em
                                                             class="icon ni ni-edit-alt-fill"></em><span
                                                             class="fw-normal">ویرایش</span>
                                                     </a>
                                                 </div>
                                                 <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
-                                                    <a href="{{ route('purchases.categories.delete' , ['purchases_category' => $category->id]) }}"
+                                                    <a href="{{ route('purchases.categories.delete' , ['id' => $category->id]) }}"
                                                        onclick="event.preventDefault(); document.getElementById('delete_cate{{$category->id}}').submit();"
                                                        class="btn btn-danger btn-dim"
                                                        style="padding: 6px 9px !important;"><em
                                                             class="icon ni ni-trash-fill"></em></a>
                                                     <form id="delete_cate{{$category->id}}" method="post"
-                                                          action="{{ route('purchases.categories.delete' , ['purchases_category' => $category->id]) }}"
+                                                          action="{{ route('purchases.categories.delete' , ['id' => $category->id]) }}"
                                                           class="d-none">@csrf @method('delete')</form>
 
                                                 </div>

@@ -96,12 +96,12 @@
                                                 dd
                                             </td>
                                             <td class="nk-tb-col tb-col-sm" data-order="35040.34">
-                                                <span class="fw-light"><a href="{{ route('purchases.detail' , ['purchase' => $purchase]) }}">{{ $purchase->code }}</a></span>
+                                                <span class="fw-light">{{ $purchase->code }}</span>
                                             </td>
                                             <td class="nk-tb-col tb-col-lg">
                                                 <div class="user-card">
                                                     <div class="user-info">
-                                                        <span class="tb-lead"><a href="{{ route('purchases.detail' , ['purchase' => $purchase]) }}">{{ $purchase->name }}</a><span class="dot dot-success d-md-none ms-1"></span></span>
+                                                        <span class="tb-lead">{{ $purchase->name }}<span class="dot dot-success d-md-none ms-1"></span></span>
                                                         <span>{{ $purchase->color }}</span>
                                                     </div>
                                                 </div>
@@ -121,18 +121,18 @@
                                             <td class="nk-tb-col nk-tb-col-tools">
                                                 <ul class="nk-tb-actions gx-1">
                                                     <li class="nk-tb-action-hidden">
-                                                        <a href="{{ route('purchases.restore' , ['purchase' => $purchase->id]) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        <a href="{{ route('purchases.restore' , ['id' => $purchase->id]) }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
                                                            onclick="event.preventDefault(); document.getElementById('restore_pur{{$purchase->id}}').submit();" title="بازگردانی">
                                                             <em class="icon ni ni-redo"></em>
                                                         </a>
-                                                        <form id="restore_pur{{$purchase->id}}" method="post" action="{{ route('purchases.restore' , ['purchase' => $purchase->id]) }}" class="d-none">@csrf @method('post')</form>
+                                                        <form id="restore_pur{{$purchase->id}}" method="post" action="{{ route('purchases.restore' , ['id' => $purchase->id]) }}" class="d-none">@csrf @method('post')</form>
                                                     </li>
                                                     <li class="nk-tb-action-hidden">
-                                                        <a href="{{ route('purchases.delete.trash' , ['purchase' => $purchase->id]) }}" onclick="event.preventDefault(); document.getElementById('delete_pur{{$purchase->id}}').submit();"
+                                                        <a href="{{ route('purchases.delete.trash' , ['id' => $purchase->id]) }}" onclick="event.preventDefault(); document.getElementById('delete_pur{{$purchase->id}}').submit();"
                                                            class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف کامل">
                                                             <em class="icon ni ni-trash-fill"></em>
                                                         </a>
-                                                        <form id="delete_pur{{$purchase->id}}" method="post" action="{{ route('purchases.delete.trash' , ['purchase' => $purchase->id]) }}" class="d-none">@csrf @method('delete')</form>
+                                                        <form id="delete_pur{{$purchase->id}}" method="post" action="{{ route('purchases.delete.trash' , ['id' => $purchase->id]) }}" class="d-none">@csrf @method('delete')</form>
                                                     </li>
                                                 </ul>
                                             </td>

@@ -259,7 +259,7 @@
                                         </div>
                                         @if($product->picture)
                                             <div class="justify-content-center">
-                                                <a href="{{ route('products.delete.picture' , $product->id) }}" class="btn btn-dim btn-danger btn-block fw-normal w-100" onclick="event.preventDefault(); document.getElementById('delete_pi').submit();">حذف عکس موجود</a>
+                                                <a href="{{ route('products.delete.picture' , $product->id) }}" class="btn btn-dim btn-lg btn-danger btn-block fw-normal w-100" onclick="event.preventDefault(); document.getElementById('delete_pi').submit();">حذف عکس موجود</a>
                                             </div>
 
                                         @endif

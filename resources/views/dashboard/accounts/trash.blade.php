@@ -121,23 +121,23 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
-                                                    <a href="{{ route('accounts.trash.restore' , ['account' => $account->id]) }}"
+                                                    <a href="{{ route('accounts.trash.restore' , ['id' => $account->id]) }}"
                                                        onclick="event.preventDefault(); document.getElementById('restore_acc{{$account->id}}').submit();"
                                                        class="btn btn-warning btn-dim"
                                                        style="padding: 6px 9px !important;"><em class="icon ni ni-redo"></em><span class="fw-normal">بازگردانی</span></a>
                                                     <form id="restore_acc{{$account->id}}" method="post"
-                                                          action="{{ route('accounts.trash.restore' , ['account' => $account->id]) }}"
+                                                          action="{{ route('accounts.trash.restore' , ['id' => $account->id]) }}"
                                                           class="d-none">@csrf @method('post')</form>
 
                                                 </div>
                                                 <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
-                                                    <a href="{{ route('accounts.trash.delete' , ['account' => $account->id]) }}"
+                                                    <a href="{{ route('accounts.trash.delete' , ['id' => $account->id]) }}"
                                                        onclick="event.preventDefault(); document.getElementById('delete_acc{{$account->id}}').submit();"
                                                        class="btn btn-danger btn-dim"
                                                        style="padding: 6px 9px !important;"><em
                                                             class="icon ni ni-trash-fill"></em><span class="fw-normal">حذف کامل</span></a>
                                                     <form id="delete_acc{{$account->id}}" method="post"
-                                                          action="{{ route('accounts.trash.delete' , ['account' => $account->id]) }}"
+                                                          action="{{ route('accounts.trash.delete' , ['id' => $account->id]) }}"
                                                           class="d-none">@csrf @method('delete')</form>
 
                                                 </div>

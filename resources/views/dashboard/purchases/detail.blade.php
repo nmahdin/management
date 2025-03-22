@@ -21,7 +21,7 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('product.edit' , $purchase->id) }}" class="dropdown-toggle btn btn-secondary " data-bs-toggle="modal" data-bs-target="#modalZoom"
+                                            <a href="{{ route('purchases.edit' , $purchase->id) }}" class="dropdown-toggle btn btn-secondary " data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form13').submit();">
                                                 <em class="icon ni ni-pen-fill"></em>
                                                 {{--                                                <em class="icon ni ni-plus"></em>--}}
@@ -37,7 +37,7 @@
                                                 <em class="icon ni ni-forward-ios"></em>
 {{--                                                <em class="icon ni ni-plus"></em>--}}
                                                 <span class="fw-normal">
-                                                    لیست خریدات
+                                                    لیست خرید ها
                                                 </span>
                                             </a>
                                             <form id="form12" action="{{ route('purchases.list') }}" class="d-none"></form>
@@ -65,7 +65,7 @@
                                     <div class="product-gallery me-xl-1 me-xxl-5">
                                         <div class="slider-init" id="sliderFor" data-slick='{"arrows": false, "fade": true, "asNavFor":"#sliderNav", "slidesToShow": 1, "slidesToScroll": 1}'>
                                             <div class="slider-item rounded">
-                                                <img src="{{ $purchase->picture }}" class="rounded w-100" alt="" />
+                                                <img src="/assets/files/purchases/{{$purchase->picture }}" class="rounded w-100" alt="عکس خرید" />
                                             </div>
                                         </div>
                                         <!-- .slider-init -->
@@ -85,7 +85,7 @@
                                 <div class="col-lg-6">
                                     <div class="product-info mt-5 me-xxl-5">
                                         <h4 class="product-price text-primary"><span class="text-secondary">کد :</span>
-                                            {{ $purchase->product_id }}</h4>
+                                            {{ $purchase->purchase_id }}</h4>
                                         <h2 class="product-title">{{ $purchase->name }}</h2>
                                         <!-- .product-rating -->
                                         <div class="product-excrept text-soft">
@@ -99,33 +99,29 @@
                                                 </li>
                                                 <li>
                                                     <div class="fs-14px text-muted">دسته بندی</div>
-                                                    <div class="fs-16px fw-bold text-secondary">{{ \App\Models\Category::find($purchase->category_id)->first()->name }}</div>
+                                                    <div class="fs-16px fw-bold text-secondary">{{ \App\Models\PurchasesCategory::find($purchase->category_id)->first()->name }}</div>
                                                 </li>
                                             </ul>
                                         </div>
                                         <div class="product-meta">
                                             <ul class="d-flex g-3 gx-5">
                                                 <li>
-                                                    <div class="fs-14px text-muted">مالک خرید</div>
+                                                    <div class="fs-14px text-muted">فروشنده کالا</div>
                                                     <div class="fs-16px fw-bold text-secondary">
-                                                        @if($purchase->partner_id == -1)
-                                                            مشترک
+                                                        @if($purchase->seller_id == -1)
+                                                            نامشخص
                                                         @else
-                                                            {{ \App\Models\Partner::find($purchase->partner_id)->first()->name }}
+                                                            {{ \App\Models\Partner::find($purchase->seller_id)->first()->name }}
                                                         @endif
                                                     </div>
                                                 </li>
-                                                <li>
-                                                    <div class="fs-14px text-muted">وضعیت خرید</div>
-                                                    <div class="fs-16px fw-bold text-secondary">{{ \App\Models\ProductStatus::find($purchase->status_id)->first()->name }}</div>
-                                                </li>
                                             </ul>
-                                        </div>
-                                        <div class="product-meta">
                                             <ul class="d-flex g-3 gx-5">
                                                 <li>
-                                                    <div class="fs-14px text-muted">برچسب خرید</div>
-                                                    <div class="fs-16px fw-bold text-secondary">{{ $purchase->label }}</div>
+                                                    <div class="fs-14px text-muted">تاریخ خرید</div>
+                                                    <div class="fs-16px fw-bold text-secondary">
+                                                        {{ App\helper\services\Custom::reDateP($purchase->date) }}
+                                                    </div>
                                                 </li>
                                             </ul>
                                         </div>
@@ -135,11 +131,6 @@
                                                 <li style="margin-top: 5px;">
                                                     <span class="text-4xl fw-normal bg-light" style="padding: 10px; border-radius: 7px;"><span>{{ number_format($purchase->total_price , 0, ',') }}</span>
                                                     </span>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ route('cart.add' , $purchase->id) }}" class="btn btn-primary"><span>افزودن به سبد خرید</span>
-                                                        <em class="icon ni ni-cart-fill"></em>
-                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -157,38 +148,26 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">عنوان</th>
-                                    <th scope="col">مبلغ</th>
+                                    <th scope="col">مقدار</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
                                     <th scope="row">1</th>
-                                    <td>هزینه مواد اولیه</td>
-                                    <td class="fs-19px">{{ number_format($purchase->price_materials , 0, ',') }} <span class="fw-normal fs-14px ">تومان</span></td>
+                                    <td>مبلغ واحد</td>
+                                    <td class="fs-19px">{{ number_format($purchase->unit_price , 0, ',') }} <span class="fw-normal fs-14px ">تومان</span></td>
 
                                 </tr>
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>دسمزد</td>
-                                    <td class="fs-19px">{{ number_format($purchase->salary , 0, ',') }} <span class="fw-normal fs-14px ">تومان</span></td>
+                                    <th scope="row">2</th>
+                                    <td>مقدار</td>
+                                    <td class="fs-19px">{{ $purchase->amount }}</td>
 
                                 </tr>
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>سود</td>
-                                    <td class="fs-19px">{{ number_format($purchase->profit , 0, ',') }} <span class="fw-normal fs-14px ">تومان</span></td>
-
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>سود مواد اولیه</td>
-                                    <td class="fs-19px">{{ number_format($purchase->materials_profit , 0, ',') }} <span class="fw-normal fs-14px ">تومان</span></td>
-
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>هزینه های دیگر</td>
-                                    <td class="fs-19px">{{ number_format($purchase->additional_costs , 0, ',') }} <span class="fw-normal fs-14px ">تومان</span></td>
+                                    <th scope="row">3</th>
+                                    <td>واحد</td>
+                                    <td class="fs-19px">{{ $purchase->unit }} </td>
 
                                 </tr>
                                 </tbody>

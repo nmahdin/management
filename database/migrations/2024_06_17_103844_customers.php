@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('birthday')->nullable();
             $table->string('gender');
             $table->foreignId('category_id')->nullable();
-            $table->string('notes')->nullable();
+            $table->text('notes')->nullable();
             $table->string('attachment')->nullable();
             $table->softDeletes();
             $table->timestamps();

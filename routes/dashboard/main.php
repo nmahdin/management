@@ -6,12 +6,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboards/main', [Main::class , 'index'])->name('main');
 
+
 Route::prefix('/cart')->name('cart.')->group(function () {
     Route::get('/add/{product}', [Main::class , 'add_to_cart'])->name('add');
-    Route::get('/cart/list', [Main::class , 'cart_list'])->name('list');
+    Route::get('/list', [Main::class , 'cart_list'])->name('list');
     Route::post('/enter', [Main::class , 'enter_order'])->name('enter');
     Route::delete('/delete/{id}', [Main::class , 'cart_delete'])->name('delete');
 });
+
 
 // start users
 Route::prefix('/users')->name('users.')->group(function () {

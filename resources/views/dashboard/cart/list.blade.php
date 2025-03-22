@@ -29,7 +29,7 @@
                                                data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form12').submit();">
                                                 <em class="icon ni ni-plus"></em>
-                                                <span>
+                                                <span class="fw-normal">
                                                     افزودن محصول
                                                 </span>
                                                 <form id="form12" action="{{ route('products.list') }}"
@@ -59,183 +59,397 @@
                     </div>
                 @endif
                 @if($n !== 0)
-                    <div class="nk-block nk-block-lg">
-                        <div class="card card-preview">
-                            <div class="card-inner">
-                                @php
-                                    $total = \App\helper\Cart\Cart::all()->sum(function ($cart){
-                                        return $cart['price'] * $cart['qnty'];
-                                    });
-                                @endphp
+                    <form action="{{ route('cart.enter') }}" method="post" id="cart">
+                        <div class="nk-block nk-block-lg">
+                            <div class="card card-preview">
+                                <div class="card-inner">
+                                    @php
+                                        $total = \App\helper\Cart\Cart::all()->sum(function ($cart){
+                                            return $cart['price'] * $cart['qnty'];
+                                        });
+                                    @endphp
 
-                                <div class="row gy-3">
-                                    <div class="col-md-12">
-                                        <table class="table">
-                                            <thead class="table-light">
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">نام محصول</th>
-                                                <th scope="col">قیمت محصول</th>
-                                                <th scope="col">تعداد</th>
-                                                <th scope="col">اقدام</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach(App\helper\Cart\Cart::all() as $cart)
-                                                @php
-                                                    $product = $cart['Product'];
-                                                @endphp
+                                    <div class="row gy-3">
+                                        <div class="col-md-12">
+
+                                            <table class="table">
+                                                <thead class="table-light">
                                                 <tr>
-                                                    <th scope="row">{{$product->id }}</th>
-                                                    <td>{{ $product->name }} - رنگ: {{ $product->color }}</td>
-                                                    <td>{{ number_format("$product->total_price") }}</td>
-                                                    <td>{{ $cart['qnty'] }}</td>
-                                                    <td>
-                                                        <a href="#"
-                                                           onclick="event.preventDefault(); document.getElementById('delete_pro{{$cart['id']}}').submit();"
-                                                           class="btn btn-trigger btn-icon">
-                                                            <em class="icon ni ni-trash-fill"></em>
-                                                        </a>
-                                                        <form id="delete_pro{{ $cart['id'] }}" method="post"
-                                                              action="{{ route('cart.delete' ,  $cart['id']) }}"
-                                                              class="d-none">@csrf @method('delete')</form>
-                                                    </td>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">نام محصول</th>
+                                                    <th scope="col">قیمت محصول</th>
+                                                    <th scope="col">تعداد</th>
+                                                    <th scope="col">مبلغ فروش</th>
+                                                    <th scope="col">اقدام</th>
                                                 </tr>
-                                            @endforeach
+                                                </thead>
+                                                <tbody>
+                                                @foreach(App\helper\Cart\Cart::all() as $cart)
+                                                    @php
+                                                        $product = $cart['Product'];
+                                                    @endphp
+                                                    <tr style="padding: 10px;">
+                                                        <th scope="row">{{$product->id }}</th>
+                                                        <td>{{ $product->name }} - رنگ: {{ $product->color }}</td>
+                                                        <td>{{ number_format("$product->total_price") }}</td>
+                                                        <td>{{ $cart['qnty'] }}</td>
+                                                        <td><input type="text"
+                                                                   value="{{ $product->total_price*$cart['qnty'] }}"
+                                                                   class="form-control" id="{{$product->id}}"
+                                                                   name="{{$product->id}}"></td>
+                                                        <td>
+                                                            <a href="#"
+                                                               onclick="event.preventDefault(); document.getElementById('delete_pro{{$cart['id']}}').submit();"
+                                                               class="btn btn-trigger btn-icon">
+                                                                <em class="icon ni ni-trash-fill"></em>
+                                                            </a>
 
-                                            </tbody>
-                                        </table>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- .col -->
                                     </div>
-                                    <!-- .col -->
                                 </div>
-                                <form action="{{ route('cart.enter') }}" method="post" id="cart">
+                            </div>
+                            <div class="card card-preview">
+                                <div class="card-inner">
+
+
                                     @csrf
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="form-label" for="price">مبلغ قابل پرداخت سبد خرید:
-                                                [{{ number_format($total) }}]</label>
-                                            <div class="form-control-wrap">
-                                                <input type="text" data-msg="الزامی"
-                                                       class="form-control form-control-lg required" id="price"
-                                                       value="{{ $total }}" name="price" required/>
+                                    <div class="row g-gs">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="price">مبلغ قابل پرداخت سبد خرید:
+                                                    [{{ number_format($total) }}]</label>
+                                                <div class="form-control-wrap">
+                                                    <input type="text" data-msg="الزامی"
+                                                           class="form-control required" id="price"
+                                                           value="{{ $total }}" name="price" required/>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                @if(\App\Models\Type::count() != 0)
+                                                    <label class="form-label" for="type_id">دسته بندی فروش</label>
+                                                    <div class="form-control-wrap">
+                                                        <select class="form-select js-select2" id="type_id"
+                                                                name="type_id">
+                                                            @foreach(\App\Models\Type::all() as $type)
+                                                                <option
+                                                                    value="{{ $type->id }}">{{ $type->label }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                @else
+                                                    <p>ابتدا برای فاکتور ها دسته فروش اضافه کنید.</p>
+                                                @endif
 
-                                    <div class="col-md-6">
+                                            </div>
+                                        </div>
+
+                                        <break></break>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="custom-control custom-radio custom-control-pro no-control">
+                                                    <input type="radio" class="custom-control-input" name="customer"
+                                                           id="new_customer" required="">
+                                                    <label class="custom-control-label" for="new_customer">ایجاد مشتری
+                                                        جدید</label>
+                                                </div>
+                                            </div>
+                                            <div class="row g-4">
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="name">نام و نام خانوادگی</label>
+                                                        <div class="form-control-wrap">
+                                                            <input type="text" value="{{ old('name' , '') }}"
+                                                                   class="form-control @error('name') error @enderror"
+                                                                   id="name"
+                                                                   name="name">
+                                                            @error('name')
+                                                            <span id="fv-full-name-error"
+                                                                  class="invalid">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="number">شماره موبایل</label>
+                                                        <div class="form-control-wrap">
+                                                            <input type="text" value="{{ old('number' , '') }}"
+                                                                   class="form-control @error('number') error @enderror"
+                                                                   id="number"
+                                                                   name="number">
+                                                            @error('number')
+                                                            <span id="fv-full-name-error"
+                                                                  class="invalid">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="city">شهر</label>
+                                                        <div class="form-control-wrap">
+                                                            <input type="text" value="{{ old('city' , '') }}"
+                                                                   class="form-control @error('city') error @enderror"
+                                                                   id="city"
+                                                                   name="city">
+                                                            @error('city')
+                                                            <span id="fv-full-name-error"
+                                                                  class="invalid">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="birthday">تاریخ تولد</label>
+                                                        <div class="form-control-wrap">
+                                                            <input type="text" value="{{ old('birthday' , '') }}"
+                                                                   class="form-control @error('birthday') error @enderror"
+                                                                   id="birthday" name="birthday">
+                                                            @error('birthday')
+                                                            <span id="fv-full-name-error"
+                                                                  class="invalid">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="gender">جنسیت</label>
+                                                        <div class="form-control-wrap">
+                                                            <ul class="custom-control-group g-3 align-center">
+                                                                <li>
+                                                                    <div
+                                                                        class="custom-control custom-control-lg custom-radio checked">
+                                                                        <input type="radio"
+                                                                               class="custom-control-input @error('gender') error @enderror"
+                                                                               name="gender" id="female" value="female">
+                                                                        <label class="custom-control-label"
+                                                                               for="female">خانم</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div
+                                                                        class="custom-control custom-control-lg custom-radio checked">
+                                                                        <input type="radio" class="custom-control-input"
+                                                                               id="male"
+                                                                               name="gender" value="male">
+                                                                        <label class="custom-control-label" for="male">آقا</label>
+                                                                    </div>
+                                                                    @error('gender')
+                                                                    <span id="fv-full-name-error"
+                                                                          class="invalid">{{$message}}</span>
+                                                                    @enderror
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @if(\App\Models\CustomerCategory::count() != 0)
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="category_id">دسته
+                                                                بندی</label>
+                                                            <div class="form-control-wrap">
+                                                                <select class="form-select js-select2" id="category_id"
+                                                                        name="category_id">
+                                                                    @foreach(\App\Models\CustomerCategory::all() as $category)
+                                                                        <option
+                                                                            value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <p>ابتدا از بخش تنظیمات -> بخش دسته بندی مشتریان، یک دسته
+                                                                بندی اضافه کنید</p>
+                                                        </div>
+                                                    </div>
+
+                                                @endif
+
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="address">آدرس</label>
+                                                        <div class="form-control-wrap">
+                                                <textarea
+                                                    class="form-control form-control-sm @error('address') error @enderror"
+                                                    value="{{ old('address' , '') }}" name="address" id="address"
+                                                    placeholder="خیابان شریعتی، خیابان دولت، کوچه ... ، پلاک ... ، واحد ..."></textarea>
+                                                            @error('address')
+                                                            <span id="fv-full-name-error"
+                                                                  class="invalid">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label ">راه های ارتباطی ارتباط</label>
+                                                        <ul class="custom-control-group g-3 align-center">
+                                                            <li>
+                                                                <div
+                                                                    class="custom-control custom-control-sm custom-checkbox">
+                                                                    <input type="checkbox" value="phone"
+                                                                           class="custom-control-input @error('com_ways') error @enderror"
+                                                                           id="phone" name="com_ways[]">
+                                                                    <label class="custom-control-label" for="phone">تماس
+                                                                        تلفنی</label>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div
+                                                                    class="custom-control custom-control-sm custom-checkbox">
+                                                                    <input type="checkbox" value="telegram"
+                                                                           class="custom-control-input" id="telegram"
+                                                                           name="com_ways[]">
+                                                                    <label class="custom-control-label"
+                                                                           for="telegram">تلگرام</label>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div
+                                                                    class="custom-control custom-control-sm custom-checkbox">
+                                                                    <input type="checkbox" value="bale"
+                                                                           class="custom-control-input"
+                                                                           id="bale" name="com_ways[]">
+                                                                    <label class="custom-control-label"
+                                                                           for="bale">بله</label>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div
+                                                                    class="custom-control custom-control-sm custom-checkbox">
+                                                                    <input type="checkbox" value="instagram"
+                                                                           class="custom-control-input" id="instagram"
+                                                                           name="com_ways[]">
+                                                                    <label class="custom-control-label"
+                                                                           for="instagram">اینستاگرام</label>
+                                                                    @error('com_ways')
+                                                                    <span id="fv-full-name-error"
+                                                                          class="invalid">{{$message}}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div
+                                                                    class="custom-control custom-control-sm custom-checkbox">
+                                                                    <input type="checkbox" value="eitaa"
+                                                                           class="custom-control-input" id="eitaa"
+                                                                           name="com_ways[]">
+                                                                    <label class="custom-control-label"
+                                                                           for="eitaa">ایتا</label>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="notes">یادداشت</label>
+                                                        <textarea class="form-control form-control-sm" name="notes"
+                                                                  id="notes"
+                                                                  placeholder="یادداشت یا نکته یا یادآوری در مورد مشتری"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <break></break>
                                         <div class="form-group">
-                                            <label class="form-label" for="type_id">دسته بندی فروش</label>
+                                            <div class="custom-control custom-radio custom-control-pro no-control">
+                                                <input type="radio" class="custom-control-input" name="customer"
+                                                       id="select_customer" required="">
+                                                <label class="custom-control-label" for="select_customer"> انتخاب
+                                                    مشتری</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="form-control-wrap">
-                                                <select class="form-select js-select2" id="type_id" name="type_id">
-                                                    @foreach(\App\Models\Type::all() as $type)
+                                                <select class="form-select js-select2" name="customer_id"
+                                                        data-search="on">
+                                                    <option value="0">جست و جوی مشتری</option>
+                                                    @foreach(\App\Models\Customer::all() as $customer)
                                                         <option
-                                                            value="{{ $type->id }}">{{ $type->label }}
-                                                        </option>
+                                                            value="{{ $customer->id }}">{{ $customer->name }}
+                                                            - {{ $customer->number }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <label class="form-label">ایجاد مشتری</label>
-                                        <div class="row g-4">
-                                            <div class="col-lg-4">
-                                                <div class="form-group">
-                                                    <label class="form-label" for="name">نام و نام
-                                                        خانوادگی</label>
-                                                    <div class="form-control-wrap">
-                                                        <input type="text"
-                                                               class="form-control @error('name') error @enderror"
-                                                               id="name" name="name">
-                                                        @error('name')
-                                                        <span id="fv-full-name-error"
-                                                              class="invalid">{{$message}}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="form-group">
-                                                    <label class="form-label" for="number">شماره
-                                                        موبایل</label>
-                                                    <div class="form-control-wrap">
-                                                        <input type="text"
-                                                               class="form-control @error('number') error @enderror"
-                                                               id="number" name="number">
-                                                        @error('number')
-                                                        <span id="fv-full-name-error"
-                                                              class="invalid">{{$message}}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label class="form-label"
-                                                           for="notes">یادداشت</label>
-                                                    <textarea class="form-control form-control-sm"
-                                                              name="notes" id="notes"
-                                                              placeholder="یادداشت یا نکته یا یادآوری در مورد مشتری"></textarea>
-                                                </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#modalCart"> ثبت و ادامه
+                                                </button>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <div class="form-control-wrap">
-                                            <select class="form-select js-select2" name="customer_id"
-                                                    data-search="on">
-                                                <option value="0">جست و جوی مشتری</option >
-                                                @foreach(\App\Models\Customer::all() as $customer)
-                                                    <option
-                                                        value="{{ $customer->id }}">{{ $customer->name }}
-                                                        - {{ $customer->number }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCart"> ثبت و ادامه</button>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal fade zoom" tabindex="-1" id="modalCart" aria-hidden="true" style="display: none;">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">انتخاب روش پرداخت</h5>
-                                                    <a href="#" class="close" data-bs-dismiss="modal" aria-label="بستن">
-                                                        <em class="icon ni ni-cross"></em>
-                                                    </a>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        @foreach(\App\Models\Accounts::all() as $account)
-                                                            <div class="custom-control custom-radio">
-                                                                <input type="radio" id="{{ $account->id }}" value="{{ $account->id }}" name="payments" class="custom-control-input">
-                                                                <label class="custom-control-label" for="{{ $account->id }}" >{{ $account->payment_label }}</label>
-                                                            </div>
-                                                            <br>
-                                                        @endforeach
-
+                                        <div class="modal fade zoom" tabindex="-1" id="modalCart" aria-hidden="true"
+                                             style="display: none;">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">انتخاب روش پرداخت</h5>
+                                                        <a href="#" class="close" data-bs-dismiss="modal"
+                                                           aria-label="بستن">
+                                                            <em class="icon ni ni-cross"></em>
+                                                        </a>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <button type="submit" class="btn btn-lg btn-primary btn-dim">ثبت سفارش</button>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            @foreach(\App\Models\Accounts::all() as $account)
+
+
+                                                                    <div class="custom-control custom-control-lg custom-radio">
+                                                                        <input type="radio" class="custom-control-input" name="payments" VALUE="{{ $account->id }}" id="2{{ $account->id }}">
+                                                                        <label class="custom-control-label" for="2{{ $account->id }}">{{ $account->payment_label }}</label>
+                                                                    </div>
+
+{{--                                                                    <input type="radio" id="{{ $account->id }}"--}}
+{{--                                                                           value="{{ $account->id }}" name="payments"--}}
+{{--                                                                           class="custom-control-input">--}}
+{{--                                                                    <label class="custom-control-label"--}}
+{{--                                                                           for="{{ $account->id }}">{{ $account->payment_label }}</label>--}}
+
+                                                                <br>
+                                                            @endforeach
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <button type="submit"
+                                                                    class="btn btn-lg btn-primary btn-dim">ثبت سفارش
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                </form>
 
+                                </div>
                             </div>
+                            <!-- .card-preview -->
                         </div>
-                        <!-- .card-preview -->
-                    </div>
+                    </form>
+                    <form id="delete_pro{{ $cart['id'] }}" method="post"
+                          action="{{ route('cart.delete' ,  $cart['id']) }}"
+                          class="d-none">@csrf @method('delete')</form>
                 @endif
 
                 <!-- .nk-block -->
@@ -256,7 +470,6 @@
         </div>
     </div>
     <x-admin.modal id="modalTrash" class="modal-body-md">در حال رفتن به صفحه محصولات حذف شده ...</x-admin.modal>
-
 
 
     @slot('script')

@@ -24,7 +24,7 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('account.create') }}"
+                                            <a href="{{ route('accounts.create') }}"
                                                class="dropdown-toggle btn btn-dark btn-dim"
                                                data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form133').submit();">
@@ -33,7 +33,7 @@
                                                     افزودن حساب
                                                 </span>
                                             </a>
-                                            <form id="form133" action="{{ route('account.create') }}"
+                                            <form id="form133" action="{{ route('accounts.create') }}"
                                                   class="d-none"></form>
                                         </li>
                                         <li>
@@ -135,18 +135,18 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('account.edit' , ['account' => $account->id]) }}" class="btn btn-warning btn-dim"><em
+                                                    <a href="{{ route('accounts.edit' , ['id' => $account->id]) }}" class="btn btn-warning btn-dim"><em
                                                             class="icon ni ni-edit-alt-fill"></em><span class="fw-normal">ویرایش</span>
                                                     </a>
                                                 </div>
                                                 <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
-                                                    <a href="{{ route('account.delete' , ['account' => $account->id]) }}"
+                                                    <a href="{{ route('accounts.delete' , ['id' => $account->id]) }}"
                                                        onclick="event.preventDefault(); document.getElementById('delete_cate{{$account->id}}').submit();"
                                                        class="btn btn-danger btn-dim"
                                                        style="padding: 6px 9px !important;"><em
                                                             class="icon ni ni-trash-fill"></em></a>
                                                     <form id="delete_cate{{$account->id}}" method="post"
-                                                          action="{{ route('account.delete' , ['account' => $account->id]) }}"
+                                                          action="{{ route('accounts.delete' , ['id' => $account->id]) }}"
                                                           class="d-none">@csrf @method('delete')</form>
 
                                                 </div>

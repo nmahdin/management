@@ -106,20 +106,23 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('purchases.categories.edit' , ['category' => $category->id]) }}"
+                                                    <a href="{{ route('purchases.categories.restore' , ['id' => $category->id]) }}" onclick="event.preventDefault(); document.getElementById('re_cate{{$category->id}}').submit();"
                                                        class="btn btn-warning btn-dim"><em
-                                                            class="icon ni ni-edit-alt-fill"></em><span
-                                                            class="fw-normal">ویرایش</span>
+                                                            class="icon ni ni-redo"></em><span
+                                                            class="fw-normal">بازگردانی</span>
                                                     </a>
+                                                    <form id="re_cate{{$category->id}}" method="post"
+                                                          action="{{ route('purchases.categories.restore' , ['id' => $category->id]) }}"
+                                                          class="d-none">@csrf</form>
                                                 </div>
                                                 <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
-                                                    <a href="{{ route('purchases.categories.delete' , ['category' => $category->id]) }}"
+                                                    <a href="{{ route('purchases.categories.delete.trash' , ['id' => $category->id]) }}"
                                                        onclick="event.preventDefault(); document.getElementById('delete_cate{{$category->id}}').submit();"
                                                        class="btn btn-danger btn-dim"
                                                        style="padding: 6px 9px !important;"><em
-                                                            class="icon ni ni-trash-fill"></em></a>
+                                                            class="icon ni ni-trash-fill"></em><span class="fw-normal">حذف کامل</span></a>
                                                     <form id="delete_cate{{$category->id}}" method="post"
-                                                          action="{{ route('purchases.categories.delete' , ['category' => $category->id]) }}"
+                                                          action="{{ route('purchases.categories.delete.trash' , ['id' => $category->id]) }}"
                                                           class="d-none">@csrf @method('delete')</form>
 
                                                 </div>

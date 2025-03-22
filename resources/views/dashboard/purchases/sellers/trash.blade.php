@@ -115,7 +115,7 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('purchases.sellers.trash.restore', ['seller' => $seller->id]) }}"
+                                                    <a href="{{ route('purchases.sellers.trash.restore', ['id' => $seller->id]) }}"
                                                        onclick="event.preventDefault(); document.getElementById('restore_seller{{$seller->id}}').submit();"
                                                        class="btn btn-warning btn-dim"
                                                        data-bs-toggle="modal" data-bs-target="#modalrestore">
@@ -123,18 +123,18 @@
                                                         <span class="fw-normal">بازگردانی</span>
                                                     </a>
                                                     <form id="restore_seller{{$seller->id}}" method="post"
-                                                          action="{{ route('purchases.sellers.trash.restore', ['seller' => $seller->id]) }}"
+                                                          action="{{ route('purchases.sellers.trash.restore', ['id' => $seller->id]) }}"
                                                           class="d-none">@csrf</form>
                                                 </div>
                                                 <div class="tb-odr-btns d-none d-md-inline" style="margin-right: 3px">
-                                                    <a href="{{ route('purchases.sellers.trash.delete', ['seller' => $seller->id]) }}"
+                                                    <a href="{{ route('purchases.sellers.trash.delete', ['id' => $seller->id]) }}"
                                                        onclick="event.preventDefault(); document.getElementById('force_delete_seller{{$seller->id}}').submit();"
                                                        class="btn btn-danger btn-dim" style="padding: 6px 9px !important;"
                                                        data-bs-toggle="modal" data-bs-target="#modaldelete">
                                                         <em class="icon ni ni-trash-fill"></em>
                                                     </a>
                                                     <form id="force_delete_seller{{$seller->id}}" method="post"
-                                                          action="{{ route('purchases.sellers.trash.delete', ['seller' => $seller->id]) }}"
+                                                          action="{{ route('purchases.sellers.trash.delete', ['id' => $seller->id]) }}"
                                                           class="d-none">@csrf @method('delete')</form>
                                                 </div>
                                             </td>

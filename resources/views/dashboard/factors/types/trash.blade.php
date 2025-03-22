@@ -1,4 +1,4 @@
-<x-admin.main title="سطل زباله دسته بندی ها">
+<x-admin.main title="سطل زباله دسته بندی های خرید">
 
     <div class="nk-content nk-content-fluid">
         <div class="container-xl wide-xl">
@@ -7,7 +7,7 @@
                     <div class="nk-block-between">
                         <div class="nk-block-head-content">
                             <!--   --------------- title --------------     -->
-                            <h3 class="nk-block-title page-title">سطل زباله دسته بندی ها</h3>
+                            <h3 class="nk-block-title page-title">سطل زباله دسته بندی های خرید</h3>
                             <div class="nk-block-des text-soft">
                                 <!--   --------------- توضیح صفحه --------------     -->
                                 @if($n !== 0)
@@ -24,7 +24,7 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('products.categories.list') }}"
+                                            <a href="{{ route('orders.types.list') }}"
                                                class="dropdown-toggle btn btn-dark btn-dim"
                                                data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form133').submit();">
@@ -33,7 +33,7 @@
                                                     لیست دسته بندی ها
                                                 </span>
                                             </a>
-                                            <form id="form133" action="{{ route('products.categories.list') }}"
+                                            <form id="form133" action="{{ route('orders.types.list') }}"
                                                   class="d-none"></form>
                                         </li>
                                     </ul>
@@ -79,10 +79,7 @@
                                     <thead class="tb-odr-head">
                                     <tr class="tb-odr-item">
                                         <th class="tb-odr-info">
-                                            <span class="tb-odr-info">نام انگلیسی</span>
-                                        </th>
-                                        <th class="tb-odr-info">
-                                            <span class="tb-odr-info">نام فارسی</span>
+                                            <span class="tb-odr-info">نام</span>
                                         </th>
                                         <th class="tb-odr-info">
                                             <span class="tb-odr-info">توضیحات</span>
@@ -91,20 +88,15 @@
                                     </tr>
                                     </thead>
                                     <tbody class="tb-odr-body">
-                                    @foreach($categories as $category)
+                                    @foreach($types as $type)
                                         <tr class="tb-odr-item">
                                             <td class="tb-odr-info">
-                                                <span class="tb-odr-info">{{ $category->name }}</span>
+                                                <span class="tb-odr-info">{{ $type->label }}</span>
                                             </td>
                                             <td class="tb-odr-info">
-                                                <span class="tb-odr-info">
-                                                    {{ $category->label }}
-                                                </span>
-                                            </td>
-                                            <td class="tb-odr-info">
-                                                @if($category->notes)
+                                                @if($type->notes)
                                                     <span class="tb-odr-info">
-                                                    {{ $category->notes }}
+                                                    {{ $type->notes }}
                                                 </span>
                                                 @else
                                                     <span class="tb-odr-info text-gray fw-light">
@@ -114,31 +106,26 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('products.category.restore' , ['category' => $category->id]) }}"
-                                                       class="btn btn-warning btn-dim" data-bs-toggle="modal"
-                                                       data-bs-target="#modalrestore"
-                                                       onclick="event.preventDefault(); document.getElementById('restore_trash{{$category->id}}').submit();"
-                                                    ><em class="icon ni ni-redo"></em><span class="fw-normal">بازگردانی</span> </a>
-                                                    <form id="restore_trash{{$category->id}}" method="post"
-                                                          action="{{ route('products.category.restore' , ['category' => $category->id]) }}"
+                                                    <a href="{{ route('orders.types.trash.restore' , ['id' => $type->id]) }}"
+                                                       onclick="event.preventDefault(); document.getElementById('re{{$type->id}}').submit();"
+                                                       class="btn btn-warning btn-dim"><em
+                                                            class="icon ni ni-redo"></em><span class="fw-normal">بازگردانی</span>
+                                                    </a>
+                                                    <form id="re{{$type->id}}" method="post"
+                                                          action="{{ route('orders.types.trash.restore' , ['id' => $type->id]) }}"
                                                           class="d-none">@csrf</form>
+                                                </div>
+                                                <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
+                                                    <a href="{{ route('orders.types.trash.delete' , ['id' => $type->id]) }}"
+                                                       onclick="event.preventDefault(); document.getElementById('delete{{$type->id}}').submit();"
+                                                       class="btn btn-danger btn-dim"
+                                                       style="padding: 6px 9px !important;"><em
+                                                            class="icon ni ni-trash-fill"></em><span class="fw-normal">حذف کامل</span></a>
+                                                    <form id="delete{{$type->id}}" method="post"
+                                                          action="{{ route('orders.types.trash.delete' , ['id' => $type->id]) }}"
+                                                          class="d-none">@csrf @method('delete')</form>
 
                                                 </div>
-{{--                                                {{ dd($category->products); }}--}}
-
-                                                @if($category->products->count() == 0)
-                                                    <div class="tb-odr-btns d-none d-md-inline"
-                                                         style=" margin-right: 3px">
-                                                        <a href="{{ route('products.category.delete.trash' , ['category' => $category->id]) }}"
-                                                           data-bs-toggle="modal" data-bs-target="#modaldelete"
-                                                           onclick="event.preventDefault(); document.getElementById('delete_trash{{$category->id}}').submit();"
-                                                           class="btn btn-danger btn-dim"
-                                                           style="padding: 6px 9px !important;"><em class="icon ni ni-trash-fill"></em><span class="fw-normal">حذف کامل</span></a>
-                                                    </div>
-                                                    <form id="delete_trash{{$category->id}}" method="post"
-                                                          action="{{ route('products.category.delete.trash' , ['category' => $category->id]) }}"
-                                                          class="d-none">@csrf @method('delete')</form>
-                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

@@ -121,16 +121,16 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('purchases.sellers.edit' , ['seller' => $seller->id]) }}" class="btn btn-warning btn-dim"><em class="icon ni ni-edit-alt-fill"></em><span class="fw-normal">ویرایش</span>
+                                                    <a href="{{ route('purchases.sellers.edit' , ['id' => $seller->id]) }}" class="btn btn-warning btn-dim"><em class="icon ni ni-edit-alt-fill"></em><span class="fw-normal">ویرایش</span>
                                                     </a>
                                                 </div>
                                                 <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
-                                                    <a href="{{ route('purchases.sellers.delete' , ['seller' => $seller->id]) }}"
+                                                    <a href="{{ route('purchases.sellers.delete' , ['id' => $seller->id]) }}"
                                                        onclick="event.preventDefault(); document.getElementById('delete_seller{{$seller->id}}').submit();"
                                                        class="btn btn-danger btn-dim"
                                                        style="padding: 6px 9px !important;"><em class="icon ni ni-trash-fill"></em></a>
                                                     <form id="delete_seller{{$seller->id}}" method="post"
-                                                          action="{{ route('purchases.sellers.delete' , ['seller' => $seller->id]) }}"
+                                                          action="{{ route('purchases.sellers.delete' , ['id' => $seller->id]) }}"
                                                           class="d-none">@csrf @method('delete')</form>
 
                                                 </div>

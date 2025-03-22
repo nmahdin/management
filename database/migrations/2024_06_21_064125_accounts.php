@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('inputs')->default(0);
             $table->string('outputs')->default(0);
             $table->boolean('payment')->default(1);
-            $table->boolean('deleted')->default(0);
+            $table->softDeletes();
             $table->text('note')->nullable();
             $table->timestamps();
         });

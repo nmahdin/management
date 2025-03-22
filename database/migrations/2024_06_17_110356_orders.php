@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
         $table->id();
         $table->unsignedBigInteger('customer_id');
-        $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+        $table->foreign('customer_id')->references('id')->on('customers');
+        $table->unsignedBigInteger('user_id');
+        $table->foreign('user_id')->references('id')->on('users');
 //        $table->unsignedBigInteger('account_id');
         $table->string('date');
         $table->string('price');
@@ -26,8 +28,9 @@ return new class extends Migration
         $table->string('profit'); // سود
         $table->string('discount')->default(0); // تخفیف
         $table->integer('transportation_price')->default(0);
-        $table->unsignedBigInteger('status_id');
+        $table->string('status');
         $table->string('type_id'); // فروش نمایشگاهیی و ...
+        $table->softDeletes();
         $table->text('note')->nullable();
         $table->timestamps();
         });
@@ -36,6 +39,8 @@ return new class extends Migration
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_id');
             $table->integer('quantity');
+            $table->bigInteger('unit_price');
+            $table->bigInteger('total_price');
             $table->primary(['order_id' , 'product_id']);
         });
 

@@ -27,7 +27,7 @@
                                                data-bs-toggle="modal" data-bs-target="#modalZoom"
                                                onclick="event.preventDefault(); document.getElementById('form1').submit();">
                                                 <em class="icon ni ni-forward-ios"></em>
-                                                <span>
+                                                <span class="fw-normal">
                                                     حساب های مالی
                                                 </span>
                                             </a>
@@ -59,7 +59,7 @@
 
                     <div class="card card-preview">
                         <div class="card-inner">
-                            <form action="{{ route('account.create') }}" method="POST" class="gy-3">
+                            <form action="{{ route('accounts.create') }}" method="POST" class="gy-3">
                                 @csrf
                                 <div class="row g-3 align-center">
                                     <div class="col-lg-3">

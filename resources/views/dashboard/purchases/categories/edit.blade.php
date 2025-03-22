@@ -1,4 +1,4 @@
-<x-admin.main title="ویرایش دسته بندی">
+<x-admin.main title="ویرایش دسته بندی خرید">
 
     <div class="nk-content nk-content-fluid">
         <div class="container-xl wide-xl">
@@ -7,7 +7,7 @@
                     <div class="nk-block-between">
                         <div class="nk-block-head-content">
                             <!--   --------------- title --------------     -->
-                            <h3 class="nk-block-title page-title">ویرایش دسته بندی</h3>
+                            <h3 class="nk-block-title page-title">ویرایش دسته بندی خرید {{ $category->name }}</h3>
                             <div class="nk-block-des text-soft">
                                 <!--   --------------- توضیح صفحه --------------     -->
 {{--                                <p>در مجموج {{ $n }} نفش وجود دارد.</p>--}}
@@ -22,7 +22,7 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('products.categories.list') }}"
+                                            <a href="{{ route('purchases.categories.list') }}"
                                                class="dropdown-toggle btn btn-dark btn-dim"
                                                data-bs-toggle="modal" data-bs-target="#modalList"
                                                onclick="event.preventDefault(); document.getElementById('form1').submit();">
@@ -31,7 +31,7 @@
                                                     لیست دسته بندی ها
                                                 </span>
                                             </a>
-                                            <form id="form1" action="{{ route('products.categories.list') }}" class="d-none"></form>
+                                            <form id="form1" action="{{ route('purchases.categories.list') }}" class="d-none"></form>
                                         </li>
                                     </ul>
                                 </div>
@@ -59,7 +59,7 @@
 
                     <div class="card card-preview">
                         <div class="card-inner">
-                            <form action="{{ route('products.category.edit' , $category) }}" method="POST" class="gy-3">
+                            <form action="{{ route('purchases.categories.edit' , $category->id) }}" method="POST" class="gy-3">
                                 @csrf
                                 <div class="row g-3 align-center">
                                     <div class="col-lg-3">
@@ -71,7 +71,7 @@
                                     <div class="col-lg-5">
                                         <div class="form-group">
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control @error('name') error @enderror" id="name" name="name" value="{{ old('name' , "$category->name") }}" placeholder="مثلاً روسری">
+                                                <input type="text" class="form-control @error('name') error @enderror" id="name" name="name" value="{{ old('name' , "$category->name") }}" placeholder="مثلاً مواد اولیه">
                                                 @error('name')
                                                 <span id="fv-subject-error" class="invalid">{{ $message }}</span>
                                                 @enderror
@@ -100,7 +100,7 @@
                                 <div class="row g-3">
                                     <div class="col-lg-7 offset-lg-5">
                                         <div class="form-group mt-2">
-                                            <button type="submit" class="btn btn-md btn-primary btn-dim"  data-bs-toggle="modal" data-bs-target="#modalEdit">افزودن دسته بندی</button>
+                                            <button type="submit" class="btn btn-md btn-primary btn-dim"  data-bs-toggle="modal" data-bs-target="#modalEdit">ویرایش دسته بندی</button>
                                         </div>
                                     </div>
                                 </div>
@@ -113,7 +113,7 @@
             </div>
         </div>
     </div>
-    <x-admin.modal id="modalEdit" class="modal-body-md">در حال ویرایش دسته بندی "{{ $category->label }}" ...</x-admin.modal>
+    <x-admin.modal id="modalEdit" class="modal-body-md">در حال ویرایش دسته بندی "{{ $category->name }}" ...</x-admin.modal>
     <x-admin.modal id="modalList" class="modal-body-md">در حال رفت به لیست دسته بندی ها ...</x-admin.modal>
     <div class="modal fade zoom  modal-sm" tabindex="-1" id="modalZoom" style="display: none;" aria-hidden="true">
         <div class="modal-dialog" role="document">
