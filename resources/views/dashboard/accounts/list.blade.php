@@ -98,7 +98,7 @@
                                             <span class="tb-odr-info">شماره حساب</span>
                                         </th>
                                         <th class="tb-odr-info">
-                                            <span class="tb-odr-info">نام روش پرداخت</span>
+                                            <span class="tb-odr-info">روش های پرداخت</span>
                                         </th>
                                         <th class="tb-odr-info">
                                             <span class="tb-odr-info">توضیحات</span>
@@ -118,15 +118,29 @@
                                                 </span>
                                             </td>
                                             <td class="tb-odr-info">
-                                                <span class="tb-odr-info">
-                                                    {{ $account->payment_label }}
+                                                <span class="tb-odr-info fs-12px">
+
+                                                    @foreach(json_decode($account->payment_ways) as $way)
+                                                        @if($way == 'cash')
+                                                            پرداخت نقدی /
+                                                        @elseif($way == 'cart')
+                                                            کارت به کارت /
+                                                        @elseif($way == 'online')
+                                                            پرداخت آنلاین از درگاه پرداخت /
+                                                        @elseif($way == 'pos')
+                                                            پرداخت با دستگاه پز /
+                                                        @endif
+                                                    @endforeach
                                                 </span>
                                             </td>
                                             <td class="tb-odr-info">
                                                 @if($account->note)
+                                                <details>
+                                                    <summary class="tb-odr-info">نمایش توضیحات</summary>
                                                 <span class="tb-odr-info">
                                                     {{ $account->note }}
                                                 </span>
+                                                </details>
                                                 @else
                                                     <span class="tb-odr-info text-gray fw-light">
                                                     بدون توضیح

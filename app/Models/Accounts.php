@@ -10,5 +10,10 @@ class Accounts extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $fillable = ['number' , 'label' , 'inputs' , 'outputs' , 'payment_label' , 'count' , 'deleted' , 'note'];
+    protected $fillable = ['number' , 'label' , 'inputs' , 'outputs' , 'payment_ways' , 'count' , 'deleted' , 'note'];
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

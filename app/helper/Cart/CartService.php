@@ -101,6 +101,11 @@ class CartService
         return  $this->get($key)['qnty'];
     }
 
+    public function clear(): void
+    {
+        session()->forget('cart');
+    }
+
     protected function withRelationshipIfExists($item){
         if (isset( $item['subject_id']) && isset( $item['subject_type'] )){
             $class = $item['subject_type'];

@@ -17,11 +17,8 @@ return new class extends Migration
         $table->foreign('customer_id')->references('id')->on('customers');
         $table->unsignedBigInteger('user_id');
         $table->foreign('user_id')->references('id')->on('users');
-//        $table->unsignedBigInteger('account_id');
         $table->string('date');
-        $table->string('price');
-        $table->string('payments'); // روش پرداخت
-        $table->unsignedBigInteger('account_id'); // حساب مقصد
+        $table->string('amount');
         $table->string('tax')->nullable(); // مالیات
         $table->string('extra_expenses')->nullable(); // هزینه های اضافی
         $table->string('services')->nullable(); // خدمات
@@ -29,7 +26,7 @@ return new class extends Migration
         $table->string('discount')->default(0); // تخفیف
         $table->integer('transportation_price')->default(0);
         $table->string('status');
-        $table->string('type_id'); // فروش نمایشگاهیی و ...
+        $table->string('type_id'); // فروش نمایشگاهی و ...
         $table->softDeletes();
         $table->text('note')->nullable();
         $table->timestamps();

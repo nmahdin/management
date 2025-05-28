@@ -6,12 +6,25 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboards/main', [Main::class , 'index'])->name('main');
 
-
+// start cart
 Route::prefix('/cart')->name('cart.')->group(function () {
     Route::get('/add/{product}', [Main::class , 'add_to_cart'])->name('add');
     Route::get('/list', [Main::class , 'cart_list'])->name('list');
     Route::post('/enter', [Main::class , 'enter_order'])->name('enter');
     Route::delete('/delete/{id}', [Main::class , 'cart_delete'])->name('delete');
+});
+
+// start payments
+Route::prefix('/payments')->name('payments.')->group(function () {
+    Route::get('/list', [Main::class, 'payments_list'])->name('list');
+    Route::get('/create', [Main::class, 'payments_create'])->name('create');
+    Route::post('/create', [Main::class, 'payments_store'])->name('store');
+    Route::get('/edit/{id}', [Main::class, 'payments_edit'])->name('edit');
+    Route::post('/edit/{id}', [Main::class, 'payments_edit_post']);
+    Route::Delete('/delete/{id}', [Main::class, 'payments_delete'])->name('delete');
+    Route::Put('/restore/{id}', [Main::class, 'payments_restore'])->name('restore');
+    Route::Put('/forceDelete/{id}', [Main::class, 'payments_forceDelete'])->name('forceDelete');
+    Route::Put('/paid/{id}', [Main::class, 'payments_paid'])->name('paid');
 });
 
 

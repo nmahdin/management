@@ -90,21 +90,64 @@
                                         </div>
                                     </div>
                                 </div>
+                                @php
+                                      function check($way , $account){
+                                          $ways = json_decode($account->payment_ways);
+                                         if (in_array($way , $ways)) {
+                                             echo 'checked';
+                                         }
+                                      }
+                                @endphp
                                 <div class="row g-3 align-center">
                                     <div class="col-lg-3">
                                         <div class="form-group">
-                                            <label class="form-label" for="payment_label">نام روش پرداخت</label>
+                                            <label class="form-label" for="payment_label">روش های پرداخت</label>
                                             <span class="form-note"></span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-5">
+                                    <div class="col-lg-8">
                                         <div class="form-group">
-                                            <div class="form-control-wrap">
-                                                <input type="text" class="form-control @error('payment_label') error @enderror" id="payment_label" name="payment_label" value="{{ old('payment_label' , $account->payment_label) }}" placeholder="به عنوان روش پرداخت و حساب مقصد در سفارشات نمایش داده می شود">
-                                                @error('payment_label')
-                                                <span id="fv-subject-error" class="invalid">{{ $message }}</span>
-                                                @enderror
-                                            </div>
+                                            <ul class="custom-control-group g-3 align-center">
+                                                <li>
+                                                    <div class="custom-control custom-control-sm custom-checkbox">
+                                                        <input type="checkbox" value="cash" {{ check('cash' , $account) }}
+                                                               class="custom-control-input @error('payment_ways') error @enderror"
+                                                               id="cash" name="payment_ways[]">
+                                                        <label class="custom-control-label" for="cash">
+                                                            نقدی
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="custom-control custom-control-sm custom-checkbox">
+                                                        <input type="checkbox" value="cart" {{ check('cart' , $account) }}
+                                                               class="custom-control-input" id="cart"
+                                                               name="payment_ways[]">
+                                                        <label class="custom-control-label"
+                                                               for="cart">کارت به کارت</label>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="custom-control custom-control-sm custom-checkbox">
+                                                        <input type="checkbox" value="online" class="custom-control-input" {{ check('online' , $account) }}
+                                                               id="online" name="payment_ways[]">
+                                                        <label class="custom-control-label" for="online">پرداخت آنلاین از درگاه پرداخت</label>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="custom-control custom-control-sm custom-checkbox">
+                                                        <input type="checkbox" value="pos" {{ check('pos' , $account) }}
+                                                               class="custom-control-input" id="pos"
+                                                               name="payment_ways[]">
+                                                        <label class="custom-control-label"
+                                                               for="pos">پرداخت با دستگاه پز</label>
+                                                        @error('payment_ways')
+                                                        <span id="fv-full-name-error"
+                                                              class="invalid">{{$message}}</span>
+                                                        @enderror
+                                                    </div>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>

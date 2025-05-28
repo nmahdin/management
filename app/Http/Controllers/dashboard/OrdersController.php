@@ -4,9 +4,12 @@ namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Status;
+use App\Models\Transaction;
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
@@ -15,7 +18,7 @@ class OrdersController extends Controller
     public function orders_list()
     {
         $orders = Order::with(['customer', 'type', 'user'])
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at' , 'asc')
             ->get();
 
         return view('dashboard.factors.orders.list', [
@@ -23,11 +26,28 @@ class OrdersController extends Controller
             'n' => $orders->count()
         ]);
     }
+
+    public function orders_detail($id)
+    {
+        $order = Order::with(['customer', 'type', 'user', 'products'])
+            ->findOrFail($id);
+
+        return view('dashboard.factors.orders.detail', compact('order'));
+    }
+
+    public function updateStatus(Order $order, $status)
+    {
+        $order->status = $status;
+        $order->save();
+
+        return redirect()->back()->with('success', 'وضعیت سفارش با موفقیت تغییر کرد.');
+    }
+
     public function orders_create()
     {
-
+        return view('dashboard.orders.create');
     }
-    public function orders_create_post()
+    public function orders_store(Request $request)
     {
 
     }
@@ -39,10 +59,51 @@ class OrdersController extends Controller
     {
 
     }
-    public function orders_delete()
+    public function orders_delete($id)
     {
+        $order = Order::findOrFail($id);
+        $masage = "سفارش شماره #$order->id با موفقیت حذف شد.";
 
+        DB::beginTransaction();
+
+        try {
+            // بروزرسانی موجودی محصولات
+            foreach ($order->products as $item) {
+                $product = Product::find($item->id);
+                $product->inventory += $item->pivot->quantity; // برگرداندن موجودی
+                $product->save();
+            }
+
+            foreach ($order->transactions as $item) {
+                $transaction = Transaction::find($item->id);
+                $transaction->delete(); // حذف تراکنش ها
+            }
+
+            $order->delete();
+            DB::commit();
+
+            return redirect()->route('orders.list')
+                ->with('warning', $masage);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with(['danger' => 'خطا در حذف سفارش: ' . $e->getMessage()]);
+        }
     }
+
+    public function printInvoice(Order $order)
+    {
+        // اینجا می‌توانید مطمئن شوید که کاربر دسترسی لازم برای پرینت این فاکتور را دارد
+        // مثلاً با استفاده از policies یا gate
+        // $this->authorize('view', $order);
+
+        // ویو مخصوص پرینت را برگردانید
+        return view('dashboard.factors.orders.order_detail_print', compact('order'));
+    }
+
+
+
+
     public function orders_trash_list()
     {
 

@@ -24,7 +24,7 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('orders.create') }}"
+                                            <a href="{{ route('products.list') }}"
                                                class="btn btn-primary">
                                                 <em class="icon ni ni-plus"></em>
                                                 <span class="fw-normal">
@@ -34,7 +34,7 @@
                                         </li>
                                         <li>
                                             <a href="{{ route('orders.trash') }}"
-                                               class="btn btn-outline-danger">
+                                               class="btn btn-danger btn-dim">
                                                 <em class="icon ni ni-trash"></em>
                                                 <span class="fw-normal">
                                                     سطل زباله
@@ -60,12 +60,9 @@
                     </div>
                 @endif
 
-                @if(session('success'))
-                    <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
-                        <em class="icon ni ni-check-circle"></em>
-                        {{ session('success') }}
-                    </div>
-                @endif
+                <x-admin.templates.successAlert/>
+                <x-admin.templates.warningAlert/>
+                <x-admin.templates.dangerAlert/>
 
                 <!-- .nk-block-head -->
                 @if($n == 0)
@@ -79,25 +76,15 @@
                     <div class="nk-block nk-block-lg">
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
-                                <div class="row mb-3">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="form-control-wrap">
-                                                <input type="text" id="search-orders" class="form-control" placeholder="جستجو در سفارشات...">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <table class="datatable-init table table-hover">
                                     <thead class="table-light">
                                     <tr>
                                         <th class="tb-col-sm">شماره سفارش</th>
-                                        <th>عنوان</th>
                                         <th>مشتری</th>
                                         <th>نوع سفارش</th>
                                         <th>وضعیت</th>
                                         <th>مبلغ (تومان)</th>
-                                        <th>تاریخ ثبت</th>
+                                        <th>تاریخ سفارش</th>
                                         <th class="tb-col-md">عملیات</th>
                                     </tr>
                                     </thead>
@@ -105,10 +92,9 @@
                                     @foreach($orders as $order)
                                         <tr>
                                             <td>{{ $order->id }}</td>
-                                            <td>{{ $order->title }}</td>
                                             <td>
                                                 @if($order->customer)
-                                                    <a href="#" class="text-primary">
+                                                    <a href="{{ route('customers.info' , $order->customer->id) }}" class="text-primary">
                                                         {{ $order->customer->name }}
                                                     </a>
                                                 @else
@@ -117,31 +103,48 @@
                                             </td>
                                             <td>
                                                 @if($order->type)
-                                                    <span class="badge bg-primary">{{ $order->type->label }}</span>
+                                                    <span class="badge bg-gray badge-dim">{{ $order->type->label }}</span>
                                                 @else
                                                     <span class="text-muted">نامشخص</span>
                                                 @endif
                                             </td>
                                             <td>
                                                 @if($order->status)
-                                                    <span class="badge
-{{--                                                        @if($order->status == 'تکمیل شده') bg-success--}}
-{{--                                                        @elseif($order->status == 'در انتظار پرداخت') bg-warning--}}
-{{--                                                        @elseif($order->status == 'لغو شده') bg-danger--}}
-{{--                                                        @else bg-info--}}
-{{--                                                        @endif--}}
-                                                        bg-info">
-                                                        {{ $order->status }}
-                                                    </span>
+                                                    @if($order->status == 'completed')
+                                                        <span class="badge badge-dim bg-success">
+                                                            تکمیل شده
+                                                        </span>
+                                                    @elseif($order->status == 'unpaid')
+                                                        <span class="badge badge-dim bg-warning">
+                                                            پرداخت نشده
+                                                        </span>
+                                                    @elseif($order->status == 'paid')
+                                                        <span class="badge badge-dim bg-info">
+                                                            پرداخت شده
+                                                        </span>
+
+                                                    @elseif($order->status == 'canceled')
+                                                        <span class="badge badge-dim bg-danger">
+                                                            لغو شده
+                                                        </span>
+
+
+                                                    @else
+                                                        <span class="badge badge-dim bg-light">
+                                                            {{ $order->status }}
+                                                        </span>
+                                                    @endif
+
                                                 @else
                                                     <span class="badge bg-secondary">نامشخص</span>
                                                 @endif
                                             </td>
                                             <td>{{ number_format($order->price) }}</td>
-                                            <td>{{ jdate($order->created_at)->format('Y/m/d') }}</td>
+                                            <td>{{ jdate($order->date)->format('Y/m/d') }}</td>
                                             <td>
                                                 <div class="dropdown">
-                                                    <a class="btn btn-icon btn-trigger dropdown-toggle" data-bs-toggle="dropdown">
+                                                    <a class="btn btn-icon btn-trigger dropdown-toggle"
+                                                       data-bs-toggle="dropdown">
                                                         <em class="icon ni ni-more-h"></em>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
@@ -159,11 +162,15 @@
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <a href="#" onclick="event.preventDefault(); document.getElementById('delete_order_{{ $order->id }}').submit();" class="text-danger">
+                                                                <a href="#"
+                                                                   onclick="event.preventDefault(); document.getElementById('delete_order_{{ $order->id }}').submit();"
+                                                                   class="text-danger">
                                                                     <em class="icon ni ni-trash"></em>
                                                                     <span>حذف</span>
                                                                 </a>
-                                                                <form id="delete_order_{{ $order->id }}" method="post" action="{{ route('orders.delete', $order->id) }}" class="d-none">
+                                                                <form id="delete_order_{{ $order->id }}" method="post"
+                                                                      action="{{ route('orders.delete', $order->id) }}"
+                                                                      class="d-none">
                                                                     @csrf
                                                                     @method('delete')
                                                                 </form>
@@ -189,11 +196,11 @@
     @slot('script')
         <script src="/assets/js/libs/datatable-btns.js"></script>
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 // جستجو در جدول
-                $("#search-orders").on("keyup", function() {
+                $("#search-orders").on("keyup", function () {
                     var value = $(this).val().toLowerCase();
-                    $("table tbody tr").filter(function() {
+                    $("table tbody tr").filter(function () {
                         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     });
                 });

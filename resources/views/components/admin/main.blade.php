@@ -31,7 +31,7 @@
         <div class="nk-sidebar nk-sidebar-fixed is-light" data-content="sidebarMenu">
             <div class="nk-sidebar-element nk-sidebar-head">
                 <div class="nk-sidebar-brand">
-                    <a href="{{ route('dashboard') }}" class="logo-link nk-sidebar-logo">
+                    <a href="{{ route('main') }}" class="logo-link nk-sidebar-logo">
                       <span class="fw-medium text-neutral-900">صدف پرداز</span>
 {{--                        <img class="logo-light logo-img" src="/assets/images/logo.png" srcset="/assets/images/logo2x.png 2x" alt="لوگو" />--}}
 {{--                        <img class="logo-dark logo-img" src="/assets/images/logo-dark.png" srcset="/assets/images/logo-dark2x.png 2x" alt="لوگوی تاریک" />--}}

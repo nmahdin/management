@@ -44,6 +44,11 @@
                     <!-- .nk-block-between -->
                 </div>
                 <!-- .nk-block-head -->
+
+                <x-admin.templates.successAlert/>
+                <x-admin.templates.warningAlert/>
+                <x-admin.templates.dangerAlert/>
+
                 @if(session('created'))
                     <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
                         <em class="icon ni ni-check-circle"></em>
@@ -111,7 +116,7 @@
                                         <div class="row gy-3 justify-content-center text-center">
                                             <div class="col">
                                                 <div class="profile-stats">
-                                                    <span class="amount">23</span>
+                                                    <span class="amount">{{ $customer->orders()->count() }}</span>
                                                     <span class="sub-text">سفارش</span>
                                                 </div>
                                             </div>
@@ -149,77 +154,275 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- .col -->
+
+                        @php
+                            $sum1 = $customer->orders->sum('amount');
+                            $sum2 = $customer->transactions->sum('amount');
+                            $sum = $sum1 - $sum2;
+                        @endphp
+
+                            <!-- .col -->
                         <div class="col-xl-8">
                             <div class="card">
                                 <div class="card-inner">
                                     <div class="nk-block">
-                                        <div class="overline-title-alt mb-2 mt-2">گردش مالی</div>
-                                        <div class="profile-balance">
-                                            <div class="profile-balance-group gx-4">
-                                                <div class="profile-balance-sub">
-                                                    <div class="profile-balance-amount">
-                                                        <div class="number">238,000 <small
-                                                                class="currency currency-usd">تومان</small></div>
+
+                                        <div class="d-flex justify-content-start  mb-3">
+                                            <div class="m-2">
+                                                <div class="overline-title-alt mb-2 mt-2">گردش مالی</div>
+                                                <div class="profile-balance">
+                                                    <div class="profile-balance-group gx-4">
+                                                        <div class="profile-balance-sub">
+                                                            <div class="profile-balance-amount">
+                                                                <div class="number">{{ number_format($customer->transactions->sum('amount')) }} <small class="currency currency-usd">تومان</small></div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="profile-balance-subtitle">خرید</div>
                                                 </div>
                                             </div>
+                                            @if($sum)
+                                            <div class="m-2">
+                                                <div class="overline-title-alt mb-2 mt-2">بدهکاری های مربوط به سفارشات</div>
+                                                <div class="profile-balance">
+                                                    <div class="profile-balance-group gx-4">
+                                                        <div class="profile-balance-sub">
+                                                            <div class="profile-balance-amount">
+                                                                <div
+                                                                    class="number  text-danger">{{ number_format($sum) }}
+                                                                    <small class="currency currency-usd">تومان</small></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endif
                                         </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="col-3">
+
+                                            </div>
+                                            <div class="col-3">
+
+                                            </div>
+                                        </div>
+
+
                                     </div>
-                                    <div class="nk-block">
-                                        <h6 class="lead-text mb-3">سفارشات اخیر</h6>
-                                        <div class="nk-tb-list nk-tb-ulist is-compact card">
-                                            <div class="nk-tb-item nk-tb-head">
-                                                <div class="nk-tb-col">
-                                                    <span class="sub-text">شناسه سفارش</span>
+                                    <br>
+                                    @if($customer->orders->count() > 0)
+                                        <div class="nk-block">
+                                            <h6 class="lead-text mb-3">سفارشات اخیر</h6>
+                                            <div class="nk-tb-list nk-tb-ulist is-compact card">
+                                                <div class="nk-tb-item nk-tb-head">
+                                                    <div class="nk-tb-col">
+                                                        <span class="sub-text">شناسه سفارش</span>
+                                                    </div>
+                                                    <div class="nk-tb-col tb-col-sm">
+                                                        <span class="sub-text">دسته بندی فروش</span>
+                                                    </div>
+                                                    <div class="nk-tb-col tb-col-xxl">
+                                                        <span class="sub-text">قیمت کل</span>
+                                                    </div>
+                                                    <div class="nk-tb-col">
+                                                        <span class="sub-text">وضعیت</span>
+                                                    </div>
+                                                    <div class="nk-tb-col">
+                                                        <span class="sub-text">تاریخ سفارش</span>
+                                                    </div>
                                                 </div>
-                                                <div class="nk-tb-col tb-col-sm">
-                                                    <span class="sub-text">نام محصول</span>
-                                                </div>
-                                                <div class="nk-tb-col tb-col-xxl">
-                                                    <span class="sub-text">قیمت کل</span>
-                                                </div>
-                                                <div class="nk-tb-col">
-                                                    <span class="sub-text">وضعیت</span>
-                                                </div>
-                                                <div class="nk-tb-col">
-                                                    <span class="sub-text">تحویل</span>
-                                                </div>
+                                                @foreach($customer->orders as $order)
+                                                    <div class="nk-tb-item">
+                                                        <div class="nk-tb-col">
+                                                            <a href="{{ route('orders.detail' , $order->id) }}"><span class="fw-bold">#{{ $order->id }}</span></a>
+                                                        </div>
+                                                        <div class="nk-tb-col tb-col-sm">
+                                                            <span class="tb-lead">{{ \App\Models\Type::find($order->type_id)->first()->label }}</span>
+                                                        </div>
+                                                        <div class="nk-tb-col tb-col-xxl fw-bolder">
+                                                            <span class="amount">{{ number_format($order->amount) }} تومان</span>
+                                                        </div>
+                                                        <div class="nk-tb-col">
+                                                            @if($order->status)
+                                                                @if($order->status == 'completed')
+                                                                    <span class="lead-text text-success fw-normal">
+                                                            تکمیل شده
+                                                        </span>
+                                                                @elseif($order->status == 'unpaid')
+                                                                    <span class="lead-text text-warning fw-normal">
+                                                            پرداخت نشده
+                                                        </span>
+                                                                @elseif($order->status == 'paid')
+                                                                    <span class="lead-text text-info fw-normal">
+                                                            پرداخت شده
+                                                        </span>
+
+                                                                @elseif($order->status == 'canceled')
+                                                                    <span class="lead-text text-danger fw-normal">
+                                                            لغو شده
+                                                        </span>
+
+                                                                @else
+                                                                    <span class="lead-text text-gray fw-normal">
+                                                            {{ $order->status }}
+                                                        </span>
+                                                                @endif
+
+                                                            @else
+                                                                <span class="lead-text text-secondary fw-normal">نامشخص</span>
+                                                            @endif
+                                                        </div>
+                                                        <div class="nk-tb-col">
+                                                            <span class="sub-text">{{ jdate($order->date)->format('Y/m/d') }}</span>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
                                             </div>
-                                            <div class="nk-tb-item">
-                                                <div class="nk-tb-col">
-                                                    <a href="#"><span class="fw-bold">#4947</span></a>
-                                                </div>
-                                                <div class="nk-tb-col tb-col-sm">
-                                                                    <span class="tb-product">
-                                                                        <img src="./images/product/c.png" alt=""
-                                                                             class="thumb">
-                                                                        <span
-                                                                            class="title">ساعت هوشمند Mi Band مشکی</span>
-                                                                    </span>
-                                                </div>
-                                                <div class="nk-tb-col tb-col-xxl">
-                                                    <span class="amount">89,000 تومان</span>
-                                                </div>
-                                                <div class="nk-tb-col">
-                                                    <span class="lead-text text-warning">ارسال شده</span>
-                                                </div>
-                                                <div class="nk-tb-col">
-                                                    <span class="sub-text">در 2 روز</span>
+                                            <br>
+                                            {{--                                        <div class="col-12 col-lg-6 col-xl-12">--}}
+                                            {{--                                            <button class="h-100 w-100 bg-white border border-dashed round-xl p-4 d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#add-card">--}}
+                                            {{--                                                <span class="text-soft">افزودن سفارش جدید</span>--}}
+                                            {{--                                            </button>--}}
+                                            {{--                                        </div>--}}
+                                        </div>
+                                    @else
+                                        <div class="alert alert-light alert-icon">
+                                            <em class="icon ni ni-alert-circle"></em> هیچ سفارشی برای این مشتری وجود ندارد!
+                                        </div>
+                                    @endif
+
+                                    @if($customer->transactions->count())
+                                        <div class="nk-block mt-5">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">پرداخت‌ها</h5>
+                                                <p>لیست پرداخت‌های مرتبط با این سفارش</p>
+                                            </div>
+                                            <div class="card card-bordered">
+                                                <div class="card-inner">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                            <tr>
+                                                                <th scope="col">#</th>
+                                                                <th scope="col">مبلغ (تومان)</th>
+                                                                <th scope="col">وضعیت</th>
+                                                                <th scope="col">تاریخ</th>
+                                                                <th scope="col">توضیحات</th>
+                                                                <th scope="col">اقدام</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            @foreach($order->transactions as $index => $payment)
+                                                                <tr>
+                                                                    <th scope="row">{{ $index + 1 }}</th>
+                                                                    <td>{{ number_format($payment->amount) }}</td>
+                                                                    <td>
+                                                                        @if($payment->status == 'paid')
+                                                                            <span
+                                                                                class="badge bg-success">پرداخت شده</span>
+
+                                                                        @elseif($payment->status == 'unpaid')
+                                                                            <span class="badge bg-danger">پرداخت نشده</span>
+                                                                        @else
+                                                                            <span class="badge bg-info">مشخص نشده</span>
+                                                                        @endif
+
+                                                                    </td>
+                                                                    <td>{{ jdate($payment->date)->format('Y/m/d') }}</td>
+                                                                    @if($payment->notes)
+                                                                        <td>
+                                                                            <button
+                                                                                class="btn btn-sm btn-light btn-dim fw-normal"
+                                                                                type="button" data-bs-toggle="collapse"
+                                                                                data-bs-target="#collapsePayment{{ $index }}"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="collapsePayment{{ $index }}">
+                                                                                نمایش توضیحات
+                                                                            </button>
+                                                                        </td>
+                                                                    @else
+                                                                        <td></td>
+                                                                    @endif
+                                                                    <td>
+                                                                        <span><a href="{{ route('payments.delete' , $payment->id) }}"
+                                                                                 onclick="event.preventDefault(); document.getElementById('delete{{$payment->id}}').submit();"
+                                                                                 class="btn btn-sm btn-danger btn-dim"><em class="icon ni ni-trash-fill"></em></a></span>
+                                                                        <form id="delete{{$payment->id}}" action="{{ route('payments.delete' , $payment->id) }}" method="post"
+                                                                              class="d-none">@csrf @method('Delete')</form>
+                                                                        <span><a href="#" class="btn btn-sm btn-info btn-dim"><em class="icon ni ni-pen-fill"></em></a></span>
+                                                                        @if($payment->status == 'unpaid')
+                                                                            <span><a href="{{ route('payments.paid' , $payment->id) }}"
+                                                                                     onclick="event.preventDefault(); document.getElementById('pay{{$payment->id}}').submit();"
+                                                                                     class="btn btn-sm btn-success btn-dim"><em class="icon ni ni-check-thick"></em></a></span>
+                                                                            <form id="pay{{$payment->id}}" action="{{ route('payments.paid' , $payment->id) }}" method="post"
+                                                                                  class="d-none">@csrf @method('Put')</form>
+                                                                        @endif
+                                                                    </td>
+                                                                </tr>
+                                                                <tr id="collapsePayment{{ $index }}" class="collapse">
+                                                                    <td colspan="6"
+                                                                        class="bg-lighter">{{ $payment->notes }}</td>
+                                                                </tr>
+
+                                                            @endforeach
+                                                            </tbody>
+                                                            <tfoot>
+                                                            <tr>
+                                                                <td colspan="2" class="text-end fw-bold">جمع
+                                                                    پرداخت‌ها:
+                                                                </td>
+                                                                <td class="fw-bold">{{ number_format($order->transactions->sum('amount')) }}
+                                                                    تومان
+                                                                </td>
+                                                                <td colspan="3"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="2" class="text-end fw-bold">مانده:</td>
+                                                                <td class="fw-bold {{ $order->amount - $order->transactions->sum('amount') > 0 ? 'text-danger' : 'text-success' }}">
+                                                                    {{ number_format($order->amount - $order->transactions->sum('amount')) }}
+                                                                    تومان
+                                                                </td>
+                                                                @if($order->amount - $order->transactions->sum('amount') > 0)
+                                                                    <td colspan="3"><span
+                                                                            class="d-flex justify-content-end">
+                                                                            <a href="{{ route('payments.create' , ['order_id' => $order->id]) }}"
+                                                                               class="btn btn-dim btn-outline-light fw-normal" STYLE="margin-left: 5px">افزودن پرداخت</a>
+                                                                        </span>
+                                                                    </td>
+                                                                @else
+                                                                    <td colspan="3">
+                                                                    </td>
+                                                                @endif
+
+                                                            </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    @else
                                         <br>
-                                        <div class="col-12 col-lg-6 col-xl-12">
-                                            <button
-                                                class="h-100 w-100 bg-white border border-dashed round-xl p-4 d-flex align-items-center justify-content-center"
-                                                data-bs-toggle="modal" data-bs-target="#add-card">
-                                                <span class="text-soft">افزودن سفارش جدید</span>
-                                            </button>
+                                        <div class="alert alert-light alert-icon">
+                                            <em class="icon ni ni-alert-circle"></em>
+                                            <span><strong>هیچ پرداختی برای این مشتری
+                                                ثبت نشده است.</strong></span>
+                                            {{--                                            <br>--}}
+                                            <span class="d-flex justify-content-end">
+                                                <a href="{{ route('transactions.new' , ['type' => 'input']) }}"
+                                                   class="btn btn-dim btn-outline-light fw-normal" STYLE="margin-left: 5px">افزودن پرداخت</a>
+
+                                                @if($sum > 0)
+                                                    <a href="{{ route('transactions.new' , ['type' => 'input' , 'amount' => $sum , 'info' => 'orders']) }}"
+                                                       class="btn btn-dim btn-outline-secondary fw-normal"> پرداختن کامل بدهکاری های مربوط به سفارشات</a>
+                                                @endif
+
+                                            </span>
+
                                         </div>
-                                        <!-- .nk-tb-list -->
-                                    </div>
+
+                                    @endif
+
                                     <div class="nk-block">
                                         <h6 class="lead-text mb-3">راه های ارتباطی</h6>
                                         <div class="row g-3">

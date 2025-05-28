@@ -1,0 +1,194 @@
+/* public/css/print.css */
+
+/* تعریف فونت Yekan Bakh */
+@font-face {
+    font-family: YekanBakhFaNum;
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/woff/YekanBakhFaNum-Regular.woff") format("woff"),
+    url("../fonts/woff2/YekanBakhFaNum-Regular.woff2") format("woff2"),
+    url("../fonts/ttf/YekanBakhFaNum-Regular.ttf") format("truetype"),
+    url("../fonts/otf/YekanBakhFaNum-Regular.otf") format("opentype");
+}
+/* اگر وزن‌های دیگر مانند Medium, Light و ... را نیز استفاده می‌کنید، اینجا تعریف کنید */
+
+/* این media query تضمین می‌کند که این استایل‌ها فقط هنگام پرینت اعمال می‌شوند */
+@media print {
+    /* اطمینان از اعمال فونت Yekan Bakh و حاشیه‌ها در پرینت */
+    body {
+        font-family: 'Yekan Bakh', Arial, sans-serif !important;
+        font-size: 10pt; /* اندازه فونت برای پرینت */
+        color: #000;
+        margin: 0;
+        padding: 10mm !important; /* حاشیه‌های کمتر */
+        direction: rtl; /* جهت راست به چپ برای کل سند */
+        text-align: right;
+        -webkit-print-color-adjust: exact; /* برای چاپ رنگ‌های پس‌زمینه */
+    }
+
+    /* مخفی کردن عناصر UI اضافی Nioboard */
+    .nk-sidebar,
+    .nk-header,
+    .toggle-wrap,
+    .nk-block-tools,
+    .btn-toolbar,
+    #printInvoiceBtn,
+    .nk-block-head-content:has(a.toggle),
+    .dropdown,
+    .alert,
+    .nk-block-between:has(a.toggle) /* برای پنهان کردن دکمه منوی موبایل در بالای صفحه */
+    {
+        display: none !important;
+    }
+
+    /* تنظیم عرض ستون‌ها برای نمایش بهتر در پرینت */
+    .nk-content {
+        padding: 0 !important;
+    }
+    .container-xl, .container-fluid {
+        width: 100% !important;
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* تنظیمات grid برای نمایش سایدبار اطلاعات مشتری و محتوای اصلی در کنار هم */
+    /* این سلکتورها بر اساس ساختار Nioboard هستند، ممکن است نیاز به بازبینی داشته باشند */
+    .row.g-gs {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 !important; /* حذف margin منفی */
+        gap: 0 !important; /* حذف گپ بین ستون‌ها */
+    }
+    .col-lg-4, .col-xl-4, .col-xxl-3 { /* برای باکس‌های اطلاعات مشتری و کاربر */
+        flex: 0 0 50% !important; /* هر کدام 50% عرض صفحه را بگیرند تا کنار هم قرار گیرند */
+        max-width: 50% !important;
+        padding: 0 5mm !important; /* کمی فاصله بین باکس‌ها */
+    }
+    .col-lg-8, .col-xl-8, .col-xxl-9 { /* برای محتوای اصلی فاکتور */
+        flex: 0 0 100% !important; /* تمام عرض صفحه را بگیرد */
+        max-width: 100% !important;
+        padding: 0 5mm !important; /* تنظیم padding ستون‌ها */
+    }
+
+    /* تنظیمات برای کارت‌ها و بلوک‌ها - حذف سایه و حاشیه اضافی */
+    .card, .nk-block {
+        box-shadow: none !important;
+        border: none !important;
+        margin-bottom: 0 !important;
+        padding: 0 !important;
+    }
+    .card-inner {
+        padding: 5mm !important; /* کمی padding برای محتوای داخلی کارت‌ها */
+    }
+    .user-card, .profile-stats, .overline-title, .lead-text, .sub-text {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .user-card-s2 .user-info {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    .user-card-status {
+        margin-top: 10px !important;
+    }
+    .badge {
+        font-size: 8pt !important;
+        padding: 3px 6px !important;
+    }
+
+    /* تنظیمات مربوط به جدول - رفع مشکل ستاره و نمایش بهتر */
+    table {
+        width: 100% !important;
+        border-collapse: collapse;
+        margin-bottom: 10px !important;
+        font-size: 9pt; /* فونت جدول کمی کوچکتر */
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 6px 8px !important; /* کاهش padding سلول‌های جدول */
+        text-align: right !important; /* اطمینان از راست‌چین بودن متن */
+        vertical-align: top;
+        white-space: normal; /* جلوگیری از فشرده شدن متن و تبدیل به ستاره */
+    }
+    th {
+        font-weight: bold;
+    }
+    thead th {
+        background-color: #f2f2f2;
+    }
+    tfoot {
+        background-color: #e6e6e6;
+        font-weight: bold;
+    }
+    tfoot td {
+        background-color: #f0f8ff !important;
+        color: #333 !important;
+        text-align: left !important; /* برای جمع کل که در سمت چپ می‌آید */
+    }
+    tfoot td:first-child {
+        text-align: right !important; /* اولین td در tfoot (جمع کل) راست‌چین باشد */
+    }
+
+    /* مخفی کردن ردیف‌های توضیحات collapsed در پرینت */
+    tr.collapse {
+        display: none !important;
+    }
+
+    /* برای رنگ‌های خاص */
+    .text-danger {
+        color: #dc3545 !important;
+    }
+    .text-success {
+        color: #28a745 !important;
+    }
+
+    /* استایل‌های بخش امضاها */
+    .signatures-section {
+        display: flex;
+        justify-content: space-around; /* فاصله یکسان بین باکس‌ها */
+        margin-top: 50px;
+    }
+    .signature-box {
+        flex: 0 0 45%; /* هر باکس 45% عرض را بگیرد */
+        border: 1px solid #ccc; /* باکس دور امضا */
+        padding: 20px;
+        text-align: center;
+    }
+    .signature-box p {
+        margin: 5px 0;
+        font-size: 10pt;
+    }
+    .signature-box .line {
+        border-bottom: 1px dashed #ccc;
+        margin-top: 50px; /* فضای بیشتر برای امضا */
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* تنظیمات مربوط به هدر فاکتور برای پرینت */
+    .invoice-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #eee; /* یک خط برای جدا کردن هدر */
+        padding-bottom: 15px;
+    }
+    .invoice-header h1 {
+        font-size: 20pt !important; /* اندازه عنوان فروشگاه */
+        margin-bottom: 5px !important;
+    }
+    .invoice-header p {
+        font-size: 10pt !important;
+        margin: 0 !important;
+    }
+    .header-left, .header-center, .header-right {
+        padding: 0 5mm; /* کمی padding برای عناصر هدر */
+    }
+    .header-left img {
+        max-height: 70px !important; /* تنظیم ارتفاع لوگو */
+        width: auto;
+    }
+}

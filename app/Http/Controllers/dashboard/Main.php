@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\helper\Cart\Cart;
+use App\helper\services\Custom;
 use App\Http\Controllers\Controller;
 use App\Models\Accounts;
 use App\Models\Customer;
 use App\Models\Group;
+use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Permission;
 use App\Models\Product;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,9 +44,7 @@ class Main extends Controller
 
         return redirect(route('cart.list'));
 
-//        return 'OK!';
 
-        return $product;
     }
 
     public function cart_list()
@@ -60,7 +62,6 @@ class Main extends Controller
 
     public function enter_order(Request $request)
     {
-//        dd($request->all());
         if ($request->customer_id != 0) {
             $customer = Customer::findOrFail($request->customer_id);
         } else {
@@ -99,6 +100,7 @@ class Main extends Controller
             }
         }
 
+        $date = Custom::changDate($request->date);
 
         $cartItems = $cart;
         if ($cartItems->count()) {
@@ -111,9 +113,8 @@ class Main extends Controller
             });
 
             $orderItems = $cartItems->mapWithKeys(function ($cart) {
-                return [ $cart['Product']->id => ['quantity' => $cart['qnty'] , 'total_price' => null , 'unit_price' => $cart['Product']->total_price] ];
+                return [$cart['Product']->id => ['quantity' => $cart['qnty'], 'total_price' => null, 'unit_price' => $cart['Product']->total_price]];
             });
-
 
 
             $orderItems = collect($orderItems);
@@ -132,29 +133,193 @@ class Main extends Controller
             $discount = $totalAmount - $price;
 
 
-            $payments = Accounts::findOrFail($request->payments);
             $order = Customer::findOrFail($customer->id)->orders()->create([
-                'price' => $totalAmount,
+                'amount' => $totalAmount,
                 'profit' => $profit, // سود
-                'date' => date('Y-m-d'),
+                'date' => $date,
                 'discount' => $discount,
                 'type_id' => $request->type_id,
                 'user_id' => Auth::user()->id,
-                'account_id' => $request->payments,
                 'status' => 'unpaid',
-                'payments' => $payments->payment_label,
             ]);
-            $payments->update([
-                'inputs' => $payments->inputs + $totalAmount,
-                'count' => $payments->count + 1,
-            ]);
+
+
             $order->products()->attach($orderItems);
 
-            return 'ok';
+            foreach ($orderItems as $productId => $item) {
+                $product = Product::find($productId);
+                if ($product) {
+                    $product->inventory -= $item['quantity'];
+                    $product->save();
+                }
+            }
+
+
+            Cart::clear();
+
+            if ($request->input('action') === 'pay') {
+                return redirect(route('payments.create', ['order_id' => $order->id, 'amount' => $order->amount]))->with('success', '.سفارش با موفقیت ثبت شد');
+            } elseif ($request->input('action') === 'no_pay') {
+                return redirect(route('cart.list'))->with('success', '.سفارش با موفقیت ثبت شد');
+            }
         }
 
         return back();
     }
+
+    // start payments
+    public function payments_list()
+    {
+        $payments = Accounts::all();
+        $n = Accounts::count();
+        return view('dashboard.payments.list', ['payments' => $payments, 'n' => $n]);
+    }
+
+    public function payments_create(Request $request)
+    {
+        $accounts = Accounts::all();
+        if ($request->has('order_id')) {
+            $order = Order::findOrFail($request->order_id);
+            if ($request->has('amount')) {
+                $amount = $request->amount;
+                return view('dashboard.payments.create', compact('order', 'amount', 'accounts'));
+            }
+
+            return view('dashboard.payments.create', compact('order', 'accounts'));
+        } else {
+            $orders = Order::all();
+            if ($request->has('amount')) {
+                $amount = $request->amount;
+                return view('dashboard.payments.create', compact('orders', 'amount', 'accounts'));
+            }
+            return view('dashboard.payments.create', compact('orders', 'accounts'));
+        }
+    }
+
+    public function payments_store(Request $request)
+    {
+        $data = $request->validate([
+            'order_id' => ['required', 'exists:orders,id'],
+            'amount' => ['required', 'numeric'],
+            'date' => ['required', 'max:255'],
+            'status' => ['required', 'in:paid,unpaid'],
+            'label_id' => ['required', 'exists:transactions_labels,id'],
+            'account_payment_way' => ['required'],
+            'tracking_number' => ['nullable', 'max:255'],
+            'note' => ['nullable'],
+        ]);
+
+        // اطلاعات حساب و روش پرداخت را از رشته جدا کنید
+        [$accountId, $paymentWay] = explode('_', $data['account_payment_way']);
+
+        if (!Accounts::find($accountId)) {
+            return back()->withErrors(['account_payment_way' => 'حساب انتخاب شده معتبر نیست.']);
+        }
+
+        if (!Order::find($data['order_id'])) {
+            return back()->withErrors(['order_id' => 'سفارش انتخاب شده معتبر نیست.']);
+        }
+
+
+        $data['date'] = Custom::changDate($request->date);
+        $data['customer_id'] = Order::findOrFail($request->order_id)->customer_id;
+
+        $account = Accounts::find($accountId);
+        $account->update([
+            'inputs' => $account->inputs = +$data['amount'],
+            'count' => $account->count = +1,
+        ]);
+
+        Transaction::create([
+            'name' => 'پرداخت مبلغ سفارش',
+            'type' => 'input',
+            'date' => $data['date'],
+            'amount' => $data['amount'],
+            'user_id' => Auth::user()->id,
+            'tracking_number' => $data['tracking_number'],
+            'pay_id' => $data['customer_id'],
+            'account_id' => $accountId,
+            'payment_way' => $paymentWay,
+            'label_id' => $data['label_id'],
+            'category' => 'orders',
+            'status' => $data['status'],
+            'source_type' => 'orders',
+            'source_id' => $data['order_id'],
+            'notes' => $data['note'],
+        ]);
+
+
+        $order = Order::find($data['order_id']);
+
+        $sumTransactions = $order->transactions()->where('status', 'paid')->sum('amount');
+        if ($order->amount <= $sumTransactions) {
+            Order::find($data['order_id'])
+                ->update([
+                    'status' => 'paid',
+                ]);
+        } else {
+            Order::find($data['order_id'])
+                ->update([
+                    'status' => 'unpaid',
+                ]);
+        }
+
+
+        return redirect(route('orders.detail', $data['order_id']))->with('success', 'پرداخت با موفقیت ثبت شد');
+    }
+
+    public function payments_paid($id)
+    {
+        $trasaction = Transaction::findOrFail($id);
+        $trasaction->update([
+            'status' => 'paid',
+        ]);
+
+        $price = number_format($trasaction->amount, 0, '') . ' ' . 'تومان';
+
+        if ($trasaction->where('source_type', 'orders')) {
+            if ($order = Order::find($trasaction->source_id)) {
+                $sumTransactions = $order->transactions()->where('status', 'paid')->sum('amount');
+                if ($order->amount <= $sumTransactions) {
+                    Order::find($trasaction->source_id)
+                        ->update([
+                            'status' => 'paid',
+                        ]);
+                } else {
+                    Order::find($trasaction->source_id)
+                        ->update([
+                            'status' => 'unpaid',
+                        ]);
+                }
+
+            }
+
+        }
+        return back()->with('success', "تراکنش مربوطه به عنوان پرداخت شده علامت گذاری شد. مبلغ: $price");
+    }
+
+    public function payments_delete($id)
+    {
+        $trasaction = Transaction::find($id);
+        $trasaction->delete();
+        if ($trasaction->where('source_type', 'orders')) {
+            if ($order = Order::find($trasaction->source_id)) {
+                $sumTransactions = $order->transactions()->sum('amount');
+                if ($order->amount > $sumTransactions) {
+                    Order::find($trasaction->source_id)
+                        ->update([
+                            'status' => 'unpaid',
+                        ]);
+                }
+
+            }
+
+        }
+
+        $massage = 'تراکنش مروبطه با موفقیت حذف شد.';
+        return back()->with('warning', $massage);
+    }
+
 
     // start users
     public function users_all()

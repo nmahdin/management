@@ -4,10 +4,14 @@ namespace App\Http\Controllers\dashboard;
 
 use App\helper\services\Custom;
 use App\Http\Controllers\Controller;
+use App\Models\Accounts;
+use App\Models\Order;
 use App\Models\Purchase;
 use App\Models\PurchasesCategory;
 use App\Models\Seller;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
 
@@ -23,7 +27,8 @@ class PurchasesController extends Controller
 
     public function purchases_create()
     {
-        return view('dashboard.purchases.create');
+        $accounts = Accounts::all();
+        return view('dashboard.purchases.create', compact('accounts'));
     }
 
     public function purchases_create_post(Request $request)
@@ -44,6 +49,7 @@ class PurchasesController extends Controller
             'notes' => ['nullable'],
         ]);
 
+
         if ($request->hasFile('picture')) {
             $file = $request->picture;
             $path = "/assets/files/purchases";
@@ -52,9 +58,11 @@ class PurchasesController extends Controller
             $data['picture'] = now()->timestamp . '.' . $file->getClientOriginalExtension();
         }
         $data['date'] = Custom::changDate($data['date']);
-        Purchase::create($data);
 
-        return back()->with('created', $data['name']);
+        $purchase = Purchase::create($data);
+
+
+        return redirect()->route('purchases.payments.create', ['purchase_id' => $purchase->id, 'amount' => $data['total_price'], 'total_price' => $data['seller_id']])->with('created', $data['name']);
     }
 
     public function purchases_detail($id)
@@ -68,13 +76,13 @@ class PurchasesController extends Controller
         $purchase = Purchase::findOrFail($id);
 //        dd(public_path('assets/files/purchases/'.$purchase->picture));
         if ($purchase->picture != null) {
-            if (File::exists(public_path('/assets/files/purchases/'.$purchase->picture))) {
-                File::delete(public_path('/assets/files/purchases/'.$purchase->picture));
+            if (File::exists(public_path('/assets/files/purchases/' . $purchase->picture))) {
+                File::delete(public_path('/assets/files/purchases/' . $purchase->picture));
                 $purchase->update(['picture' => null]);
             }
-            return back()->with('picture' , 'عکس با موفقیت حذف شد.');
+            return back()->with('picture', 'عکس با موفقیت حذف شد.');
         }
-        return back()->with('picture' , 'عکس برای حذف وجود نداشت.');
+        return back()->with('picture', 'عکس برای حذف وجود نداشت.');
 
     }
 
@@ -133,8 +141,8 @@ class PurchasesController extends Controller
             $file = $request->picture;
             $path = "/assets/files/purchases";
             $file->move(public_path($path), now()->timestamp . '.' . $file->getClientOriginalExtension());
-            if (File::exists(public_path('/assets/files/purchases/'.$purchase->picture))) {
-                File::delete(public_path('/assets/files/purchases/'.$purchase->picture));
+            if (File::exists(public_path('/assets/files/purchases/' . $purchase->picture))) {
+                File::delete(public_path('/assets/files/purchases/' . $purchase->picture));
                 $purchase->update(['picture' => null]);
             }
 
@@ -146,6 +154,128 @@ class PurchasesController extends Controller
         $purchase->update($data);
 
         return redirect(route('purchases.list'))->with('created', $data['name']);
+    }
+
+    // payments
+    public function purchases_payments_list()
+    {
+
+    }
+
+    public function purchases_payments_create(Request $request)
+    {
+        $accounts = Accounts::all();
+        if ($request->has('purchase_id')) {
+            $purchase = Purchase::findOrFail($request->purchase_id);
+            if ($request->has('amount')) {
+                $amount = $request->amount;
+                return view('dashboard.purchases.payments.create', compact('purchase', 'amount', 'accounts'));
+            }
+
+            return view('dashboard.purchases.payments.create', compact('purchase', 'accounts'));
+        } else {
+            $purchases = Purchase::all();
+            if ($request->has('amount')) {
+                $amount = $request->amount;
+                return view('dashboard.purchases.payments.create', compact('purchases', 'amount', 'accounts'));
+            }
+            return view('dashboard.purchases.payments.create', compact('purchases', 'accounts'));
+        }
+    }
+
+    public function purchases_payments_create_post(Request $request)
+    {
+        $data = $request->validate([
+            'purchase_id' => ['required', 'exists:orders,id'],
+            'amount' => ['required', 'numeric'],
+            'date' => ['required', 'max:255'],
+            'status' => ['required', 'in:paid,unpaid'],
+            'label_id' => ['required', 'exists:transactions_labels,id'],
+            'account_payment_way' => ['required'],
+            'tracking_number' => ['nullable', 'max:255'],
+            'note' => ['nullable', 'max:522'],
+        ]);
+
+        // اطلاعات حساب و روش پرداخت را از رشته جدا کنید
+        [$accountId, $paymentWay] = explode('_', $data['account_payment_way']);
+
+        if (!Accounts::find($accountId)) {
+            return back()->withErrors(['account_payment_way' => 'حساب انتخاب شده معتبر نیست.']);
+        }
+
+        if (!Purchase::find($data['purchase_id'])) {
+            return back()->withErrors(['purchase_id' => 'خرید انتخاب شده معتبر نیست.']);
+        }
+
+
+        $data['date'] = Custom::changDate($request->date);
+        $data['seller_id'] = Purchase::find($data['purchase_id'])->seller_id;
+
+        $account = Accounts::find($accountId);
+        $account->update([
+            'outputs' => $account->outputs = +$data['amount'],
+            'count' => $account->count = +1,
+        ]);
+
+        Transaction::create([
+            'name' => 'پرداخت مبلغ خرید',
+            'type' => 'output',
+            'date' => $data['date'],
+            'amount' => $data['amount'],
+            'user_id' => Auth::user()->id,
+            'tracking_number' => $data['tracking_number'],
+            'pay_id' => $data['seller_id'],
+            'account_id' => $accountId,
+            'payment_way' => $paymentWay,
+            'label_id' => $data['label_id'],
+            'category' => 'purchases',
+            'status' => $data['status'],
+            'source_type' => 'purchases',
+            'source_id' => $data['purchase_id'],
+            'notes' => $data['note'],
+        ]);
+
+        return redirect(route('purchases.detail', $data['purchase_id']))->with('success', 'پرداخت با موفقیت ثبت شد.');
+    }
+
+    public function purchases_payments_edit($id)
+    {
+
+    }
+
+    public function purchases_payments_update($id)
+    {
+
+    }
+
+    public function purchases_payments_delete($id)
+    {
+
+    }
+
+    public function purchases_payments_trash()
+    {
+
+    }
+
+    public function purchases_payments_trash_delete($id)
+    {
+
+    }
+
+    public function purchases_payments_trash_restore($id)
+    {
+
+    }
+
+    public function purchases_payments_paid($id)
+    {
+        $trasaction = Transaction::findOrFail($id);
+        $trasaction->update([
+                'status' => 'paid',
+            ]);
+        $price = number_format($trasaction->amount , 0 , '' ) . ' ' .'تومان';
+        return back()->with('success' , "تراکنش مربوطه به عنوان پرداخت شده علامت گذاری شد. مبلغ: $price");
     }
 
     // categories
@@ -171,11 +301,13 @@ class PurchasesController extends Controller
         return back()->with('created', $data['name']);
     }
 
-    public function purchases_categories_edit($id) {
+    public function purchases_categories_edit($id)
+    {
         return view('dashboard.purchases.categories.edit', ['category' => PurchasesCategory::findOrFail($id)]);
     }
 
-    public function purchases_categories_update($id) {
+    public function purchases_categories_update($id)
+    {
         $purchases_category = PurchasesCategory::findOrFail($id);
         $data = request()->validate([
             'name' => ['required', 'max:255', Rule::unique('purchases_category')->ignore($purchases_category->name, 'name')],
@@ -266,28 +398,28 @@ class PurchasesController extends Controller
     {
         $seller = Seller::findOrFail($id);
         $seller->delete();
-        return redirect(route('purchases.sellers.list'))->with('deleted' , $seller->name);
+        return redirect(route('purchases.sellers.list'))->with('deleted', $seller->name);
     }
 
     public function sellers_trash()
     {
         $sellers = Seller::onlyTrashed()->get();
         $n = Seller::onlyTrashed()->count();
-        return view('dashboard.purchases.sellers.trash' , ['sellers' => $sellers , 'n' => $n]);
+        return view('dashboard.purchases.sellers.trash', ['sellers' => $sellers, 'n' => $n]);
     }
 
     public function sellers_trash_delete($id)
     {
         $seller = Seller::onlyTrashed()->findOrFail($id);
         $seller->forceDelete();
-        return redirect(route('purchases.sellers.trash'))->with('deleted' , $seller->name);
+        return redirect(route('purchases.sellers.trash'))->with('deleted', $seller->name);
     }
 
     public function sellers_trash_restore($id)
     {
         $seller = Seller::onlyTrashed()->findOrFail($id);
         $seller->restore();
-        return redirect(route('purchases.sellers.trash'))->with('restored' , $seller->name);
+        return redirect(route('purchases.sellers.trash'))->with('restored', $seller->name);
     }
 
     // end purchases

@@ -10,5 +10,20 @@ class Transaction extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $fillable = ['name' , 'type' , 'date' , 'amount' , 'account_id' , 'category_id' , 'user_id' , 'status' , 'source_type' , 'source_id' , 'reference' , 'attached' , 'notes'];
+    protected $fillable = ['name' , 'type' , 'date' , 'amount' , 'account_id' , 'category' , 'user_id' , 'label_id' , 'status' , 'payment_way' , 'source_type' , 'pay_id' , 'tracking_number' , 'source_id' , 'attached' , 'notes'];
+
+    public function account()
+    {
+        return $this->belongsTo(Accounts::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function label()
+    {
+        return $this->belongsTo(TransactionLabel::class, 'label_id');
+    }
 }

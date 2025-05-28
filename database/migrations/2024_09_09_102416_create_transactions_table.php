@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
 
-        Schema::create('transactions_categories', function (Blueprint $table) {
+        Schema::create('transactions_labels', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
             $table->text('notes')->nullable();
@@ -27,14 +27,18 @@ return new class extends Migration
             $table->string('type');
             $table->date('date');
             $table->bigInteger('amount');
+            $table->string('pay_id')->nullable();
+            $table->string('tracking_number')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('account_id');
             $table->foreign('account_id')->references('id')->on('accounts');
-            $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('transactions_categories');
+            $table->string('payment_way'); // روش پرداخت
+            $table->unsignedBigInteger('label_id');
+            $table->foreign('label_id')->references('id')->on('transactions_labels');
+            $table->string('category');
             $table->string('status');
-            $table->string('reference'); // دلیل یا مرجع
+//            $table->string('reference'); // دلیل یا مرجع
             $table->string('source_type'); // مرجع
             $table->string('source_id')->nullable(); // مرجع
             $table->string('attached')->nullable(); //پیوست

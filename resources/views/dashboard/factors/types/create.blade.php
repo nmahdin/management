@@ -101,7 +101,7 @@
                                 <div class="row g-3">
                                     <div class="col-lg-7 offset-lg-5">
                                         <div class="form-group mt-2">
-                                            <button type="submit" class="btn btn-md btn-primary btn-dim"  data-bs-toggle="modal" data-bs-target="#modalCreate">افزودن دسته بندی</button>
+                                            <button type="submit" class="btn btn-md btn-primary btn-dim fw-normal"  data-bs-toggle="modal" data-bs-target="#modalCreate">افزودن دسته بندی</button>
                                         </div>
                                     </div>
                                 </div>

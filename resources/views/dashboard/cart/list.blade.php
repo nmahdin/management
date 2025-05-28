@@ -94,7 +94,7 @@
                                                         <td>{{ number_format("$product->total_price") }}</td>
                                                         <td>{{ $cart['qnty'] }}</td>
                                                         <td><input type="text"
-                                                                   value="{{ $product->total_price*$cart['qnty'] }}"
+                                                                   value="{{ old($product->id , $product->total_price*$cart['qnty']) }}"
                                                                    class="form-control" id="{{$product->id}}"
                                                                    name="{{$product->id}}"></td>
                                                         <td>
@@ -123,17 +123,6 @@
                                     <div class="row g-gs">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="price">مبلغ قابل پرداخت سبد خرید:
-                                                    [{{ number_format($total) }}]</label>
-                                                <div class="form-control-wrap">
-                                                    <input type="text" data-msg="الزامی"
-                                                           class="form-control required" id="price"
-                                                           value="{{ $total }}" name="price" required/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
                                                 @if(\App\Models\Type::count() != 0)
                                                     <label class="form-label" for="type_id">دسته بندی فروش</label>
                                                     <div class="form-control-wrap">
@@ -152,6 +141,22 @@
 
                                             </div>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="date">تاریخ</label>
+                                                <div class="form-control-wrap">
+                                                    <div class="form-icon form-icon-right">
+                                                        <em class="icon ni ni-calendar-alt"></em>
+                                                    </div>
+                                                    <input type="text" name="date" id="date" value="{{ old('date' , '') }}" class="form-control persiandate @error('date') error @enderror" />
+                                                    @error('date')
+                                                    <span id="fv-full-name-error" class="invalid">{{$message}}</span>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-note">فرمت تاریخ <code>روز/ماه/سال</code></div>
+                                            </div>
+                                        </div>
+
 
                                         <break></break>
                                         <div class="col-md-12">
@@ -393,32 +398,37 @@
 
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#modalCart"> ثبت و ادامه
-                                                </button>
+                                                <div class="d-flex justify-content-center">
+                                                    <button type="submit" name="action" value="pay" class="btn btn-dim btn-outline-primary btn-lg fw-normal ">
+                                                        ثبت سفارش و پرداخت
+                                                    </button>
+                                                    <button type="submit" name="action" value="no_pay" class="btn btn-dim  btn-outline-secondary btn-lg fw-normal" style="margin-right: 10px">
+                                                        ثبت سفارش بدون پرداخت
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div class="modal fade zoom" tabindex="-1" id="modalCart" aria-hidden="true"
-                                             style="display: none;">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">انتخاب روش پرداخت</h5>
-                                                        <a href="#" class="close" data-bs-dismiss="modal"
-                                                           aria-label="بستن">
-                                                            <em class="icon ni ni-cross"></em>
-                                                        </a>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="form-group">
-                                                            @foreach(\App\Models\Accounts::all() as $account)
+{{--                                        <div class="modal fade zoom" tabindex="-1" id="modalCart" aria-hidden="true"--}}
+{{--                                             style="display: none;">--}}
+{{--                                            <div class="modal-dialog" role="document">--}}
+{{--                                                <div class="modal-content">--}}
+{{--                                                    <div class="modal-header">--}}
+{{--                                                        <h5 class="modal-title">انتخاب روش پرداخت</h5>--}}
+{{--                                                        <a href="#" class="close" data-bs-dismiss="modal"--}}
+{{--                                                           aria-label="بستن">--}}
+{{--                                                            <em class="icon ni ni-cross"></em>--}}
+{{--                                                        </a>--}}
+{{--                                                    </div>--}}
+{{--                                                    <div class="modal-body">--}}
+{{--                                                        <div class="form-group">--}}
+{{--                                                            @foreach(\App\Models\Accounts::all() as $account)--}}
 
 
-                                                                    <div class="custom-control custom-control-lg custom-radio">
-                                                                        <input type="radio" class="custom-control-input" name="payments" VALUE="{{ $account->id }}" id="2{{ $account->id }}">
-                                                                        <label class="custom-control-label" for="2{{ $account->id }}">{{ $account->payment_label }}</label>
-                                                                    </div>
+{{--                                                                    <div class="custom-control custom-control-lg custom-radio">--}}
+{{--                                                                        <input type="radio" class="custom-control-input" name="payments" VALUE="{{ $account->id }}" id="pay{{ $account->id }}">--}}
+{{--                                                                        <label class="custom-control-label" for="pay{{ $account->id }}">{{ $account->payment_label }}</label>--}}
+{{--                                                                    </div>--}}
 
 {{--                                                                    <input type="radio" id="{{ $account->id }}"--}}
 {{--                                                                           value="{{ $account->id }}" name="payments"--}}
@@ -426,19 +436,19 @@
 {{--                                                                    <label class="custom-control-label"--}}
 {{--                                                                           for="{{ $account->id }}">{{ $account->payment_label }}</label>--}}
 
-                                                                <br>
-                                                            @endforeach
+{{--                                                                <br>--}}
+{{--                                                            @endforeach--}}
 
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <button type="submit"
-                                                                    class="btn btn-lg btn-primary btn-dim">ثبت سفارش
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+{{--                                                        </div>--}}
+{{--                                                        <div class="form-group">--}}
+{{--                                                            <button type="submit"--}}
+{{--                                                                    class="btn btn-lg btn-primary btn-dim">ثبت سفارش--}}
+{{--                                                            </button>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
                                     </div>
 
 
@@ -476,6 +486,10 @@
         <script src="/assets/js/libs/datatable-btns.js"></script>
         <script src="/assets/js/persian-date.js"></script>
         <script src="/assets/js/persian-datepicker.js"></script>
+    @endslot
+
+    @slot('style')
+        <link rel="stylesheet" href="/assets/css/persian-datepicker.css" />
     @endslot
 
 </x-admin.main>

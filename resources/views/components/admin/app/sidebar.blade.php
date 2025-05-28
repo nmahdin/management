@@ -140,6 +140,7 @@
                 </li>
                 <!-- .nk-menu-item تراکنش ها-->
                 <li class="nk-menu-item has-sub">
+                    <li class="nk-menu-item has-sub">
                     <a href="#" class="nk-menu-link nk-menu-toggle">
                         <span class="nk-menu-icon"><em class="icon ni ni-tranx"></em></span>
                         <span class="nk-menu-text">تراکنش ها</span>
@@ -149,10 +150,23 @@
                             <a href="{{ route('transactions.general') }}" class="nk-menu-link"><span class="nk-menu-text">کلی</span></a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="{{ route('transactions.inputs.index') }}" class="nk-menu-link"><span class="nk-menu-text">ورودی</span></a>
+                            <a href="{{ route('transactions.general' , ['type' => 'input']) }}" class="nk-menu-link"><span class="nk-menu-text">ورودی</span></a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="{{ route('transactions.outputs.index') }}" class="nk-menu-link"><span class="nk-menu-text">خروجی</span></a>
+                            <a href="{{ route('transactions.general' , ['type' => 'output']) }}" class="nk-menu-link"><span class="nk-menu-text">خروجی</span></a>
+                        </li>
+                        <li class="nk-menu-item has-sub">
+                            <a href="#" class="nk-menu-link nk-menu-toggle">
+                                <span class="nk-menu-text">برچسب‌ها</span>
+                            </a>
+                            <ul class="nk-menu-sub">
+                                <li class="nk-menu-item">
+                                    <a href="{{ route('transactions.labels.index') }}" class="nk-menu-link"><span class="nk-menu-text">لیست برچسب‌ها</span></a>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a href="{{ route('transactions.labels.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن برچسب</span></a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                     <!-- .nk-menu-sub -->

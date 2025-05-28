@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('number')->unique();
             $table->string('label');
-            $table->string('payment_label');
+            $table->string('payment_ways');
             $table->integer('count')->default(0);
             $table->string('inputs')->default(0);
             $table->string('outputs')->default(0);

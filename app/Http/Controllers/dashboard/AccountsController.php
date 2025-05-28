@@ -25,10 +25,11 @@ class AccountsController extends Controller
         $data = $request->validate([
             'label' => ['required', 'max:255'],
             'number' => ['required', 'max:255' , Rule::unique('accounts')],
-            'payment_label' => ['required', 'max:255'],
+            'payment_ways' => ['required', 'array' , 'in:cash,cart,online,pos'],
             'note' => ['nullable'],
         ]);
 
+        $data['payment_ways'] = json_encode($data['payment_ways']);
         Accounts::create($data);
 
         return back()->with('created', $data['label']);
@@ -44,10 +45,11 @@ class AccountsController extends Controller
         $data = $request->validate([
             'label' => ['required', 'max:255'],
             'number' => ['required', 'max:255' , Rule::unique('accounts')->ignore($account->id)],
-            'payment_label' => ['required', 'max:255'],
+            'payment_ways' => ['required', 'array' , 'in:cash,cart,online,pos'],
             'note' => ['nullable'],
         ]);
 
+        $data['payment_ways'] = json_encode($data['payment_ways']);
         $account->update($data);
 
         return redirect(route('accounts.list'))->with('edited', $data['label']);

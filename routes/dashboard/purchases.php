@@ -19,6 +19,21 @@ Route::prefix('/purchases')->name('purchases.')->group(function () {
     Route::post('/trash/{id}/re', [PurchasesController::class, 'purchases_trash_restore'])->name('restore');
 
 
+    Route::prefix('/payments')->name('payments.')->group(function () {
+
+        Route::get('/list', [PurchasesController::class, 'purchases_payments_list'])->name('list');
+        Route::get('/create', [PurchasesController::class, 'purchases_payments_create'])->name('create');
+        Route::post('/create', [PurchasesController::class, 'purchases_payments_create_post']);
+        Route::get('/edit/{id}', [PurchasesController::class, 'purchases_payments_edit'])->name('edit');
+        Route::post('/edit/{id}', [PurchasesController::class, 'purchases_payments_update']);
+        Route::delete('/delete/{id}', [PurchasesController::class, 'purchases_payments_delete'])->name('delete');
+        Route::get('/trash', [PurchasesController::class, 'purchases_payments_trash'])->name('trash');
+        Route::delete('/trash/{id}/d', [PurchasesController::class, 'purchases_payments_trash_delete'])->name('delete.trash');
+        Route::post('/trash/{id}/re', [PurchasesController::class, 'purchases_payments_trash_restore'])->name('restore');
+        Route::Put('/paid/{id}', [PurchasesController::class, 'purchases_payments_paid'])->name('paid');
+    });
+
+
     Route::prefix('/categories')->name('categories.')->group(function () {
 
         Route::get('/list', [PurchasesController::class, 'purchases_categories_list'])->name('list');
