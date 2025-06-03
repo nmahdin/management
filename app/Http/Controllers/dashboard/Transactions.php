@@ -60,6 +60,50 @@ class Transactions extends Controller
         return view('dashboard.transactions.general', compact('transactions', 'perPage', 'sort', 'type', 'status', 'account', 'dateFrom', 'dateTo', 'amountFrom', 'amountTo', 'paymentMethod', 'includeDeleted'));
     }
 
+    public function printTransactions(Request $request)
+    {
+        // دریافت تراکنش‌ها بر اساس فیلترهای احتمالی، مشابه general.blade.php
+        // می‌توانید فیلترهای دقیقی که در general.blade.php دارید را اینجا کپی کنید
+        // برای سادگی، فعلاً همه تراکنش‌ها را می‌گیریم یا بر اساس کوئری‌های موجود در request
+
+        $query = Transaction::query();
+
+        // مثال: اعمال فیلترهایی که در general.blade.php استفاده می‌کنید:
+        if ($request->has('type') && $request->type != 'any') {
+            $query->where('type', $request->type);
+        }
+        if ($request->has('status') && $request->status != 'any') {
+            $query->where('status', $request->status);
+        }
+        if ($request->has('account') && $request->account != 'any') {
+            $query->where('account_id', $request->account);
+        }
+        if ($request->has('payment_method') && $request->payment_method != 'any') {
+            $query->where('payment_way', $request->payment_method);
+        }
+        if ($request->has('amount_from') && is_numeric($request->amount_from)) {
+            $query->where('amount', '>=', $request->amount_from);
+        }
+        if ($request->has('amount_to') && is_numeric($request->amount_to)) {
+            $query->where('amount', '<=', $request->amount_to);
+        }
+        if ($request->has('date_from') && !empty($request->date_from)) {
+            $query->whereDate('date', '>=', $request->date_from);
+        }
+        if ($request->has('date_to') && !empty($request->date_to)) {
+            $query->whereDate('date', '<=', $request->date_to);
+        }
+        if ($request->has('include_deleted')) {
+            $query->withTrashed();
+        }
+
+        $sort = $request->get('sort', 'desc');
+        $query->orderBy('created_at', $sort);
+
+        $transactions = $query->get(); // همه تراکنش‌های فیلتر شده را دریافت کنید
+
+        return view('dashboard.transactions.print_general', compact('transactions'));
+    }
 
     public function delete_transaction($id)
     {
@@ -83,6 +127,36 @@ class Transactions extends Controller
         return back()->with('warning', $massage);
 
     }
+
+    public function transactionDetail($id)
+    {
+        $transaction = Transaction::findOrFail($id);
+        return view('dashboard.transactions.detail', compact('transaction'));
+    }
+
+    public function edit($id)
+    {
+        $transaction = Transaction::findOrFail($id);
+        return view('dashboard.transactions.edit', compact('transaction'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $transaction = Transaction::findOrFail($id);
+
+        $request->validate([
+            'type' => 'required|string',
+            'amount' => 'required|numeric',
+            'date' => 'required|date',
+            // Add validation rules for other fields
+        ]);
+
+        $transaction->update($request->all());
+
+        return redirect()->route('transactions.detail', $transaction->id)->with('success', 'تراکنش با موفقیت ویرایش شد.');
+    }
+
+
 
     public function new_transaction()
     {

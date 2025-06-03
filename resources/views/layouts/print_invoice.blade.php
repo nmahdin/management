@@ -36,8 +36,7 @@
             direction: rtl;
             text-align: right;
             font-size: 10pt;
-            /* position: relative; دیگر نیاز نیست */
-            box-sizing: border-box; /* برای اینکه padding به عرض و ارتفاع کلی اضافه نشود */
+            box-sizing: border-box;
         }
         .invoice-container {
             width: 100%;
@@ -65,19 +64,17 @@
             margin-bottom: 5px;
         }
 
-        /* سربرگ فاکتور - دیگر fixed نیست */
+        /* سربرگ فاکتور */
         .invoice-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid #eee;
-            padding: 5px 0 10px 10px; /* padding داخلی (چپ و راست را صفر کردیم تا به margin@page بچسبد) */
+            padding: 5px 0 10px 10px;
             box-sizing: border-box;
             width: 100%;
             flex-shrink: 0;
-            /* height: 80px; دیگر نیازی به height ثابت نیست مگر اینکه بخواهید فضای آن دقیقاً اینقدر باشد */
             background-color: #fff;
-            /* z-index دیگر نیاز نیست */
             margin-bottom: 15px;
         }
         .header-left { flex: 0 0 150px; text-align: right; }
@@ -185,18 +182,16 @@
             page-break-before: always !important;
         }
 
-        /* استایل‌های بخش امضاها - دیگر fixed نیست */
+        /* استایل‌های بخش امضاها */
         .signatures-section {
             display: flex;
             justify-content: space-around;
             width: 100%;
-            padding: 5px 0; /* padding داخلی (چپ و راست را صفر کردیم) */
+            padding: 5px 0;
             box-sizing: border-box;
-            /* height: 120px; دیگر نیازی به height ثابت نیست */
             background-color: #fff;
-            /* z-index دیگر نیاز نیست */
-            margin-top: 30px; /* فاصله از محتوای بالای خود */
-            page-break-inside: avoid; /* جلوگیری از شکستن در وسط صفحه */
+            margin-top: 30px;
+            page-break-inside: avoid;
         }
         .signature-box {
             flex: 0 0 45%;
@@ -206,7 +201,7 @@
             border-radius: 10px;
             color: #7c7c7c;
             background-color: #ffffff;
-            height: 100px; /* ارتفاع داخلی باکس امضا را تنظیم کردیم */
+            height: 100px;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -217,19 +212,17 @@
             font-size: 10pt;
         }
 
-        /* استایل‌های footer (متن "صدف پرداز") - دیگر fixed نیست */
+        /* استایل‌های footer (متن "صدف پرداز") */
         .footer {
             text-align: center;
             font-size: 10px;
             color: #666;
-            padding: 2px 0; /* padding داخلی (چپ و راست را صفر کردیم) */
+            padding: 2px 0;
             box-sizing: border-box;
-            /* height: 25px; دیگر نیازی به height ثابت نیست */
             border-top: 1px solid #eee;
             background-color: #fff;
-            /* z-index دیگر نیاز نیست */
-            margin-top: 10px; /* فاصله از بخش امضا */
-            page-break-inside: avoid; /* جلوگیری از شکستن در وسط صفحه */
+            margin-top: 10px;
+            page-break-inside: avoid;
         }
 
 
@@ -318,30 +311,39 @@
             /* ----------------------------------------------- */
 
             @page {
-                /* تعریف حاشیه 10mm از هر طرف برای خود صفحه پرینت */
-                margin: 10mm; /* این حاشیه به اطراف کل صفحه اعمال می‌شود */
-                size: A4 portrait; /* اطمینان از اندازه و جهت صفحه */
+                margin: 20mm; /* اعمال مارجین کلی به کل محتوای پرینت، 20 میلی‌متر از هر طرف */
+                size: A4 portrait;
             }
 
-            /*
-            چون دیگر عناصر fixed نیستند، padding-top و padding-bottom body
-            صرفاً نقش حاشیه‌های داخلی را بازی می‌کنند و باید با margin@page هماهنگ باشند.
-            */
             body {
-                padding: 10mm !important; /* حاشیه‌های کلی محتوا از هر چهار طرف را به @page منتقل کردیم */
-                box-sizing: border-box; /* اطمینان از اینکه padding در محاسبه عرض و ارتفاع لحاظ شود */
+                padding: 0 !important; /* پدینگ body را صفر می‌کنیم چون margin@page خودش حاشیه را می‌دهد */
             }
 
-            /* container اصلی محتوا - باید 100% عرض padding شده body را اشغال کند */
             .invoice-container {
                 width: 100% !important;
                 max-width: none !important;
-                margin: 0 !important; /* حذف margin: 0 auto; برای پرینت */
+                margin: 0 !important;
             }
 
-            /* این padding برای باکس‌های اطلاعات مشتری را حذف می‌کنیم چون padding-top کلی body آن را پوشش می‌دهد */
             .info-boxes-row {
                 padding-top: 0 !important;
+            }
+            /* اصلاح مارجین مهر و امضا در حالت پرینت */
+            .signatures-section {
+                position: static !important;
+                margin-top: 20mm !important; /* افزایش مارجین بالا در حالت پرینت */
+                margin-bottom: 5mm !important; /* افزایش مارجین پایین در حالت پرینت */
+                padding: initial !important;
+                top: auto !important;
+                bottom: auto !important;
+                left: auto !important;
+                right: auto !important;
+                width: auto !important;
+                z-index: auto !important;
+                border: initial !important;
+                box-shadow: none !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
             }
         }
     </style>
@@ -350,7 +352,7 @@
         @media print {
             thead { display: table-header-group; }
             tfoot { display: table-footer-group; }
-            body { margin: 0; }
+            /* body { margin: 0; } - این خط توسط @page margin: 20mm جایگزین شد */
             .no-break { page-break-inside: avoid; break-inside: avoid; }
         }
     </style>
@@ -362,19 +364,29 @@
 <script>
     window.addEventListener('load', function() {
         const printDateElements = document.querySelectorAll('.print-date-js');
-        const jalaaliDate = new Date().toLocaleDateString('fa-IR', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        });
-        printDateElements.forEach(el => {
-            el.textContent = jalaaliDate;
-        });
+        // استفاده از jdate برای فرمت تاریخ و ساعت
+        if (typeof jdate === 'function') {
+            const now = new Date();
+            const jalaaliDate = jdate(now).format('Y/m/d H:i'); // اضافه کردن ساعت و دقیقه
+            printDateElements.forEach(el => {
+                el.textContent = jalaaliDate;
+            });
+        } else {
+            // Fallback برای تاریخ میلادی همراه با ساعت
+            const now = new Date();
+            const gregorianDate = now.toLocaleDateString('fa-IR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit', // اضافه کردن ساعت
+                minute: '2-digit' // اضافه کردن دقیقه
+            });
+            printDateElements.forEach(el => {
+                el.textContent = gregorianDate;
+            });
+        }
     });
 </script>
-
-</tbody>
-</table>
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-<x-admin.main title="لیست سفارشات">
+<x-admin.main title="لیست سفارشات حذف شده">
 
     <div class="nk-content nk-content-fluid">
         <div class="container-xl wide-xl">
@@ -7,11 +7,11 @@
                     <div class="nk-block-between">
                         <div class="nk-block-head-content">
                             <!--   --------------- title --------------     -->
-                            <h3 class="nk-block-title page-title">لیست سفارشات</h3>
+                            <h3 class="nk-block-title page-title">لیست سفارشات حذف شده</h3>
                             <div class="nk-block-des text-soft">
                                 <!--   --------------- توضیح صفحه --------------     -->
                                 @if($n !== 0)
-                                    <p>در مجموع {{ $n }} سفارش ثبت شده است.</p>
+                                    <p>در مجموع {{ $n }} سفارش در سطل زباله است.</p>
                                 @endif
                             </div>
                         </div>
@@ -24,22 +24,14 @@
                                     <ul class="nk-block-tools g-3">
                                         <!--   --------------- links --------------     -->
                                         <li>
-                                            <a href="{{ route('products.list') }}"
-                                               class="btn btn-primary btn-dim">
-                                                <em class="icon ni ni-plus"></em>
+                                            <a href="{{ route('orders.list') }}"
+                                               class="dropdown-toggle btn btn-dark btn-dim" data-bs-toggle="modal" data-bs-target="#modalZoom" onclick="event.preventDefault(); document.getElementById('list').submit();">
+                                                <em class="icon ni ni-forward-ios"></em>
                                                 <span class="fw-normal">
-                                                    ثبت سفارش جدید
+                                                    لیست سفارشات
                                                 </span>
                                             </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('orders.trash') }}"
-                                               class="btn btn-danger">
-                                                <em class="icon ni ni-trash"></em>
-                                                <span class="fw-normal">
-                                                    سطل زباله
-                                                </span>
-                                            </a>
+                                            <form id="list" action="{{ route('orders.list') }}" class="d-none"></form>
                                         </li>
                                     </ul>
                                 </div>
@@ -49,16 +41,6 @@
                     </div>
                     <!-- .nk-block-between -->
                 </div>
-                @if(session('deleted'))
-                    <div class="alert alert-fill alert-success alert-icon bg-success-dim text-success">
-                        <em class="icon ni ni-check-circle"></em>
-                        سفارش "{{session('deleted')}}" با موفقیت به
-                        <a href="{{ route('orders.trash') }}" class="text-success">
-                            <u>سطل زباله</u>
-                        </a>
-                        منتقل شد.
-                    </div>
-                @endif
 
                 <x-admin.templates.successAlert/>
                 <x-admin.templates.warningAlert/>
@@ -68,7 +50,7 @@
                 @if($n == 0)
                     <div class="alert alert-fill alert-light alert-icon">
                         <em class="icon ni ni-alert-circle"></em>
-                        هیچ سفارشی ثبت نشده است!
+                        هیچ سفارشی در سطل زباله وجود ندارد!
                     </div>
                 @endif
 
@@ -82,9 +64,9 @@
                                         <th class="tb-col-sm">شماره سفارش</th>
                                         <th>مشتری</th>
                                         <th>نوع سفارش</th>
-                                        <th>وضعیت</th>
                                         <th>مبلغ (تومان)</th>
                                         <th>تاریخ سفارش</th>
+                                        <th>تاریخ حذف</th>
                                         <th class="tb-col-md">عملیات</th>
                                     </tr>
                                     </thead>
@@ -108,39 +90,9 @@
                                                     <span class="text-muted">نامشخص</span>
                                                 @endif
                                             </td>
-                                            <td>
-                                                @if($order->status)
-                                                    @if($order->status == 'completed')
-                                                        <span class="badge badge-dim bg-success">
-                                                            تکمیل شده
-                                                        </span>
-                                                    @elseif($order->status == 'unpaid')
-                                                        <span class="badge badge-dim bg-warning">
-                                                            پرداخت نشده
-                                                        </span>
-                                                    @elseif($order->status == 'paid')
-                                                        <span class="badge badge-dim bg-info">
-                                                            پرداخت شده
-                                                        </span>
-
-                                                    @elseif($order->status == 'canceled')
-                                                        <span class="badge badge-dim bg-danger">
-                                                            لغو شده
-                                                        </span>
-
-
-                                                    @else
-                                                        <span class="badge badge-dim bg-light">
-                                                            {{ $order->status }}
-                                                        </span>
-                                                    @endif
-
-                                                @else
-                                                    <span class="badge bg-secondary">نامشخص</span>
-                                                @endif
-                                            </td>
                                             <td>{{ number_format($order->amount) }}</td>
                                             <td>{{ jdate($order->date)->format('Y/m/d') }}</td>
+                                            <td>{{ jdate($order->deleted_at)->format('Y/m/d') }}</td>
                                             <td>
                                                 <div class="dropdown">
                                                     <a class="btn btn-icon btn-trigger dropdown-toggle"
@@ -150,26 +102,27 @@
                                                     <div class="dropdown-menu dropdown-menu-end">
                                                         <ul class="link-list-opt">
                                                             <li>
-                                                                <a href="{{ route('orders.detail', $order->id) }}">
-                                                                    <em class="icon ni ni-eye"></em>
-                                                                    <span>مشاهده جزئیات</span>
+                                                                <a href="{{ route('orders.restore', $order->id) }}" class="text-warning"
+                                                                   onclick="event.preventDefault(); document.getElementById('restore_order_{{ $order->id }}').submit();">
+                                                                    <em class="icon ni ni-redo"></em>
+                                                                    <span>بازیابی</span>
                                                                 </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="{{ route('orders.edit', $order->id) }}">
-                                                                    <em class="icon ni ni-edit"></em>
-                                                                    <span>ویرایش</span>
-                                                                </a>
+                                                                <form id="restore_order_{{ $order->id }}" method="post"
+                                                                      action="{{ route('orders.restore', $order->id) }}"
+                                                                      class="d-none">
+                                                                    @csrf
+                                                                    @method('post')
+                                                                </form>
                                                             </li>
                                                             <li>
                                                                 <a href="#"
                                                                    onclick="event.preventDefault(); document.getElementById('delete_order_{{ $order->id }}').submit();"
                                                                    class="text-danger">
                                                                     <em class="icon ni ni-trash"></em>
-                                                                    <span>حذف</span>
+                                                                    <span class="text-danger">حذف کامل</span>
                                                                 </a>
                                                                 <form id="delete_order_{{ $order->id }}" method="post"
-                                                                      action="{{ route('orders.delete', $order->id) }}"
+                                                                      action="{{ route('orders.forceDelete', $order->id) }}"
                                                                       class="d-none">
                                                                     @csrf
                                                                     @method('delete')

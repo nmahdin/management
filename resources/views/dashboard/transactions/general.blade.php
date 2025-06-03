@@ -21,7 +21,10 @@
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
                                         <li>
-                                            <a href="#" class="btn btn-white btn-dim btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>خروجی گرفتن</span></a>
+                                            {{-- با استفاده از request()->fullUrlWithQuery()، تمامی فیلترهای اعمال شده را به لینک پرینت منتقل می‌کنیم --}}
+                                            <a href="{{ route('transactions.print', request()->query()) }}" target="_blank" class="btn btn-white btn-dim btn-outline-light">
+                                                <em class="icon ni ni-download-cloud"></em><span>خروجی گرفتن</span>
+                                            </a>
                                         </li>
                                         <li class="nk-block-tools-opt">
                                             <div class="drodown">
@@ -339,7 +342,7 @@
                                             <div class="nk-tb-col nk-tb-col-tools">
                                                 <ul class="nk-tb-actions gx-2">
                                                     <li class="nk-tb-action-hidden">
-                                                        <a href="#tranxDetails" data-bs-toggle="modal" class="bg-white btn btn-sm btn-outline-light btn-icon btn-tooltip" title="جزئیات"><em
+                                                        <a href="{{ route('transactions.detail' , $transaction->id) }}"  class="bg-white btn btn-sm btn-outline-light btn-icon btn-tooltip" title="جزئیات"><em
                                                                 class="icon ni ni-eye"></em></a>
                                                     </li>
                                                     <li class="nk-tb-action-hidden">

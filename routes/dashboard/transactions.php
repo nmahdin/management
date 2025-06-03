@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/transactions')->name('transactions.')->group(function () {
 
     Route::get('/general' , [Transactions::class , 'transactions_general'])->name('general');
+    Route::get('/print', [Transactions::class, 'printTransactions'])->name('print');
+    Route::get('/{id}', [Transactions::class, 'transactionDetail'])->name('detail');
     Route::delete('/delete/{id}' , [Transactions::class , 'delete_transaction'])->name('delete');
     Route::Get('/new/{type}' , [Transactions::class , 'new_transaction'])->name('new');
     Route::Put('/store/' , [Transactions::class , 'store_transaction'])->name('store');
+    Route::get('/{id}/edit', [Transactions::class, 'edit'])->name('edit');
+    Route::put('/{id}', [Transactions::class, 'update'])->name('update');
 
     Route::prefix('/inputs')->name('inputs.')->group(function () {
 

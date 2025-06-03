@@ -14,8 +14,8 @@ Route::prefix('/orders')->name('orders.')->group(function () {
     Route::post('/edit/{orders}' , [OrdersController::class , 'orders_edit_post']);
     Route::delete('/delete/{orders}' , [OrdersController::class , 'orders_delete'])->name('delete');
     Route::get('/trash' , [OrdersController::class , 'orders_trash_list'])->name('trash');
-    Route::delete('/trash/{orders}/d' , [OrdersController::class , 'orders_trash_delete'])->name('trash.delete');
-    Route::post('/trash/{orders}/re' , [OrdersController::class , 'orders_trash_restore'])->name('trash.restore');
+    Route::delete('/trash/{orders}/delete' , [OrdersController::class , 'orders_force_delete'])->name('forceDelete');
+    Route::post('/trash/{orders}/restore' , [OrdersController::class , 'orders_restore'])->name('restore');
     Route::get('/orders/{order}/print', [OrdersController::class, 'printInvoice'])->name('print');
 
 

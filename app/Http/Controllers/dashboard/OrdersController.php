@@ -106,15 +106,22 @@ class OrdersController extends Controller
 
     public function orders_trash_list()
     {
-
+        $orders = Order::onlyTrashed()->get(); // Fetch soft deleted orders
+        $n = $orders->count();
+        return view('dashboard.factors.orders.trash', compact('orders', 'n'));
     }
-    public function orders_trash_delete()
+    public function orders_force_delete($id)
     {
-
+        $order = Order::onlyTrashed()->findOrFail($id);
+        $order->forceDelete();
+        return redirect()->back()->with('warning', 'سفارش با موفقیت به طور کامل حذف شد.');
     }
-    public function orders_trash_restore()
-    {
 
+    public function orders_restore($id)
+    {
+        $order = Order::onlyTrashed()->findOrFail($id);
+        $order->restore();
+        return redirect()->back()->with('success', 'سفارش با موفقیت بازیابی شد.');
     }
     // categories
     public function orders_types_list()
