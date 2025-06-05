@@ -136,19 +136,53 @@
                                     <div class="nk-block">
                                         <div class="nk-block-head">
                                             <h5 class="title">جزئیات تراکنش</h5>
-{{--                                            <p>اطلاعات کامل تراکنش</p>--}}
+                                            {{-- <p>اطلاعات کامل تراکنش</p> --}}
                                         </div>
 
-
-                                                <!-- Display more transaction details here -->
-                                                <p>نوع تراکنش: {{ __("payment.$transaction->type") }}</p>
-                                                <p>مبلغ: {{ number_format($transaction->amount) }} تومان</p>
-                                                <p>تاریخ: {{ jdate($transaction->date)->format('Y/m/d') }}</p>
-                                                <p>حساب: {{ $transaction->account->label ?? 'نامشخص' }}</p>
-                                                <p>روش پرداخت: {{ $transaction->payment_way }}</p>
-                                                <p>یادداشت‌ها: {{ $transaction->notes }}</p>
-
-
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <tbody>
+                                                <tr>
+                                                    <th>نوع تراکنش:</th>
+                                                    <td>{{ __("payment.$transaction->type") ?? 'نامشخص' }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>نام:</th>
+                                                    <td class="fw-bold">{{ $transaction->name ?? 'بی نام!' }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>مربوط به ... :</th>
+                                                    <td><a
+                                                            href="{{ route("$transaction->source_type.detail" , $transaction->source_id) }}">{{ __('payment.' . $transaction->source_type) . ' ' . "#$transaction->source_id"}}</a></span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>مبلغ:</th>
+                                                    <td class="bg-gray-dim">{{ number_format($transaction->amount) }} تومان</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>تاریخ:</th>
+                                                    <td>{{ jdate($transaction->date)->format('Y/m/d') }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>حساب:</th>
+                                                    <td class="text-blue">{{ $transaction->account->label ?? 'نامشخص' }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>روش پرداخت:</th>
+                                                    <td>{{  __("payment.$transaction->payment_way") }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>شماره پیگیری:</th>
+                                                    <td>{{ $transaction->tracking_number ?? 'ندارد.' }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>یادداشت‌ها:</th>
+                                                    <td>{{ $transaction->notes ?? 'برای این تراکنش یادداشتی ثبت نشده است.' }}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

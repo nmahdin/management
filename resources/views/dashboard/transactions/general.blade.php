@@ -310,7 +310,7 @@
                                                     <div class="nk-tnx-type-text">
                                                         <span class="tb-lead">{{ $transaction->name }}</span>
 {{--                                                        <span class="text-sm">({{ jdate($transaction->date)->ago() }})</span>--}}
-                                                        <span class="tb-date">{{ jdate($transaction->date)->ago() }}</span>
+                                                        <span class="tb-date">تراکنش #{{ $transaction->id }} / {{ jdate($transaction->date)->ago() }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -346,7 +346,7 @@
                                                                 class="icon ni ni-eye"></em></a>
                                                     </li>
                                                     <li class="nk-tb-action-hidden">
-                                                        <a href="#" title="ویرایش"
+                                                        <a href="{{ route('transactions.edit' , $transaction->id) }}" title="ویرایش"
                                                            class="bg-white btn btn-sm btn-outline-light btn-icon btn-tooltip"><em class="icon ni ni-pen"></em></a>
                                                     </li>
                                                     <li class="nk-tb-action-hidden">

@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Accounts;
+use App\Models\Customer;
 use App\Models\Order;
+use App\Models\Purchase;
+use App\Models\Seller;
 use App\Models\Transaction;
 use App\Models\TransactionLabel;
 use Illuminate\Http\Request;
@@ -137,7 +141,14 @@ class Transactions extends Controller
     public function edit($id)
     {
         $transaction = Transaction::findOrFail($id);
-        return view('dashboard.transactions.edit', compact('transaction'));
+        $customers = Customer::all();
+        $sellers = Seller::all();
+        $accounts = Accounts::all();
+        $transactionLabels = TransactionLabel::all();
+        $orders = Order::all();
+        $purchases = Purchase::all();
+
+        return view('dashboard.transactions.edit', compact('transaction', 'customers', 'sellers', 'accounts', 'transactionLabels', 'orders', 'purchases'));
     }
 
     public function update(Request $request, $id)
@@ -145,16 +156,81 @@ class Transactions extends Controller
         $transaction = Transaction::findOrFail($id);
 
         $request->validate([
-            'type' => 'required|string',
+            'name' => 'required|string',
+            'type' => 'required|in:input,output',
+            'date' => 'required|string',
             'amount' => 'required|numeric',
-            'date' => 'required|date',
-            // Add validation rules for other fields
+            'pay_id' => 'nullable|string',
+            'tracking_number' => 'nullable|string',
+            'account_payment_way' => 'nullable|string',
+            'label_id' => 'required|exists:transactions_labels,id', // Required
+            'status' => 'required|in:paid,unpaid',
+            'notes' => 'nullable|string',
+            'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx',
+            'relation_id' => 'nullable|string',
+            'category' => 'nullable|string', // Added
         ]);
 
-        $transaction->update($request->all());
+        // Convert Persian date to Gregorian
+        $date = App\helper\services\Custom::reDateE($request->date);
+
+        $transactionData = [
+            'name' => $request->name,
+            'type' => $request->type,
+            'date' => $date,
+            'amount' => $request->amount,
+            'pay_id' => $request->pay_id,
+            'tracking_number' => $request->tracking_number,
+            'user_id' => auth()->id(), // Assuming you want to set the user_id
+            'payment_way' => null,
+            'account_id' => null,
+            'label_id' => $request->label_id,
+            'status' => $request->status,
+            'notes' => $request->notes,
+            'category' => $request->category,
+            'source_type' => null,
+            'source_id' => null,
+        ];
+
+        // Handle account and payment way
+        if ($request->account_payment_way) {
+            $parts = explode('_', $request->account_payment_way);
+            $transactionData['account_id'] = $parts[0];
+            $transactionData['payment_way'] = $parts[1];
+        }
+
+        // Handle order/purchase relation
+        if ($request->relation_id) {
+            $relationParts = explode('-', $request->relation_id);
+            if ($relationParts[0] == 'order') {
+                $transactionData['source_type'] = 'order';
+                $transactionData['source_id'] = $relationParts[1];
+            } elseif ($relationParts[0] == 'purchase') {
+                $transactionData['source_type'] = 'purchase';
+                $transactionData['source_id'] = $relationParts[1];
+            }
+        }
+
+        // Handle file upload
+        if ($request->hasFile('file')) {
+            // Delete the old file if it exists
+            if ($transaction->attached) {
+                Storage::delete('public/' . $transaction->attached);
+            }
+
+            $file = $request->file('file');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->store('transactions', 'public');
+
+            $transactionData['attached'] = $path;
+        }
+
+        $transaction->update($transactionData);
 
         return redirect()->route('transactions.detail', $transaction->id)->with('success', 'تراکنش با موفقیت ویرایش شد.');
     }
+
+
 
 
 
