@@ -160,7 +160,7 @@ class Transactions extends Controller
             'type' => 'required|in:input,output',
             'date' => 'required|string',
             'amount' => 'required|numeric',
-            'pay_id' => 'nullable|string',
+            'payer_information' => 'required|string',
             'tracking_number' => 'nullable|string',
             'account_payment_way' => 'nullable|string',
             'label_id' => 'required|exists:transactions_labels,id', // Required
@@ -172,14 +172,14 @@ class Transactions extends Controller
         ]);
 
         // Convert Persian date to Gregorian
-        $date = App\helper\services\Custom::reDateE($request->date);
+        $date = \App\helper\services\Custom::changDate($request->date);
 
         $transactionData = [
             'name' => $request->name,
             'type' => $request->type,
             'date' => $date,
             'amount' => $request->amount,
-            'pay_id' => $request->pay_id,
+            'payer_information' => $request->payer_information,
             'tracking_number' => $request->tracking_number,
             'user_id' => auth()->id(), // Assuming you want to set the user_id
             'payment_way' => null,
@@ -203,10 +203,10 @@ class Transactions extends Controller
         if ($request->relation_id) {
             $relationParts = explode('-', $request->relation_id);
             if ($relationParts[0] == 'order') {
-                $transactionData['source_type'] = 'order';
+                $transactionData['source_type'] = 'orders';
                 $transactionData['source_id'] = $relationParts[1];
             } elseif ($relationParts[0] == 'purchase') {
-                $transactionData['source_type'] = 'purchase';
+                $transactionData['source_type'] = 'purchases';
                 $transactionData['source_id'] = $relationParts[1];
             }
         }

@@ -82,23 +82,23 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="form-label" for="pay_id">پرداخت کننده</label>
+                                            <label class="form-label" for="payer_information">پرداخت کننده</label>
                                             <div class="form-control-wrap">
-                                                <select class="form-select js-select2 @error('pay_id') error @enderror" name="pay_id" id="pay_id" data-search="on">
+                                                <select class="form-select js-select2 @error('payer_information') error @enderror" name="payer_information" id="payer_information" data-search="on">
                                                     <option value="">انتخاب پرداخت کننده</option>
                                                     @foreach($customers as $customer)
-                                                        <option value="customer-{{ $customer->id }}" @if(old('pay_id', $transaction->pay_id) == 'customer-' . $customer->id) selected @endif>مشتری: {{ $customer->name }}</option>
+                                                        <option value="customer-{{ $customer->id }}" @if(old('payer_information', $transaction->payer_information) == 'customer-' . $customer->id) selected @endif>مشتری: {{ $customer->name }}</option>
                                                     @endforeach
                                                     @foreach($sellers as $seller)
-                                                        <option value="seller-{{ $seller->id }}" @if(old('pay_id', $transaction->pay_id) == 'seller-' . $seller->id) selected @endif>فروشنده: {{ $seller->name }}</option>
+                                                        <option value="seller-{{ $seller->id }}" @if(old('payer_information', $transaction->payer_information) == 'seller-' . $seller->id) selected @endif>فروشنده: {{ $seller->name }}</option>
                                                     @endforeach
-                                                    <option value="other" @if(strpos(old('pay_id', $transaction->pay_id), 'other-') === 0) selected @endif>متن دلخواه</option>
+                                                    <option value="other" @if(strpos(old('payer_information', $transaction->payer_information), 'other-') === 0) selected @endif>متن دلخواه</option>
                                                 </select>
-                                                @error('pay_id')
+                                                @error('payer_information')
                                                 <span class="invalid">{{ $message }}</span>
                                                 @enderror
-                                                @if(strpos(old('pay_id', $transaction->pay_id), 'other-') === 0)
-                                                    <input type="text" class="form-control mt-2" name="pay_id_other" value="{{ substr(old('pay_id', $transaction->pay_id), 6) }}" placeholder="متن دلخواه">
+                                                @if(strpos(old('payer_information', $transaction->payer_information), 'other-') === 0)
+                                                    <input type="text" class="form-control mt-2" name="payer_information_other" value="{{ substr(old('payer_information', $transaction->payer_information), 6) }}" placeholder="متن دلخواه">
                                                 @endif
                                             </div>
                                         </div>
@@ -271,11 +271,11 @@
                     initialValue: false,
                 });
 
-                $('#pay_id').change(function() {
+                $('#payer_information').change(function() {
                     if ($(this).val() === 'other') {
-                        $(this).after('<input type="text" class="form-control mt-2" name="pay_id_other" placeholder="متن دلخواه">');
+                        $(this).after('<input type="text" class="form-control mt-2" name="payer_information_other" placeholder="متن دلخواه">');
                     } else {
-                        $(this).next('input[name="pay_id_other"]').remove();
+                        $(this).next('input[name="payer_information_other"]').remove();
                     }
                 });
             });

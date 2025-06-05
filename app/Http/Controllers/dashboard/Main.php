@@ -237,7 +237,7 @@ class Main extends Controller
             'amount' => $data['amount'],
             'user_id' => Auth::user()->id,
             'tracking_number' => $data['tracking_number'],
-            'pay_id' => $data['customer_id'],
+            'payer_information' => 'customer'.'-'.$data['customer_id'],
             'account_id' => $accountId,
             'payment_way' => $paymentWay,
             'label_id' => $data['label_id'],

@@ -180,6 +180,15 @@
                                                     <th>یادداشت‌ها:</th>
                                                     <td>{{ $transaction->notes ?? 'برای این تراکنش یادداشتی ثبت نشده است.' }}</td>
                                                 </tr>
+                                                @if($transaction->attached)
+                                                    <tr>
+                                                        <h6 class="overline-title">پیوست</h6>
+                                                        <a href="{{ asset('storage/' . $transaction->attached) }}" target="_blank" class="btn btn-sm btn-primary">
+                                                            <em class="icon ni ni-download-cloud"></em>
+                                                            <span>دانلود فایل</span>
+                                                        </a>
+                                                    </tr>
+                                                @endif
                                                 </tbody>
                                             </table>
                                         </div>
