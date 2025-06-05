@@ -112,13 +112,13 @@
                                             </div>
                                             <div class="col-12">
                                                 <span class="sub-text">تاریخ ثبت:</span>
-                                                <span class="lead-text">{{ jdate($transaction->created_at)->format('Y/m/d') }}</span>
+                                                <span class="lead-text">{{ jdate($transaction->created_at)->format('Y/m/d , H:i') }}</span>
                                             </div>
 
                                             @if($transaction->updated_at && $transaction->updated_at != $transaction->created_at)
                                                 <div class="col-12">
                                                     <span class="sub-text">آخرین بروزرسانی:</span>
-                                                    <span class="lead-text">{{ jdate($transaction->updated_at)->format('Y/m/d') }}</span>
+                                                    <span class="lead-text">{{ jdate($transaction->updated_at)->format('Y/m/d , H:i') }}</span>
                                                 </div>
                                             @endif
                                         </div>
@@ -182,11 +182,11 @@
                                                 </tr>
                                                 @if($transaction->attached)
                                                     <tr>
-                                                        <h6 class="overline-title">پیوست</h6>
-                                                        <a href="{{ asset('storage/' . $transaction->attached) }}" target="_blank" class="btn btn-sm btn-primary">
-                                                            <em class="icon ni ni-download-cloud"></em>
-                                                            <span>دانلود فایل</span>
-                                                        </a>
+                                                        <th>پیوست</th>
+                                                        <td><a href="{{ asset($transaction->attached) }}" target="_blank" class="btn btn-sm btn-primary btn-dim fw-normal">
+                                                                <em class="icon ni ni-download-cloud"></em>
+                                                                <span>دانلود فایل</span>
+                                                            </a></td>
                                                     </tr>
                                                 @endif
                                                 </tbody>

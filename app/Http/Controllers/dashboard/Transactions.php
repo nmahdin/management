@@ -215,15 +215,19 @@ class Transactions extends Controller
         if ($request->hasFile('file')) {
             // Delete the old file if it exists
             if ($transaction->attached) {
-                Storage::delete('public/' . $transaction->attached);
+                // Delete the old file
+                if (file_exists(public_path($transaction->attached))) {
+                    unlink(public_path($transaction->attached));
+                }
             }
 
             $file = $request->file('file');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->store('transactions', 'public');
+            $path = $file->move(public_path('transactions'), $filename); // Store in public directory
 
-            $transactionData['attached'] = $path;
+            $transactionData['attached'] = 'transactions/' . $filename; // Save relative path
         }
+
 
         $transaction->update($transactionData);
 
