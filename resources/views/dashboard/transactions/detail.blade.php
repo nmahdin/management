@@ -18,6 +18,12 @@
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
                                         <li>
+                                            <a href="{{ route('transactions.print', $transaction->id) }}" target="_blank" class="btn btn-info fw-normal btn-dim">
+                                                <em class="icon ni ni-printer"></em>
+                                                <span>چاپ</span>
+                                            </a>
+                                        </li>
+                                        <li>
                                             <a href="{{ route('transactions.edit', $transaction->id) }}"
                                                class="btn btn-primary btn-dim">
                                                 <em class="icon ni ni-edit"></em>
@@ -69,13 +75,13 @@
                                             <br>
                                             <div class="user-card-status">
                                                 <div class="user-card-status-info">
-                                                    <span class="sub-text">وضعیت:</span>
+{{--                                                    <span class="sub-text">وضعیت:</span>--}}
                                                     @if($transaction->status == 'paid')
-                                                        <span class="badge badge-dim bg-success badge-md">پرداخت شده</span>
+                                                        <span class="badge rounded-pill bg-teal badge-md">پرداخت شده</span>
                                                     @elseif($transaction->status == 'unpaid')
-                                                        <span class="badge badge-dim bg-danger badge-md">پرداخت نشده</span>
+                                                        <span class="badge  bg-danger badge-md">پرداخت نشده</span>
                                                     @else
-                                                        <span class="badge badge-dim bg-light badge-md">نا مشخص</span>
+                                                        <span class="badge  bg-light badge-md">نا مشخص</span>
                                                     @endif
                                                 </div>
                                             </div>
@@ -96,6 +102,15 @@
                                                     <em class="icon ni ni-trash"></em>
                                                 </a>
                                             </li>
+                                            @if($transaction->status == 'unpaid')
+                                            <li>
+                                                <a href="{{ route('transactions.delete', $transaction->id) }}"
+                                                   onclick="event.preventDefault(); document.getElementById('delete_transaction{{$transaction->id}}').submit();"
+                                                   class="btn btn-trigger btn-icon text-success">
+                                                    <em class="icon ni ni-check"></em>
+                                                </a>
+                                            </li>
+                                            @endif
                                         </ul>
                                         <form id="delete_transaction{{$transaction->id}}" method="post"
                                               action="{{ route('transactions.delete', $transaction->id) }}" class="d-none">

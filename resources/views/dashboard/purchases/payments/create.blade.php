@@ -205,20 +205,20 @@
                                     <div class="col-12">
                                         <div class="form-group">
                                             <div class="d-flex justify-content-between">
-                                                <button type="submit" class="btn btn-lg btn-primary btn-dim fw-normal">
-                                                    ثبت پرداخت
-                                                </button>
                                                 @if(isset($purchases))
                                                     <a href="{{ route('purchases.list') }}"
-                                                       class="btn btn-lg btn-danger btn-dim fw-normal">
+                                                       class="btn btn-lg btn-outline-danger btn-dim fw-normal">
                                                         لغو پرداخت
                                                     </a>
                                                 @else
-                                                <a href="{{ route('purchases.detail' , $purchase->id) }}"
-                                                   class="btn btn-lg btn-danger btn-dim fw-normal">
-                                                    لغو پرداخت
-                                                </a>
+                                                    <a href="{{ route('purchases.detail' , $purchase->id) }}"
+                                                       class="btn btn-lg btn-outline-danger btn-dim fw-normal">
+                                                        لغو پرداخت
+                                                    </a>
                                                 @endif
+                                                <button type="submit" class="btn btn-lg btn-outline-primary btn-dim fw-normal">
+                                                    ثبت پرداخت
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

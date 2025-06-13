@@ -202,13 +202,13 @@
                                     <div class="col-12">
                                         <div class="form-group">
                                             <div class="d-flex justify-content-between">
-                                                <button type="submit" class="btn btn-lg btn-primary btn-dim fw-normal">
-                                                    پرداخت سفارش
-                                                </button>
                                                 <a href="{{ route('cart.list') }}"
-                                                   class="btn btn-lg btn-danger btn-dim fw-normal">
+                                                   class="btn btn-lg btn-outline-danger btn-dim fw-normal">
                                                     لغو پرداخت
                                                 </a>
+                                                <button type="submit" class="btn btn-lg btn-outline-primary btn-dim fw-normal">
+                                                    ثبت پرداخت
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

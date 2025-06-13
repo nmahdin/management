@@ -11,6 +11,29 @@
                                 <p>ویرایش اطلاعات تراکنش</p>
                             </div>
                         </div>
+                        <div class="nk-block-head-content">
+                            <div class="toggle-wrap nk-block-tools-toggle">
+                                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em
+                                        class="icon ni ni-more-v"></em></a>
+                                <div class="toggle-expand-content" data-content="pageMenu">
+                                    <ul class="nk-block-tools g-3">
+                                        <li>
+                                            <a href="{{ route('transactions.detail', $transaction->id) }}"
+                                               class="btn btn-info btn-dim">
+                                                <em class="icon ni ni-info"></em>
+                                                <span class="fw-normal">جزئیات تراکنش</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('transactions.general') }}" class="btn btn-secondary btn-dim">
+                                                <em class="icon ni ni-arrow-left"></em>
+                                                <span class="fw-normal">بازگشت به لیست</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

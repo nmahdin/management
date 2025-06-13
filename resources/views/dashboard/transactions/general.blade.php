@@ -22,7 +22,7 @@
                                     <ul class="nk-block-tools g-3">
                                         <li>
                                             {{-- با استفاده از request()->fullUrlWithQuery()، تمامی فیلترهای اعمال شده را به لینک پرینت منتقل می‌کنیم --}}
-                                            <a href="{{ route('transactions.print', request()->query()) }}" target="_blank" class="btn btn-white btn-dim btn-outline-light">
+                                            <a href="{{ route('transactions.print_list', request()->query()) }}" target="_blank" class="btn btn-white btn-dim btn-outline-light">
                                                 <em class="icon ni ni-download-cloud"></em><span>خروجی گرفتن</span>
                                             </a>
                                         </li>
@@ -349,6 +349,19 @@
                                                         <a href="{{ route('transactions.edit' , $transaction->id) }}" title="ویرایش"
                                                            class="bg-white btn btn-sm btn-outline-light btn-icon btn-tooltip"><em class="icon ni ni-pen"></em></a>
                                                     </li>
+                                                    @if($transaction->status == 'unpaid')
+                                                        <li class="nk-tb-action-hidden">
+                                                            <a title="پرداخت شده"
+                                                               class="bg-white btn btn-sm btn-outline-light btn-icon btn-tooltip"
+                                                               onclick="event.preventDefault(); document.getElementById('pay_transaction{{$transaction->id}}').submit();"
+                                                               href="{{ route('transactions.pay' , $transaction->id) }}"><em class="icon ni ni-check"></em></a>
+                                                            <form id="pay_transaction{{$transaction->id}}" method="post"
+                                                                  action="{{ route('transactions.pay', $transaction->id) }}" class="d-none">
+                                                                @csrf
+                                                                @method('put')
+                                                            </form>
+                                                        </li>
+                                                    @endif
                                                     <li class="nk-tb-action-hidden">
                                                         <a title="حذف"
                                                            class="bg-white btn btn-sm btn-outline-light btn-icon btn-tooltip"

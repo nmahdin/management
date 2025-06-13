@@ -234,6 +234,12 @@ class Transactions extends Controller
         return redirect()->route('transactions.detail', $transaction->id)->with('success', 'تراکنش با موفقیت ویرایش شد.');
     }
 
+    public function pay($id)
+    {
+        $transaction = Transaction::findOrFail($id);
+        $transaction->update(['status' => 'paid']);
+        return back()->with('success' , "تراکنش #$transaction->id با موفقیت به عنوان پرداخت شده علامت گذاری شد.");
+    }
 
 
 
@@ -401,5 +407,12 @@ class Transactions extends Controller
         $label = TransactionLabel::onlyTrashed()->findOrFail($id);
         $label->forceDelete();
         return redirect()->back()->with('deleted', $label->name);
+    }
+
+    public function print($id)
+    {
+        $transaction = Transaction::findOrFail($id);
+
+        return view('dashboard.transactions.print_detail', compact('transaction'));
     }
 }
