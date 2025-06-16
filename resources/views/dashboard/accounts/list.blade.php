@@ -153,6 +153,10 @@
                                                             class="icon ni ni-edit-alt-fill"></em><span class="fw-normal">ویرایش</span>
                                                     </a>
                                                 </div>
+                                                <div class="tb-odr-btns d-none d-md-inline">
+                                                    <a href="{{ route('accounts.report' , ['id' => $account->id]) }}" class="btn btn-info btn-dim"><em class="icon ni ni-reports"></em><span class="fw-normal">گزارش</span>
+                                                    </a>
+                                                </div>
                                                 <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
                                                     <a href="{{ route('accounts.delete' , ['id' => $account->id]) }}"
                                                        onclick="event.preventDefault(); document.getElementById('delete_cate{{$account->id}}').submit();"

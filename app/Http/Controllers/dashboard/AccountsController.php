@@ -4,8 +4,11 @@ namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Accounts;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Morilog\Jalali\Jalalian;
 
 class AccountsController extends Controller
 {
@@ -78,5 +81,76 @@ class AccountsController extends Controller
         $account->restore();
         return redirect(route('accounts.trash'))->with('restored' , $account->label);
     }
+
+    public function reports(Request $request)
+    {
+        $accounts = Account::all();
+
+        return view('dashboard.accounts.index', compact('accounts'));
+    }
+
+    // نمایش گزارش یک حساب خاص با فیلتر زمانی و جدول تراکنش‌ها
+    public function showReport(Request $request, Accounts $account)
+    {
+        // Convert jalali date to gregorian
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $gregorianStartDate = null;
+        $gregorianEndDate = null;
+
+        if ($startDate) {
+            $gregorianStartDate = Jalalian::fromFormat('Y/m/d', $startDate)->toCarbon()->format('Y-m-d');
+        }
+
+        if ($endDate) {
+            $gregorianEndDate = Jalalian::fromFormat('Y/m/d', $endDate)->toCarbon()->format('Y-m-d');
+        }
+
+        // Fetch transactions
+        $transactions = Transaction::where('account_id', $account->id)
+            ->when($gregorianStartDate, function ($query) use ($gregorianStartDate) {
+                $query->where('date', '>=', $gregorianStartDate);
+            })
+            ->when($gregorianEndDate, function ($query) use ($gregorianEndDate) {
+                $query->where('date', '<=', $gregorianEndDate);
+            })
+            ->orderByDesc('date')
+            ->get();
+
+        // Calculate inputs, outputs, and balance
+        $inputs = $transactions->where('type', 'input')->sum('amount');
+        $outputs = $transactions->where('type', 'output')->sum('amount');
+        $balance = $inputs - $outputs;
+
+        // Chart data
+        $chartData = Transaction::where('account_id', $account->id)
+            ->when($gregorianStartDate, function ($query) use ($gregorianStartDate) {
+                $query->where('date', '>=', $gregorianStartDate);
+            })
+            ->when($gregorianEndDate, function ($query) use ($gregorianEndDate) {
+                $query->where('date', '<=', $gregorianEndDate);
+            })
+            ->select(DB::raw('DATE(date) as date'),
+                DB::raw('SUM(CASE WHEN type = "input" THEN amount ELSE 0 END) as input'),
+                DB::raw('SUM(CASE WHEN type = "output" THEN amount ELSE 0 END) as output'))
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->keyBy('date')
+            ->map(function ($item) {
+                return [
+                    'input' => $item->input,
+                    'output' => $item->output,
+                ];
+            });
+
+        return view('dashboard.accounts.report', compact('account', 'transactions', 'inputs', 'outputs', 'balance', 'startDate', 'endDate', 'chartData'));
+    }
+
+
+
+
+
     // end accounts
 }

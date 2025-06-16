@@ -15,5 +15,13 @@ Route::prefix('/accounts')->name('accounts.')->group(function () {
     Route::delete('/trash/{id}/d', [AccountsController::class, 'accounts_trash_delete'])->name('trash.delete');
     Route::post('/trash/{id}/re', [AccountsController::class, 'accounts_trash_restore'])->name('trash.restore');
 
+
+
+    Route::get('/reports', [AccountsController::class, 'reports'])->name('index');
+    Route::get('/{id}/report', [AccountsController::class, 'showReport'])->name('report');
+        // اگر صفحه نمودار جدا خواستید:
+    Route::get('/{account}/chart', [AccountsController::class, 'showChart'])->name('chart');
+  Route::get('/{account}/report/download', [AccountsController::class, 'downloadReport'])->name('report.download');
+
 });
 
