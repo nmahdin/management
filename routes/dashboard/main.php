@@ -1,10 +1,11 @@
 <?php
 
 
+use App\Http\Controllers\dashboard\DashboardController;
 use App\Http\Controllers\dashboard\Main;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/dashboards/main', [Main::class , 'index'])->name('main');
+Route::get('/dashboards/main', [DashboardController::class , 'index'])->name('main');
 
 // start cart
 Route::prefix('/cart')->name('cart.')->group(function () {
@@ -56,3 +57,4 @@ require __DIR__.'/transactions.php';
 require __DIR__.'/orders.php';
 require __DIR__.'/accounts.php';
 require __DIR__.'/partners.php';
+require __DIR__.'/settlements.php';

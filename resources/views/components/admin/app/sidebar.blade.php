@@ -215,19 +215,24 @@
                 <!-- .nk-menu-item شریک ها -->
                 <li class="nk-menu-item has-sub">
                     <a href="#" class="nk-menu-link nk-menu-toggle">
-                        <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
-                        <span class="nk-menu-text">شریک ها</span>
+                        <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
+                        <span class="nk-menu-text">شریک‌ها</span>
                     </a>
                     <ul class="nk-menu-sub">
                         <li class="nk-menu-item">
-                            <a href="{{ route('partners.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست شریک ها</span></a>
+                            <a href="{{ route('partners.list') }}" class="nk-menu-link"><span class="nk-menu-text">لیست شریک‌ها</span></a>
                         </li>
                         <li class="nk-menu-item">
                             <a href="{{ route('partners.create') }}" class="nk-menu-link"><span class="nk-menu-text">افزودن شریک</span></a>
                         </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('settlements.index') }}" class="nk-menu-link">
+                                <span class="nk-menu-text">تسویه‌ها</span>
+                            </a>
+                        </li>
                     </ul>
-                    <!-- .nk-menu-sub -->
                 </li>
+
                 <!-- .nk-menu-item حساب های بانکی -->
                 <li class="nk-menu-item has-sub">
                     <a href="#" class="nk-menu-link nk-menu-toggle">

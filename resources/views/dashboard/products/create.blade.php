@@ -46,6 +46,12 @@
                     محصول "{{session('created')}}" با موفقیت ایجاد شد.
                 </div>
                 @endif
+                @if($errors->any())
+                    <div class="alert alert-fill alert-danger alert-icon bg-danger-dim text-danger">
+                        <em class="icon ni ni-alert-circle"></em>
+                        محصول ایجاد نشد!
+                    </div>
+                @endif
                 <div class="nk-block nk-block-lg">
                     <div class="card card-preview">
                         <div class="card-inner">

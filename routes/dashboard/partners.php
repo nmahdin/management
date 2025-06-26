@@ -15,5 +15,6 @@ Route::prefix('/partners')->name('partners.')->group(function () {
     Route::get('/trash' , [PartnersController::class , 'partners_trash_list'])->name('trash');
     Route::delete('/trash/{id}/delete' , [PartnersController::class , 'partners_trash_delete'])->name('trash.delete');
     Route::post('/trash/{id}/restore', [PartnersController::class , 'partners_trash_restore'])->name('trash.restore');
+    Route::get('/show/{id}', [PartnersController::class, 'show'])->name('show');
 
 });

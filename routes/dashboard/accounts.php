@@ -16,7 +16,6 @@ Route::prefix('/accounts')->name('accounts.')->group(function () {
     Route::post('/trash/{id}/re', [AccountsController::class, 'accounts_trash_restore'])->name('trash.restore');
 
 
-
     Route::get('/reports', [AccountsController::class, 'reports'])->name('index');
     Route::get('/{id}/report', [AccountsController::class, 'showReport'])->name('report');
         // اگر صفحه نمودار جدا خواستید:

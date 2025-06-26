@@ -11,7 +11,7 @@
                             <div class="nk-block-des text-soft">
                                 <!--   --------------- توضیح صفحه --------------     -->
                                 @if($n !== 0)
-                                <p>در مجموج {{ $n }} حساب وجود دارد.</p>
+                                    <p>در مجموج {{ $n }} حساب وجود دارد.</p>
                                 @endif
                             </div>
                         </div>
@@ -76,11 +76,11 @@
                         ویرایش شد.
                     </div>
                 @endif
-            <!-- .nk-block-head -->
+                <!-- .nk-block-head -->
                 @if($n == 0)
                     <div class="alert alert-fill alert-light alert-icon">
                         <em class="icon ni ni-alert-circle"></em>
-                    هیچ حسابی وجود ندارد! سطل زباله را بررسی کنید.
+                        هیچ حسابی وجود ندارد! سطل زباله را بررسی کنید.
                     </div>
                 @endif
 
@@ -135,12 +135,12 @@
                                             </td>
                                             <td class="tb-odr-info">
                                                 @if($account->note)
-                                                <details>
-                                                    <summary class="tb-odr-info">نمایش توضیحات</summary>
-                                                <span class="tb-odr-info">
+                                                    <details>
+                                                        <summary class="tb-odr-info">نمایش توضیحات</summary>
+                                                        <span class="tb-odr-info">
                                                     {{ $account->note }}
                                                 </span>
-                                                </details>
+                                                    </details>
                                                 @else
                                                     <span class="tb-odr-info text-gray fw-light">
                                                     بدون توضیح
@@ -149,12 +149,16 @@
                                             </td>
                                             <td class="tb-odr-action">
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('accounts.edit' , ['id' => $account->id]) }}" class="btn btn-warning btn-dim"><em
-                                                            class="icon ni ni-edit-alt-fill"></em><span class="fw-normal">ویرایش</span>
+                                                    <a href="{{ route('accounts.edit' , ['id' => $account->id]) }}"
+                                                       class="btn btn-warning btn-dim"><em
+                                                            class="icon ni ni-edit-alt-fill"></em><span
+                                                            class="fw-normal">ویرایش</span>
                                                     </a>
                                                 </div>
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('accounts.report' , ['id' => $account->id]) }}" class="btn btn-info btn-dim"><em class="icon ni ni-reports"></em><span class="fw-normal">گزارش</span>
+                                                    <a href="{{ route('accounts.report' , ['id' => $account->id]) }}"
+                                                       class="btn btn-info btn-dim"><em class="icon ni ni-reports"></em><span
+                                                            class="fw-normal">گزارش</span>
                                                     </a>
                                                 </div>
                                                 <div class="tb-odr-btns d-none d-md-inline" style=" margin-right: 3px">
@@ -177,8 +181,8 @@
                         </div>
                         <!-- .card-preview -->
                     </div>
-                 @endif
-            <!-- .nk-block -->
+                @endif
+                <!-- .nk-block -->
             </div>
         </div>
     </div>

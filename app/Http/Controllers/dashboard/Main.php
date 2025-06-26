@@ -9,11 +9,13 @@ use App\Models\Accounts;
 use App\Models\Customer;
 use App\Models\Group;
 use App\Models\Order;
+use App\Models\PartnerTransaction;
 use App\Models\Payment;
 use App\Models\Permission;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -151,6 +153,16 @@ class Main extends Controller
                 if ($product) {
                     $product->inventory -= $item['quantity'];
                     $product->save();
+
+                    // ثبت بدهی به شریک بابت این محصول
+                    \App\Models\Settlement::create([
+                        'partner_id'  => $product->partner_id,
+                        'order_id'    => $order->id,
+                        'amount'      => $this->calculatePartnerDebt($product, $item['quantity']),
+                        'type'        => 'debt',
+                        'description' => 'بدهی بابت سفارش #' . $order->id . ' و محصول ' . $product->name,
+                        'user_id'     => \Illuminate\Support\Facades\Auth::id(),
+                    ]);
                 }
             }
 
@@ -165,6 +177,17 @@ class Main extends Controller
         }
 
         return back();
+    }
+
+    private function calculatePartnerDebt($product, $quantity)
+    {
+        // فرض: مجموع هزینه مواد اولیه + سود مواد اولیه + دستمزد + سود (یا هر فیلدی که مدنظر داری)
+        $debtPerItem = ($product->price_materials ?? 0)
+            + ($product->materials_profit ?? 0)
+            + ($product->salary ?? 0)
+            + ($product->profit ?? 0);
+
+        return $debtPerItem * $quantity;
     }
 
     // start payments

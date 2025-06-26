@@ -4,6 +4,7 @@ namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Partner;
+use App\Models\PartnerTransaction;
 use Illuminate\Http\Request;
 
 class PartnersController extends Controller
@@ -63,5 +64,22 @@ class PartnersController extends Controller
         $partner->restore();
         return back()->with('restored' , $partner->name);
     }
+    public function show($id)
+    {
+        $partner = Partner::findOrFail($id);
+
+        // مجموع بدهی و تسویه
+        $debts = Settlement::where('partner_id', $id)->where('type', 'debt')->get();
+        $settlements = Settlement::where('partner_id', $id)->where('type', 'settlement')->get();
+        $balance = $debts->sum('amount') - $settlements->sum('amount');
+
+        return view('dashboard.partners.show', [
+            'partner' => $partner,
+            'debts' => $debts,
+            'settlements' => $settlements,
+            'balance' => $balance,
+        ]);
+    }
+
     // end partners
 }
