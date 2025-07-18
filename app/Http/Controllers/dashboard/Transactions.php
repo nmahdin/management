@@ -171,6 +171,12 @@ class Transactions extends Controller
             'category' => 'nullable|string', // Added
         ]);
 
+        $info = $request->input('payer_information'); // مثلاً 'customer-23'
+        list($type, $id) = explode('-', $info);
+
+        $modelType = trim($type); // 'customer'
+        $modelId = intval($id);   // 23
+
         // Convert Persian date to Gregorian
         $date = \App\helper\services\Custom::changDate($request->date);
 
@@ -179,7 +185,8 @@ class Transactions extends Controller
             'type' => $request->type,
             'date' => $date,
             'amount' => $request->amount,
-            'payer_information' => $request->payer_information,
+            'payer_type' => $modelType,
+            'payer_id' => $modelId,
             'tracking_number' => $request->tracking_number,
             'user_id' => auth()->id(), // Assuming you want to set the user_id
             'payment_way' => null,
@@ -259,6 +266,12 @@ class Transactions extends Controller
             'payment_method' => 'required|string',
             'notes' => 'nullable|string',
         ]);
+
+        $info = $request->input('payer_information'); // مثلاً 'customer-23'
+        list($type, $id) = explode('-', $info);
+
+        $modelType = trim($type); // 'customer'
+        $modelId = intval($id);   // 23
 
         Transaction::create($request->only('type', 'amount', 'date', 'account', 'payment_method', 'notes'));
 

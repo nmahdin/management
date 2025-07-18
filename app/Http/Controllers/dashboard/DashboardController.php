@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Partner;
 use App\Models\Product;
+use App\Models\Settlement;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -103,6 +105,38 @@ class DashboardController extends Controller
             'lowInventoryProducts',
             'chartProfitData',
             'chartPartnersData'
+        ));
+    }
+
+    public function settlements()
+    {
+        $partnersCount = Partner::count();
+        $ordersCount = Order::count();
+
+        $totalDebt = Settlement::where('type', 'debt')->sum('amount');
+        $totalSettled = Settlement::where('type', 'settlement')->sum('amount');
+        $unsettledDebt = $totalDebt - $totalSettled;
+
+        $latestSettlements = Settlement::with('partner')
+            ->where('type', 'settlement')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $latestDebts = Settlement::with('partner')
+            ->where('type', 'debt')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('dashboard.dashboards.settlements', compact(
+            'partnersCount',
+            'ordersCount',
+            'totalDebt',
+            'totalSettled',
+            'unsettledDebt',
+            'latestSettlements',
+            'latestDebts'
         ));
     }
 }

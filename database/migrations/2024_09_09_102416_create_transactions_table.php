@@ -27,7 +27,8 @@ return new class extends Migration
             $table->string('type');
             $table->date('date');
             $table->bigInteger('amount');
-            $table->string('payer_information')->nullable();
+            $table->string('payer_type')->nullable();
+            $table->string('payer_id')->nullable();
             $table->string('tracking_number')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');

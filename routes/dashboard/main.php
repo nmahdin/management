@@ -6,6 +6,7 @@ use App\Http\Controllers\dashboard\Main;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboards/main', [DashboardController::class , 'index'])->name('main');
+Route::get('/dashboards/settlements', [DashboardController::class , 'settlements'])->name('dashboards.settlements');
 
 // start cart
 Route::prefix('/cart')->name('cart.')->group(function () {

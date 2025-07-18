@@ -13,6 +13,7 @@ use App\Models\PartnerTransaction;
 use App\Models\Payment;
 use App\Models\Permission;
 use App\Models\Product;
+use App\Models\Settlement;
 use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
@@ -155,7 +156,7 @@ class Main extends Controller
                     $product->save();
 
                     // ثبت بدهی به شریک بابت این محصول
-                    \App\Models\Settlement::create([
+                    Settlement::create([
                         'partner_id'  => $product->partner_id,
                         'order_id'    => $order->id,
                         'amount'      => $this->calculatePartnerDebt($product, $item['quantity']),
@@ -260,7 +261,8 @@ class Main extends Controller
             'amount' => $data['amount'],
             'user_id' => Auth::user()->id,
             'tracking_number' => $data['tracking_number'],
-            'payer_information' => 'customer'.'-'.$data['customer_id'],
+            'payer_type' => \App\Models\Customer::class,
+            'payer_id' => $data['customer_id'],
             'account_id' => $accountId,
             'payment_way' => $paymentWay,
             'label_id' => $data['label_id'],

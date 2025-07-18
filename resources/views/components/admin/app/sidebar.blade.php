@@ -34,9 +34,9 @@
                 </li>
                 <!-- .nk-menu-item  تحلیل فروش  -->
                 <li class="nk-menu-item">
-                    <a href="#" class="nk-menu-link">
+                    <a href="{{ route('dashboards.settlements') }}" class="nk-menu-link">
                         <span class="nk-menu-icon"><em class="icon ni ni-cc-alt2"></em></span>
-                        <span class="nk-menu-text">تحلیل فروش</span>
+                        <span class="nk-menu-text">داشبورد شریک ها</span>
                     </a>
                 </li>
 

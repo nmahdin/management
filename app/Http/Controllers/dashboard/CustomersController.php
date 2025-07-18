@@ -60,7 +60,6 @@ class CustomersController extends Controller
 
     public function customer_info(Customer $customer)
     {
-        $customer = $customer;
         return view('dashboard.customers.info', compact('customer'));
     }
 

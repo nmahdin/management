@@ -61,34 +61,61 @@ class OrdersController extends Controller
     }
     public function orders_delete($id)
     {
+//        $order = Order::findOrFail($id);
+//        $masage = "سفارش شماره #$order->id با موفقیت حذف شد.";
+//
+//        DB::beginTransaction();
+//
+//        try {
+//            // بروزرسانی موجودی محصولات
+//            foreach ($order->products as $item) {
+//                $product = Product::find($item->id);
+//                $product->inventory += $item->pivot->quantity; // برگرداندن موجودی
+//                $product->save();
+//            }
+//
+//            foreach ($order->transactions as $item) {
+//                $transaction = Transaction::find($item->id);
+//                $transaction->delete(); // حذف تراکنش ها
+//            }
+//
+//            $order->delete();
+//            DB::commit();
+//
+//            return redirect()->route('orders.list')
+//                ->with('warning', $masage);
+//
+//        } catch (\Exception $e) {
+//            DB::rollBack();
+//            return back()->with(['danger' => 'خطا در حذف سفارش: ' . $e->getMessage()]);
+//        }
+
+
+        // copilot
         $order = Order::findOrFail($id);
-        $masage = "سفارش شماره #$order->id با موفقیت حذف شد.";
 
-        DB::beginTransaction();
-
-        try {
-            // بروزرسانی موجودی محصولات
-            foreach ($order->products as $item) {
-                $product = Product::find($item->id);
-                $product->inventory += $item->pivot->quantity; // برگرداندن موجودی
-                $product->save();
-            }
-
-            foreach ($order->transactions as $item) {
-                $transaction = Transaction::find($item->id);
-                $transaction->delete(); // حذف تراکنش ها
-            }
-
-            $order->delete();
-            DB::commit();
-
-            return redirect()->route('orders.list')
-                ->with('warning', $masage);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with(['danger' => 'خطا در حذف سفارش: ' . $e->getMessage()]);
+        // برگرداندن موجودی محصولات
+        foreach ($order->products as $product) {
+            $pivot = $product->pivot;
+            $product->inventory += $pivot->quantity;
+            $product->save();
         }
+
+        // حذف بدهی‌ها و تسویه‌های مرتبط با این سفارش
+        \App\Models\Settlement::where('order_id', $order->id)->delete();
+
+        // حذف پرداخت‌ها یا تراکنش‌های مالی مرتبط (اگر داری)
+        \App\Models\Transaction::where('source_type', 'orders')->where('source_id', $order->id)->delete();
+        \App\Models\Payment::where('order_id', $order->id)->delete();
+
+        // حذف آیتم‌های سفارش
+        $order->products()->detach();
+
+        // حذف سفارش
+        $order->delete();
+
+        return redirect()->route('orders.index')->with('success', 'سفارش و کلیه سوابق مالی مرتبط حذف شد.');
+
     }
 
     public function printInvoice(Order $order)

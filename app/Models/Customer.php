@@ -21,6 +21,6 @@ class Customer extends Model
 
     public function transactions()
     {
-        return $this->hasMany(Transaction::class ,'pay_id');
+        return $this->morphMany(\App\Models\Transaction::class, 'payer');
     }
 }

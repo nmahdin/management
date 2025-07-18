@@ -51,11 +51,13 @@
                             @forelse($debts as $item)
                                 <tr>
                                     <td>
-                                        @if($item->order)
-                                            #{{ $item->order->id }}
-                                        @else
-                                            -
-                                        @endif
+                                        <a href="{{ route('orders.detail' , $item->order->id) }}">
+                                            @if($item->order)
+                                                #{{ $item->order->id }}
+                                            @else
+                                                -
+                                            @endif
+                                        </a>
                                     </td>
                                     <td>{{ number_format($item->amount) }}</td>
                                     <td>{{ $item->description }}</td>

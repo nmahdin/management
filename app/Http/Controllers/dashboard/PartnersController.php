@@ -5,6 +5,7 @@ namespace App\Http\Controllers\dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\PartnerTransaction;
+use App\Models\Settlement;
 use Illuminate\Http\Request;
 
 class PartnersController extends Controller
