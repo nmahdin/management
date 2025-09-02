@@ -1,161 +1,237 @@
-<x-admin.main title="گزارش حساب {{ $account->label }}">
+<x-admin.main title="گزارش حساب">
 
     <div class="nk-content nk-content-fluid">
         <div class="container-xl wide-xl">
             <div class="nk-content-body">
+
                 <div class="nk-block-head nk-block-head-sm">
-                    <div class="nk-block-between g-3">
+                    <div class="nk-block-between">
                         <div class="nk-block-head-content">
-                            <h3 class="nk-block-title page-title">گزارش حساب "{{ $account->label }}"</h3>
+                            <h3 class="nk-block-title page-title">گزارش حساب: {{ $account->label }} ({{ $account->number }})</h3>
                             <div class="nk-block-des text-soft">
-                                <p>نمایش گردش حساب، ورودی‌ها، خروجی‌ها و مانده حساب</p>
+                                <p>تعداد تراکنش‌های فیلترشده: {{ $n ?? 0 }}</p>
                             </div>
                         </div>
                         <div class="nk-block-head-content">
-                            <a href="{{ route('accounts.list') }}" class="btn btn-secondary btn-dim">
-                                <em class="icon ni ni-arrow-left"></em>
-                                <span class="fw-normal">بازگشت به لیست حساب‌ها</span>
-                            </a>
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('accounts.report.download', ['account' => $account->id, 'format' => 'csv'] + request()->all()) }}" class="btn btn-outline-primary">دانلود CSV</a>
+                                <a href="{{ route('accounts.report.download', ['account' => $account->id, 'format' => 'pdf'] + request()->all()) }}" class="btn btn-outline-secondary">دانلود PDF</a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- alert components (project standard) -->
                 <x-admin.templates.successAlert/>
                 <x-admin.templates.warningAlert/>
                 <x-admin.templates.dangerAlert/>
 
-                <div class="nk-block">
-                    {{-- فرم فیلتر تاریخ --}}
-                    <form method="get" class="row g-3 align-items-center mb-4">
-                        <div class="col-md-4">
-                            <label class="form-label">از تاریخ</label>
-                            <input type="text" id="start_date" name="start_date" class="form-control jalali-datepicker" value="{{ request('start_date') }}">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">تا تاریخ</label>
-                            <input type="text" id="end_date" name="end_date" class="form-control jalali-datepicker" value="{{ request('end_date') }}">
-                        </div>
-                        <div class="col-md-4 mt-4">
-                            <button type="submit" class="btn btn-primary">اعمال فیلتر</button>
-                        </div>
-                    </form>
+                <!-- Filters -->
+                <div class="card mb-3">
+                    <div class="card-inner">
+                        <form action="{{ route('accounts.report', ['id' => $account->id]) }}" method="GET" class="row g-3">
+                            <div class="col-lg-3">
+                                <label class="form-label">تاریخ شروع (Jalali)</label>
+                                <input type="text" name="start_date" class="form-control" value="{{ old('start_date', $startDate ?? request('start_date')) }}" placeholder="YYYY/MM/DD">
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">تاریخ پایان (Jalali)</label>
+                                <input type="text" name="end_date" class="form-control" value="{{ old('end_date', $endDate ?? request('end_date')) }}" placeholder="YYYY/MM/DD">
+                            </div>
+                            <div class="col-lg-2">
+                                <label class="form-label">نوع تراکنش</label>
+                                <select name="type" class="form-select">
+                                    <option value="any" {{ (request('type','any')=='any' ? 'selected':'') }}>هر دو</option>
+                                    <option value="input" {{ (request('type')=='input' ? 'selected':'') }}>واریز (input)</option>
+                                    <option value="output" {{ (request('type')=='output' ? 'selected':'') }}>برداشت (output)</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2">
+                                <label class="form-label">وضعیت</label>
+                                <select name="status" class="form-select">
+                                    <option value="any" {{ (request('status','any')=='any' ? 'selected':'') }}>هر وضعیت</option>
+                                    <option value="paid" {{ (request('status')=='paid' ? 'selected':'') }}>پرداخت‌شده</option>
+                                    <option value="unpaid" {{ (request('status')=='unpaid' ? 'selected':'') }}>پرداخت‌نشده</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2">
+                                <label class="form-label">روش پرداخت</label>
+                                <select name="payment_way" class="form-select">
+                                    <option value="any" {{ (request('payment_way','any')=='any' ? 'selected':'') }}>همه</option>
+                                    <option value="cash" {{ request('payment_way')=='cash' ? 'selected':'' }}>نقدی</option>
+                                    <option value="cart" {{ request('payment_way')=='cart' ? 'selected':'' }}>کارت به کارت</option>
+                                    <option value="online" {{ request('payment_way')=='online' ? 'selected':'' }}>آنلاین</option>
+                                    <option value="pos" {{ request('payment_way')=='pos' ? 'selected':'' }}>POS</option>
+                                </select>
+                            </div>
 
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            <div class="card card-bordered">
-                                <div class="card-inner text-center">
-                                    <div class="fs-18px text-success mb-1">ورودی‌ها</div>
-                                    <div class="fs-20px fw-bold">{{ number_format($inputs) }} <span class="small">تومان</span></div>
+                            <div class="col-lg-3">
+                                <label class="form-label">مبلغ از</label>
+                                <input type="number" name="amount_min" class="form-control" value="{{ request('amount_min') }}">
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">مبلغ تا</label>
+                                <input type="number" name="amount_max" class="form-control" value="{{ request('amount_max') }}">
+                            </div>
+
+                            <div class="col-lg-4">
+                                <label class="form-label">جستجو در توضیحات یا شماره پیگیری</label>
+                                <input type="text" name="q" class="form-control" value="{{ request('q') }}">
+                            </div>
+
+                            <div class="col-lg-2">
+                                <label class="form-label">&nbsp;</label>
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary">اعمال فیلتر</button>
+                                    <a href="{{ route('accounts.report', ['id' => $account->id]) }}" class="btn btn-outline-secondary">پاک‌سازی</a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card card-bordered">
-                                <div class="card-inner text-center">
-                                    <div class="fs-18px text-danger mb-1">خروجی‌ها</div>
-                                    <div class="fs-20px fw-bold">{{ number_format($outputs) }} <span class="small">تومان</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card card-bordered">
-                                <div class="card-inner text-center">
-                                    <div class="fs-18px text-primary mb-1">مانده حساب</div>
-                                    <div class="fs-20px fw-bold">{{ number_format($balance) }} <span class="small">تومان</span></div>
-                                </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <div class="card card-bordered">
+                            <div class="card-inner">
+                                <h6>مانده ابتدای بازه</h6>
+                                <div class="fs-18 fw-bold">{{ number_format($openingBalance ?? 0) }} تومان</div>
                             </div>
                         </div>
                     </div>
-
-                    {{-- جدول تراکنش‌ها --}}
-                    <div class="card card-bordered">
-                        <div class="card-inner">
-                            <h5 class="mb-3">لیست تراکنش‌ها</h5>
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>تاریخ</th>
-                                        <th>نوع</th>
-                                        <th>مبلغ</th>
-                                        <th>شرح</th>
-                                        <th>ثبت‌کننده</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @forelse($transactions as $tx)
-                                        <tr>
-                                            <td>{{ jdate($tx->date)->format('Y/m/d') }}</td>
-                                            <td>
-                                                @if($tx->type == 'input')
-                                                    <span class="badge bg-success">ورودی</span>
-                                                @else
-                                                    <span class="badge bg-danger">خروجی</span>
-                                                @endif
-                                            </td>
-                                            <td>{{ number_format($tx->amount) }}</td>
-                                            <td>{{ $tx->notes }}</td>
-                                            <td>{{ $tx->user->name ?? '-' }}</td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center">تراکنشی یافت نشد.</td>
-                                        </tr>
-                                    @endforelse
-                                    </tbody>
-                                </table>
+                    <div class="col-md-4">
+                        <div class="card card-bordered">
+                            <div class="card-inner">
+                                <h6>مجموع واریزها</h6>
+                                <div class="fs-18 fw-bold text-success">{{ number_format($inputs ?? 0) }} تومان</div>
                             </div>
                         </div>
                     </div>
-
-                    {{-- نمودار ساده --}}
-                    <div class="card card-bordered mt-4">
-                        <div class="card-inner">
-                            <h5 class="mb-3">نمودار گردش حساب در بازه انتخابی</h5>
-                            <canvas id="accountChart" height="100"></canvas>
+                    <div class="col-md-4">
+                        <div class="card card-bordered">
+                            <div class="card-inner">
+                                <h6>مجموع برداشت‌ها</h6>
+                                <div class="fs-18 fw-bold text-danger">{{ number_format($outputs ?? 0) }} تومان</div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Chart placeholder -->
+                <div class="card mb-3">
+                    <div class="card-inner">
+                        <h6>نمودار وارده/خارجی (روزانه)</h6>
+                        <div id="account-report-chart" style="height:300px;">
+                            <pre style="display:none" id="chart-data-json">{!! json_encode($chartData ?? []) !!}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions table -->
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>تاریخ</th>
+                                    <th>نوع</th>
+                                    <th>مبلغ</th>
+                                    <th>مانده</th>
+                                    <th>روش پرداخت</th>
+                                    <th>شماره مرجع</th>
+                                    <th>شرح</th>
+                                    <th>وضعیت</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if(isset($transactions) && $transactions->count())
+                                    @foreach($transactions as $tx)
+                                        <tr>
+                                            <td>{{ ($transactions->currentPage()-1) * $transactions->perPage() + $loop->iteration }}</td>
+                                            <td>
+                                                @if($tx->date)
+                                                    {{ \Morilog\Jalali\Jalalian::fromDateTime($tx->date)->format('Y/m/d H:i') }}
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td>{{ $tx->type }}</td>
+                                            <td>{{ number_format($tx->amount) }}</td>
+                                            <td class="{{ ($tx->running_balance ?? 0) > 0 ? 'text-success' : 'text-danger' }}">
+                                                {{ number_format($tx->running_balance ?? 0) }}
+                                            </td>
+                                            <td>{{ $tx->payment_way }}</td>
+                                            <td>{{ $tx->tracking_number }}</td>
+                                            <td>{{ $tx->notes }}</td>
+                                            <td>{{ $tx->status }}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="9" class="text-center">هیچ تراکنشی پیدا نشد.</td>
+                                    </tr>
+                                @endif
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-end fw-bold">جمع واریزها:</td>
+                                    <td class="fw-bold text-success">{{ number_format($inputs ?? 0) }}</td>
+                                    <td colspan="5"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-end fw-bold">جمع برداشت‌ها:</td>
+                                    <td class="fw-bold text-danger">{{ number_format($outputs ?? 0) }}</td>
+                                    <td colspan="5"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-end fw-bold">مانده انتهای بازه:</td>
+                                    <td class="fw-bold">{{ number_format($finalBalance ?? ($openingBalance ?? 0) + ($inputs ?? 0) - ($outputs ?? 0)) }}</td>
+                                    <td colspan="5"></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <p class="text-muted mb-0">نمایش {{ $transactions->firstItem() ?? 0 }} تا {{ $transactions->lastItem() ?? 0 }} از {{ $transactions->total() ?? 0 }}</p>
+                            </div>
+                            <div>
+                                @if(isset($transactions))
+                                    {{ $transactions->withQueryString()->links() }}
+                                @endif
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
     @slot('script')
-        <link rel="stylesheet" href="https://unpkg.com/persian-datepicker@latest/dist/css/persian-datepicker.min.css"/>
-        <script src="https://unpkg.com/persian-datepicker@latest/dist/js/persian-datepicker.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="/assets/js/persian-date.js"></script>
+        <script src="/assets/js/persian-datepicker.js"></script>
         <script>
-            $(document).ready(function() {
-                $(".jalali-datepicker").persianDatepicker({
-                    format: 'YYYY/MM/DD',
-                    altField: $(this).attr("id") === "start_date" ? "#start_date_alt" : "#end_date_alt",
-                    initialValueType: 'persian',
-                    altFormat: 'YYYY-MM-DD',
-                    observer: true,
-                    modelType: 'gregorian',
-                    autoClose: true,
-                });
-            });
+            (function () {
+                const chartDataEl = document.getElementById('chart-data-json');
+                if (!chartDataEl) return;
+                const data = JSON.parse(chartDataEl.textContent || '[]');
 
-            const ctx = document.getElementById('accountChart').getContext('2d');
-            const chartLabels = {!! json_encode(array_map(function($k){ return \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $k)->format('Y/m/d'); }, array_keys($chartData->toArray()))) !!};
-            const chartInputs = {!! json_encode(array_values($chartData->pluck('input')->toArray())) !!};
-            const chartOutputs = {!! json_encode(array_values($chartData->pluck('output')->toArray())) !!};
-
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: chartLabels,
-                    datasets: [
-                        { label: 'ورودی', data: chartInputs, backgroundColor: 'rgba(40,167,69,0.6)' },
-                        { label: 'خروجی', data: chartOutputs, backgroundColor: 'rgba(220,53,69,0.6)' }
-                    ]
-                },
-                options: {
-                    scales: { y: { beginAtZero: true } }
-                }
-            });
+                // placeholder for Chart.js integration
+                // data format: [{date: '2025-01-01', input: 1000, output: 500}, ...]
+                // you can initialize Chart.js here using data
+                console.log('account report chart data', data);
+            })();
         </script>
+    @endslot
+
+    @slot('style')
+        <link rel="stylesheet" href="/assets/css/persian-datepicker.css"/>
     @endslot
 
 </x-admin.main>
