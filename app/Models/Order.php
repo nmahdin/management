@@ -10,9 +10,11 @@ class Order extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $fillable = ['id' , 'customer_id' , 'user_id' , 'date' , 'products' , 'amount' , 'extra_expenses' , 'status' , 'note' , 'tax' , 'services' , 'profit' , 'discount' , 'payments' , 'account_id' , 'type_id'];
 
-    public function customer() {
+    protected $fillable = ['id', 'customer_id', 'user_id', 'date', 'products', 'amount', 'extra_expenses', 'status', 'note', 'tax', 'services', 'profit', 'discount', 'payments', 'account_id', 'type_id'];
+
+    public function customer()
+    {
         return $this->belongsTo(Customer::class);
     }
 
@@ -24,12 +26,12 @@ class Order extends Model
 
     public function type()
     {
-        return $this->belongsTo(type::class);
+        return $this->belongsTo(Type::class);
     }
 
     public function user()
     {
-        return $this->belongsTo(user::class);
+        return $this->belongsTo(User::class);
     }
 
     public function transactions()
