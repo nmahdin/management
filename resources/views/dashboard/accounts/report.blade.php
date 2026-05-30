@@ -14,8 +14,8 @@
                         </div>
                         <div class="nk-block-head-content">
                             <div class="d-flex gap-2">
-                                <a href="{{ route('accounts.report.download', ['account' => $account->id, 'format' => 'csv'] + request()->all()) }}" class="btn btn-outline-primary">دانلود CSV</a>
-                                <a href="{{ route('accounts.report.download', ['account' => $account->id, 'format' => 'pdf'] + request()->all()) }}" class="btn btn-outline-secondary">دانلود PDF</a>
+                                <a href="{{ route('accounts.report.download', array_merge(request()->all(), ['account' => $account->id, 'format' => 'csv'])) }}" class="btn btn-outline-primary">دانلود CSV</a>
+                                <a href="{{ route('accounts.report.download', array_merge(request()->all(), ['account' => $account->id, 'format' => 'pdf'])) }}" class="btn btn-outline-secondary">دانلود PDF</a>
                             </div>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                 <!-- Filters -->
                 <div class="card mb-3">
                     <div class="card-inner">
-                        <form action="{{ route('accounts.report', ['id' => $account->id]) }}" method="GET" class="row g-3">
+                        <form action="{{ route('accounts.report', ['account' => $account->id]) }}" method="GET" class="row g-3">
                             <div class="col-lg-3">
                                 <label class="form-label">تاریخ شروع (Jalali)</label>
                                 <input type="text" name="start_date" class="form-control" value="{{ old('start_date', $startDate ?? request('start_date')) }}" placeholder="YYYY/MM/DD">
@@ -83,7 +83,7 @@
                                 <label class="form-label">&nbsp;</label>
                                 <div class="d-flex gap-2">
                                     <button type="submit" class="btn btn-primary">اعمال فیلتر</button>
-                                    <a href="{{ route('accounts.report', ['id' => $account->id]) }}" class="btn btn-outline-secondary">پاک‌سازی</a>
+                                    <a href="{{ route('accounts.report', ['account' => $account->id]) }}" class="btn btn-outline-secondary">پاک‌سازی</a>
                                 </div>
                             </div>
                         </form>
@@ -118,13 +118,37 @@
                     </div>
                 </div>
 
-                <!-- Chart placeholder -->
+                <!-- Chart card -->
                 <div class="card mb-3">
                     <div class="card-inner">
                         <h6>نمودار وارده/خارجی (روزانه)</h6>
-                        <div id="account-report-chart" style="height:300px;">
-                            <pre style="display:none" id="chart-data-json">{!! json_encode($chartData ?? []) !!}</pre>
+                        <div class="chartjs-wrap">
+                            <canvas id="accountReportChart" style="height:320px;"></canvas>
                         </div>
+
+                        <!-- JSON data prepared server-side, but include Jalali labels here for nicer display -->
+                        @php
+                            $chartForJs = [];
+                            if(!empty($chartData)) {
+                                foreach($chartData as $row) {
+                                    // $row expected: ['date' => 'YYYY-MM-DD', 'input' => int, 'output' => int]
+                                    $label = $row['date'];
+                                    try {
+                                        $jalali = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $row['date'])->format('Y/m/d');
+                                        $label = $jalali;
+                                    } catch (\Throwable $e) {
+                                        // fallback to original date
+                                    }
+                                    $chartForJs[] = [
+                                        'date' => $row['date'],
+                                        'label' => $label,
+                                        'input' => (int) $row['input'],
+                                        'output' => (int) $row['output'],
+                                    ];
+                                }
+                            }
+                        @endphp
+                        <pre id="chart-data-json" style="display:none;">{!! json_encode($chartForJs, JSON_UNESCAPED_UNICODE) !!}</pre>
                     </div>
                 </div>
 
@@ -188,7 +212,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="3" class="text-end fw-bold">مانده انتهای بازه:</td>
-                                    <td class="fw-bold">{{ number_format($finalBalance ?? ($openingBalance ?? 0) + ($inputs ?? 0) - ($outputs ?? 0)) }}</td>
+                                    <td class="fw-bold">{{ number_format($finalBalance ?? (($openingBalance ?? 0) + ($inputs ?? 0) - ($outputs ?? 0))) }}</td>
                                     <td colspan="5"></td>
                                 </tr>
                                 </tfoot>
@@ -214,20 +238,117 @@
     </div>
 
     @slot('script')
-        <script src="/assets/js/persian-date.js"></script>
-        <script src="/assets/js/persian-datepicker.js"></script>
+        {{-- Chart.js CDN --}}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
         <script>
             (function () {
-                const chartDataEl = document.getElementById('chart-data-json');
-                if (!chartDataEl) return;
-                const data = JSON.parse(chartDataEl.textContent || '[]');
+                const pre = document.getElementById('chart-data-json');
+                if (!pre) return;
+                let data = [];
+                try {
+                    data = JSON.parse(pre.textContent || '[]');
+                } catch (e) {
+                    console.error('Invalid chart data JSON', e);
+                    return;
+                }
 
-                // placeholder for Chart.js integration
-                // data format: [{date: '2025-01-01', input: 1000, output: 500}, ...]
-                // you can initialize Chart.js here using data
-                console.log('account report chart data', data);
+                // prepare labels and datasets
+                const labels = data.map(d => d.label || d.date);
+                const inputs = data.map(d => Number(d.input || 0));
+                const outputs = data.map(d => Number(d.output || 0));
+
+                // if no data, show a small placeholder message
+                if (!labels.length) {
+                    const chartWrap = document.getElementById('accountReportChart');
+                    if (chartWrap) {
+                        const ctxParent = chartWrap.parentElement;
+                        const msg = document.createElement('div');
+                        msg.className = 'text-center text-muted';
+                        msg.style.padding = '40px 0';
+                        msg.innerText = 'داده‌ای برای نمودار وجود ندارد.';
+                        ctxParent.appendChild(msg);
+                    }
+                    return;
+                }
+
+                // create chart
+                const ctx = document.getElementById('accountReportChart').getContext('2d');
+
+                // maintain global reference to destroy if re-rendered (e.g., via ajax)
+                if (window._accountReportChart instanceof Chart) {
+                    window._accountReportChart.destroy();
+                }
+
+                window._accountReportChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'واریز (input)',
+                                data: inputs,
+                                borderColor: '#28a745',
+                                backgroundColor: 'rgba(40,167,69,0.12)',
+                                tension: 0.25,
+                                pointRadius: 3,
+                                pointHoverRadius: 5,
+                                fill: true,
+                            },
+                            {
+                                label: 'برداشت (output)',
+                                data: outputs,
+                                borderColor: '#dc3545',
+                                backgroundColor: 'rgba(220,53,69,0.12)',
+                                tension: 0.25,
+                                pointRadius: 3,
+                                pointHoverRadius: 5,
+                                fill: true,
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: { boxWidth: 12, padding: 12 }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const value = context.raw ?? 0;
+                                        return context.dataset.label + ': ' + value.toLocaleString() + ' تومان';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: { maxRotation: 0, autoSkip: true },
+                                grid: { display: false }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) { return Number(value).toLocaleString(); }
+                                }
+                            }
+                        }
+                    }
+                });
             })();
         </script>
+
+        {{-- persian datepicker assets if used elsewhere --}}
+        <script src="/assets/js/persian-date.js"></script>
+        <script src="/assets/js/persian-datepicker.js"></script>
     @endslot
 
     @slot('style')

@@ -156,7 +156,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="tb-odr-btns d-none d-md-inline">
-                                                    <a href="{{ route('accounts.report' , ['id' => $account->id]) }}"
+                                                    <a href="{{ route('accounts.report' , ['account' => $account->id]) }}"
                                                        class="btn btn-info btn-dim"><em class="icon ni ni-reports"></em><span
                                                             class="fw-normal">گزارش</span>
                                                     </a>
