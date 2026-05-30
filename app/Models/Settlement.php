@@ -8,20 +8,25 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Settlement extends Model
 {
-    use HasFactory , softDeletes;
+    use HasFactory;
+    use SoftDeletes;
+
     protected $fillable = [
-        'partner_id', 'user_id', 'order_id', 'type' , 'amount', 'method', 'reference', 'description', 'settled_at'
+        'partner_id', 'user_id', 'order_id', 'type', 'amount', 'method', 'reference', 'description', 'settled_at'
     ];
 
-    public function partner() {
+    public function partner()
+    {
         return $this->belongsTo(Partner::class);
     }
 
-    public function order() {
+    public function order()
+    {
         return $this->belongsTo(Order::class);
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }
